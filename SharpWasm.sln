@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpWasm.Tests", "SharpWasm.Tests\SharpWasm.Tests.csproj", "{54E63D9D-8B77-4692-A701-9A49157F3A23}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpWasm", "SharpWasm\SharpWasm.csproj", "{4589D4FE-4DC7-496E-9191-6442D03DBCC9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{54E63D9D-8B77-4692-A701-9A49157F3A23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54E63D9D-8B77-4692-A701-9A49157F3A23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54E63D9D-8B77-4692-A701-9A49157F3A23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54E63D9D-8B77-4692-A701-9A49157F3A23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4589D4FE-4DC7-496E-9191-6442D03DBCC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4589D4FE-4DC7-496E-9191-6442D03DBCC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4589D4FE-4DC7-496E-9191-6442D03DBCC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4589D4FE-4DC7-496E-9191-6442D03DBCC9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {41DD708C-01BB-481B-9ACC-A67C04A80478}
+	EndGlobalSection
+EndGlobal
