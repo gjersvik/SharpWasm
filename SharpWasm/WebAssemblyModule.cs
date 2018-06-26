@@ -1,19 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using SharpWasm.Internal;
 
 namespace SharpWasm
 {
-    public partial class WebAssemblyModule
+    public class WebAssemblyModule
     {
-        public static byte[] CustomSections(WebAssemblyModule module, string name)
+        public IEnumerable<byte[]> CustomSections(string name)
+        {
+            return _module.Sections.Where(s => s.Id == SectionId.Custom).Cast<CustomSection>()
+                .Where(cs => cs.Name == name).Select(cs => cs.Payload);
+        }
+
+        public IEnumerable<ModuleExportDescriptor> Exports()
         {
             throw new NotImplementedException();
         }
-        public static IEnumerable<ModuleExportDescriptor> Exports(WebAssemblyModule module)
+
+        public IEnumerable<ModuleImportDescriptor> Import()
         {
             throw new NotImplementedException();
         }
-        public static IEnumerable<ModuleImportDescriptor> Import(WebAssemblyModule module)
+
+        private readonly Module _module;
+
+        internal WebAssemblyModule(Module module)
+        {
+            _module = module;
+        }
+
+        public WebAssemblyInstance Instantiate(WebAssemblyImports importObject = null)
         {
             throw new NotImplementedException();
         }

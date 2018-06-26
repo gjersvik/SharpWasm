@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("SharpWasm.Tests")]
@@ -7,27 +8,13 @@ namespace SharpWasm.Internal
 {
     internal class Module
     {
-        public static Module Parse(byte[] wasm)
-        {
-            return Parse(new MemoryStream(wasm));
-        }
-
-        public static Module Parse(Stream wasm)
-        {
-            var header = Header.ParseHeader(wasm);
-            return new Module(header);
-        }
-
         public readonly Header Header;
+        public readonly ImmutableList<ISection> Sections;
 
-        public Module(Header header)
+        public Module(Header header, IEnumerable<ISection> sections)
         {
             Header = header;
-        }
-
-        public bool IsValid()
-        {
-            return Header.IsValid();
+            Sections = sections.ToImmutableList();
         }
     }
 }

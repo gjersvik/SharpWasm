@@ -1,17 +1,7 @@
-﻿using System.IO;
-
-namespace SharpWasm.Internal
+﻿namespace SharpWasm.Internal
 {
     internal class Header
     {
-        public static Header ParseHeader(Stream wasm)
-        {
-            var reader = new BinaryReader(wasm);
-            var mn = reader.ReadUInt32();
-            var v = reader.ReadUInt32();
-            return new Header(mn, v);
-        }
-
         public readonly uint MagicNumber;
         public readonly uint Version;
 
