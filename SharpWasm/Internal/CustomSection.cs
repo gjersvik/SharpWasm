@@ -7,10 +7,13 @@
 
         public readonly string Name;
 
-        public CustomSection(string name, byte[] payload)
+        public CustomSection(byte[] payload)
         {
-            Name = name;
-            Payload = payload;
+            using (var reader = new WasmReader(payload))
+            {
+                Name = reader.ReadString();
+                Payload = reader.ReadRest();
+            }
         }
     }
 }

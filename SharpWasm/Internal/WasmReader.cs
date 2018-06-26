@@ -8,12 +8,7 @@ namespace SharpWasm.Internal
     internal class WasmReader: IDisposable
     {
         private readonly BinaryReader _reader;
-        private uint _lastCount;
 
-        public WasmReader(Stream stream)
-        {
-            _reader = new BinaryReader(stream, Encoding.UTF8);
-        }
         public WasmReader(byte[] buffer)
         {
             _reader = new BinaryReader(new MemoryStream(buffer), Encoding.UTF8);
@@ -40,24 +35,58 @@ namespace SharpWasm.Internal
         public ISection ReadSection()
         {
             var id = (SectionId)ReadVarUInt7();
-            if (id == SectionId.Custom)
-            {
-                return ReadCustomSection();
-            }
-
             var len = ReadVarUInt32();
-            return new Section(id, ReadBytes(len));
+            var payload = ReadBytes(len);
+            switch (id)
+            {
+                case SectionId.Custom:
+                    return new CustomSection(payload);
+                case SectionId.Type:
+                    return new Section(id);
+                case SectionId.Import:
+                    return new Section(id);
+                case SectionId.Function:
+                    return new Section(id);
+                case SectionId.Table:
+                    return new Section(id);
+                case SectionId.Memory:
+                    return new Section(id);
+                case SectionId.Global:
+                    return new Section(id);
+                case SectionId.Export:
+                    return new Exports(payload);
+                case SectionId.Start:
+                    return new Section(id);
+                case SectionId.Element:
+                    return new Section(id);
+                case SectionId.Code:
+                    return new Section(id);
+                case SectionId.Data:
+                    return new Section(id);
+                default:
+                    return new Section(id);
+            }
         }
 
-
-        private CustomSection ReadCustomSection()
+        public IEnumerable<Export> ReadExports()
         {
-            var payloadLen = ReadVarUInt32();
-            var nameLen = ReadVarUInt32();
-            payloadLen -= nameLen;
-            payloadLen -= _lastCount;
-            var name = ReadString(nameLen);
-            return new CustomSection(name, ReadBytes(payloadLen));
+            var count = ReadVarUInt32();
+            var exports = new Export[count];
+
+            for (var i = 0; i < count; i += 1)
+            {
+                exports[i] = ReadExport();
+            }
+
+            return exports;
+        }
+
+        public Export ReadExport()
+        {
+            var name = ReadString();
+            var kind = (ImportExportKind) ReadUInt8();
+            var index = ReadVarUInt32();
+            return new Export(name,kind,index);
         }
 
         public byte ReadUInt8() => _reader.ReadByte();
@@ -66,9 +95,19 @@ namespace SharpWasm.Internal
         public byte ReadVarUInt7() => Convert.ToByte(ReadVarUInt64());
         public uint ReadVarUInt32() => Convert.ToUInt32(ReadVarUInt64());
         private byte[] ReadBytes(uint len) => _reader.ReadBytes((int)len);
-        private string ReadString(uint count)
+        public string ReadString()
         {
+            var count = ReadVarUInt32();
             return Encoding.UTF8.GetString(ReadBytes(count));
+        }
+
+        public byte[] ReadRest()
+        {
+            using (var ms = new MemoryStream())
+            {
+                _reader.BaseStream.CopyTo(ms);
+                return ms.ToArray();
+            }
         }
 
 
@@ -81,7 +120,6 @@ namespace SharpWasm.Internal
         {
             long value = 0;
             var shift = 0;
-            _lastCount = 0;
             byte bt;
             do
             {
@@ -91,8 +129,6 @@ namespace SharpWasm.Internal
 
                 value |= ((long)(bt & 0x7f) << shift);
                 shift += 7;
-
-                _lastCount += 1;
             }
             while (bt >= 128);
 
@@ -107,13 +143,11 @@ namespace SharpWasm.Internal
             ulong value = 0;
             var shift = 0;
 
-            _lastCount = 0;
             while (true)
             {
                 var bt = _reader.ReadByte();
 
                 value += (ulong)(bt & 0x7f) << shift;
-                _lastCount += 1;
 
                 if (bt < 128) break;
 

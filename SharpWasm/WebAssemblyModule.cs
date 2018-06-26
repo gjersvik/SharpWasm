@@ -9,13 +9,12 @@ namespace SharpWasm
     {
         public IEnumerable<byte[]> CustomSections(string name)
         {
-            return _module.Sections.Where(s => s.Id == SectionId.Custom).Cast<CustomSection>()
-                .Where(cs => cs.Name == name).Select(cs => cs.Payload);
+            return _module.ByName(name).Select(cs => cs.Payload);
         }
 
         public IEnumerable<ModuleExportDescriptor> Exports()
         {
-            throw new NotImplementedException();
+            return _module.Exports.ExportList.Select(e => new ModuleExportDescriptor(e));
         }
 
         public IEnumerable<ModuleImportDescriptor> Import()

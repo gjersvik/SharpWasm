@@ -3,7 +3,6 @@
     internal interface ISection
     {
         SectionId Id { get; }
-        byte[] Payload { get; }
     }
 
     internal enum SectionId

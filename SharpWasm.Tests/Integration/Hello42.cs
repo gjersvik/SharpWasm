@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using SharpWasm.Tests.Helpers;
 
 namespace SharpWasm.Tests.Integration
@@ -14,6 +15,15 @@ namespace SharpWasm.Tests.Integration
             var module = WebAssembly.Compile(Wasm);
 
             Assert.That(module.CustomSections("name"), Is.Not.Empty);
+        }
+        [Test]
+        public void GetExports()
+        {
+            var module = WebAssembly.Compile(Wasm);
+            var exports = module.Exports();
+            var export = exports.First();
+
+            Assert.That(export, Is.EqualTo(new ModuleExportDescriptor(ImportExportKind.Function, "main")));
         }
     }
 }

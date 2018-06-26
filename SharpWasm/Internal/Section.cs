@@ -2,13 +2,11 @@
 {
     internal class Section: ISection
     {
-        public Section(SectionId id, byte[] payload)
+        public Section(SectionId id)
         {
             Id = id;
-            Payload = payload;
         }
 
         public SectionId Id { get; }
-        public byte[] Payload { get; }
     }
 }
