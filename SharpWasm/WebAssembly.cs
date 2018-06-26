@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpWasm.Internal;
 
 namespace SharpWasm
 {
@@ -18,7 +19,8 @@ namespace SharpWasm
         }
         public static bool Validate(byte[] wasm)
         {
-            throw new NotImplementedException();
+            var module = Module.Parse(wasm);
+            return module.IsValid();
         }
     }
 }

@@ -13,14 +13,6 @@ namespace SharpWasm.Tests.Integration
         {
             Assert.That(WebAssembly.Validate(MinimalValid), Is.True);
         }
-
-        [Test]
-        public void Instance()
-        {
-            var module = WebAssembly.Compile(MinimalValid);
-
-            WebAssembly.Instantiate(module);
-        }
     }
 
 }
