@@ -12,14 +12,6 @@ namespace SharpWasm
                 return new WebAssemblyModule(reader.ReadModule());
             }
         }
-        public static WebAssemblyInstance Instantiate(byte[] wasm, WebAssemblyImports importObject = null)
-        {
-            return Instantiate(Compile(wasm), importObject);
-        }
-        public static WebAssemblyInstance Instantiate(WebAssemblyModule module, WebAssemblyImports importObject = null)
-        {
-            return module.Instantiate(importObject);
-        }
         public static bool Validate(byte[] wasm)
         {
             using (var reader = new WasmReader(wasm))

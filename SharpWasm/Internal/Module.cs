@@ -13,6 +13,7 @@ namespace SharpWasm.Internal
         public readonly ImmutableList<ISection> Sections;
 
         public readonly Exports Exports;
+        public readonly Code Code;
         public readonly ImmutableList<CustomSection> Custom;
 
         public Module(Header header, IEnumerable<ISection> sections)
@@ -20,6 +21,7 @@ namespace SharpWasm.Internal
             Header = header;
             Sections = sections.ToImmutableList();
             Exports = Sections.Find(s => s.Id == SectionId.Export) as Exports ?? Exports.Empty;
+            Code = Sections.Find(s => s.Id == SectionId.Code) as Code ?? Code.Empty;
             Custom = Sections.Where(s => s.Id == SectionId.Custom).Cast<CustomSection>().ToImmutableList();
         }
 

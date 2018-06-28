@@ -25,5 +25,13 @@ namespace SharpWasm.Tests.Integration
 
             Assert.That(export, Is.EqualTo(new ModuleExportDescriptor(ImportExportKind.Function, "main")));
         }
+        [Test]
+        public void RunCode()
+        {
+            var module = WebAssembly.Compile(Wasm);
+            var hello42 = module.Instantiate();
+
+            Assert.That(hello42.Run("main"), Is.EqualTo(42));
+        }
     }
 }

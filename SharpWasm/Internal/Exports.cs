@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Linq;
 using JetBrains.Annotations;
 
 namespace SharpWasm.Internal
@@ -21,6 +22,12 @@ namespace SharpWasm.Internal
         private Exports()
         {
             ExportList = ImmutableArray<Export>.Empty;
+        }
+
+        public int Func(string name)
+        {
+            var export = ExportList.Where(e => e.Kind == ImportExportKind.Function).First(e => e.Name == name);
+            return (int)export.Index;
         }
     }
 

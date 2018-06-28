@@ -29,9 +29,9 @@ namespace SharpWasm
             _module = module;
         }
 
-        public WebAssemblyInstance Instantiate(WebAssemblyImports importObject = null)
+        public WebAssemblyInstance Instantiate()
         {
-            throw new NotImplementedException();
+            return new WebAssemblyInstance(_module);
         }
     }
 }
