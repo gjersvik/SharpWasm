@@ -12,10 +12,10 @@ namespace SharpWasm
             _module = module;
         }
 
-        public int Run(string name)
+        public int Run(string name, params int[] args)
         {
             var function = _module.Exports.Func(name);
-            return _vm.Run(_module.Code.Bodies[function]);
+            return _vm.Run(_module.Code.Bodies[function], args);
         }
     }
 }
