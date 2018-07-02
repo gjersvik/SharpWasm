@@ -7,7 +7,7 @@ namespace SharpWasm
         private readonly Module _module;
         private readonly VirtualMachine _vm;
 
-        internal WebAssemblyInstance(Module module)
+        internal WebAssemblyInstance(Module module, WebAssemblyImports imports)
         {
             _module = module;
             _vm = new VirtualMachine(_module);
