@@ -8,6 +8,7 @@ namespace SharpWasm.Internal
     internal class WasmReader: IDisposable
     {
         private readonly BinaryReader _reader;
+        private uint _lastCount;
 
         public WasmReader(byte[] buffer)
         {
@@ -106,6 +107,8 @@ namespace SharpWasm.Internal
         {
             var bodySize = ReadVarUInt32();
             var localCount = ReadVarUInt32();
+            bodySize -= _lastCount;
+
             if (localCount != 0) throw new Exception("Locals not supported");
             return new FunctionBody(ReadBytes(bodySize));
         }
@@ -140,6 +143,7 @@ namespace SharpWasm.Internal
         
         private  long ReadVarInt64()
         {
+            _lastCount = 0;
             long value = 0;
             var shift = 0;
             byte bt;
@@ -151,6 +155,7 @@ namespace SharpWasm.Internal
 
                 value |= ((long)(bt & 0x7f) << shift);
                 shift += 7;
+                _lastCount += 1;
             }
             while (bt >= 128);
 
@@ -162,6 +167,7 @@ namespace SharpWasm.Internal
         }
         private ulong ReadVarUInt64()
         {
+            _lastCount = 0;
             ulong value = 0;
             var shift = 0;
 
@@ -170,7 +176,7 @@ namespace SharpWasm.Internal
                 var bt = _reader.ReadByte();
 
                 value += (ulong)(bt & 0x7f) << shift;
-
+                _lastCount += 1;
                 if (bt < 128) break;
 
                 shift += 7;
