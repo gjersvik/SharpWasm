@@ -43,11 +43,11 @@ namespace SharpWasm.Internal
                 case SectionId.Custom:
                     return new CustomSection(payload);
                 case SectionId.Type:
-                    return new Section(id);
+                    return new Types(payload);
                 case SectionId.Import:
                     return new Section(id);
                 case SectionId.Function:
-                    return new Section(id);
+                    return new FunctionSelection(payload);
                 case SectionId.Table:
                     return new Section(id);
                 case SectionId.Memory:
@@ -67,6 +67,45 @@ namespace SharpWasm.Internal
                 default:
                     return new Section(id);
             }
+        }
+
+        public IEnumerable<Type> ReadTypes()
+        {
+            var count = ReadVarUInt32();
+            var types = new Type[count];
+
+            for (var i = 0; i < count; i += 1)
+            {
+                types[i] = ReadType();
+            }
+
+            return types;
+        }
+
+        public IEnumerable<uint> ReadFunction()
+        {
+            var count = ReadVarUInt32();
+            var types = new uint[count];
+
+            for (var i = 0; i < count; i += 1)
+            {
+                types[i] = ReadVarUInt32();
+            }
+
+            return types;
+        }
+
+        public Type ReadType()
+        {
+            ReadVarInt7();
+            var count = ReadVarUInt32();
+            var param = new DataTypes[count];
+            for (var i = 0; i < count; i += 1)
+            {
+                param[i] = (DataTypes) ReadVarInt7();
+            }
+
+            return ReadVarUInt1() ? new Type(param, (DataTypes)ReadVarInt7()) : new Type(param);
         }
 
         public IEnumerable<Export> ReadExports()
@@ -112,12 +151,13 @@ namespace SharpWasm.Internal
             if (localCount != 0) throw new Exception("Locals not supported");
             return new FunctionBody(ReadBytes(bodySize));
         }
-
         public byte ReadUInt8() => _reader.ReadByte();
         public ushort ReadUInt16() => _reader.ReadUInt16();
         public uint ReadUInt32() => _reader.ReadUInt32();
+        public bool ReadVarUInt1() => Convert.ToBoolean(ReadVarUInt64());
         public byte ReadVarUInt7() => Convert.ToByte(ReadVarUInt64());
         public uint ReadVarUInt32() => Convert.ToUInt32(ReadVarUInt64());
+        public sbyte ReadVarInt7() => Convert.ToSByte(ReadVarInt64());
         public int ReadVarInt32() => Convert.ToInt32(ReadVarInt64());
         private byte[] ReadBytes(uint len) => _reader.ReadBytes((int)len);
         public string ReadString()

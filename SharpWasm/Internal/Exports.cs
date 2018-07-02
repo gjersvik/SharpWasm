@@ -24,10 +24,10 @@ namespace SharpWasm.Internal
             ExportList = ImmutableArray<Export>.Empty;
         }
 
-        public int Func(string name)
+        public uint Func(string name)
         {
             var export = ExportList.Where(e => e.Kind == ImportExportKind.Function).First(e => e.Name == name);
-            return (int)export.Index;
+            return export.Index;
         }
     }
 
