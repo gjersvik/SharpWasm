@@ -10,7 +10,7 @@ namespace SharpWasm
         internal WebAssemblyInstance(Module module, WebAssemblyImports imports)
         {
             _module = module;
-            _vm = new VirtualMachine(_module);
+            _vm = new VirtualMachine(_module, imports);
         }
 
         public int Run(string name, params int[] args)

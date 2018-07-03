@@ -45,7 +45,7 @@ namespace SharpWasm.Internal
                 case SectionId.Type:
                     return new Types(payload);
                 case SectionId.Import:
-                    return new Section(id);
+                    return new Imports(payload);
                 case SectionId.Function:
                     return new FunctionSelection(payload);
                 case SectionId.Table:
@@ -82,6 +82,19 @@ namespace SharpWasm.Internal
             return types;
         }
 
+        public Type ReadType()
+        {
+            ReadVarInt7();
+            var count = ReadVarUInt32();
+            var param = new DataTypes[count];
+            for (var i = 0; i < count; i += 1)
+            {
+                param[i] = (DataTypes)ReadVarInt7();
+            }
+
+            return ReadVarUInt1() ? new Type(param, (DataTypes)ReadVarInt7()) : new Type(param);
+        }
+
         public IEnumerable<uint> ReadFunction()
         {
             var count = ReadVarUInt32();
@@ -95,17 +108,30 @@ namespace SharpWasm.Internal
             return types;
         }
 
-        public Type ReadType()
+        public Import ReadImport()
         {
-            ReadVarInt7();
+            var module = ReadString();
+            var field = ReadString();
+            var kind = (ImportExportKind) ReadUInt8();
+
+            if(kind != ImportExportKind.Function) throw new NotImplementedException();
+
+            var type = ReadVarUInt32();
+
+            return new Import(module,field,type);
+        }
+
+        public IEnumerable<Import> ReadImports()
+        {
             var count = ReadVarUInt32();
-            var param = new DataTypes[count];
+            var types = new Import[count];
+
             for (var i = 0; i < count; i += 1)
             {
-                param[i] = (DataTypes) ReadVarInt7();
+                types[i] = ReadImport();
             }
 
-            return ReadVarUInt1() ? new Type(param, (DataTypes)ReadVarInt7()) : new Type(param);
+            return types;
         }
 
         public IEnumerable<Export> ReadExports()

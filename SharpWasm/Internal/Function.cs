@@ -2,19 +2,40 @@
 
 namespace SharpWasm.Internal
 {
-    internal class Function
+    internal abstract class AFunction
     {
-        public readonly uint Id;
-        public readonly byte[] Body;
-        public readonly ImmutableArray<DataTypes> Param;
-        public readonly DataTypes Return;
+        public uint Id { get; }
+        public ImmutableArray<DataTypes> Param { get; }
+        public DataTypes Return { get; }
+        
+        public bool Import { get; }
 
-        public Function(uint id, byte[] body, Type type)
+        public AFunction(uint id, Type type, bool import)
         {
             Id = id;
-            Body = body;
+            Import = import;
             Param = type.Params;
             Return = type.Return;
+        }
+    }
+    internal class Function: AFunction
+    {
+        public readonly byte[] Body;
+
+        public Function(uint id, byte[] body, Type type): base(id,type,false)
+        {
+            Body = body;
+        }
+    }
+    internal class ImportFunction : AFunction
+    {
+        public readonly string Module;
+        public readonly string Field;
+
+        public ImportFunction(uint id, Type type, string module, string field) : base(id, type, true)
+        {
+            Module = module;
+            Field = field;
         }
     }
 }

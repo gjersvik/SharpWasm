@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SharpWasm.Internal;
 
 namespace SharpWasm
 {
@@ -9,7 +10,12 @@ namespace SharpWasm
 
         public void Add(string module, string function, Func<int[],int> func)
         {
-            _funcs[module + "," + function] = func;
+            _funcs[module + "." + function] = func;
+        }
+
+        internal int Call(ImportFunction importFunc, int[] param)
+        {
+            return _funcs[importFunc.Module + "." + importFunc.Field](param);
         }
     }
 }
