@@ -8,6 +8,9 @@ namespace SharpWasm.Internal.Parse
         public readonly long Long;
         public int Int => Convert.ToInt32(Long);
         public sbyte SByte => Convert.ToSByte(Long);
+        public ValueType ValueType => (ValueType) SByte;
+        public BlockType BlockType => (BlockType)SByte;
+        public ElemType ElemType => (ElemType)SByte;
 
         public readonly byte Count;
 
@@ -31,6 +34,12 @@ namespace SharpWasm.Internal.Parse
             // Sign extend negative numbers.
             if ((bt & 0x40) != 0)
                 Long |= -1L << shift;
+        }
+
+        public VarIntSigned(long value)
+        {
+            Long = value;
+            Count = 0;
         }
     }
 }

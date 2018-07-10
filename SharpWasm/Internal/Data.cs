@@ -31,7 +31,7 @@ namespace SharpWasm.Internal
     internal class DataSegment
     {
         public readonly int Offset;
-        public byte[] Data;
+        public readonly byte[] Data;
 
         public DataSegment(int offset, byte[] data)
         {

@@ -5,7 +5,7 @@ using SharpWasm.Tests.Helpers;
 namespace SharpWasm.Tests.Internal.Parse
 {
     [TestFixture]
-    class VarIntUnsignedTests
+    public class VarIntUnsignedTests
     {
         [Test]
         public void WikipediaExample()

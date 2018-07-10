@@ -2,7 +2,7 @@
 
 namespace SharpWasm.Internal
 {
-    class FunctionSelection : ISection
+    internal class FunctionSelection : ISection
     {
         public static FunctionSelection Empty { get; } = new FunctionSelection();
 
