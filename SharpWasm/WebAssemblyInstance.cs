@@ -10,6 +10,8 @@ namespace SharpWasm
 
         public readonly WebAssemblyMemory Memory;
 
+        public readonly WebAssemblyTable Table;
+
         internal WebAssemblyInstance(Module module, WebAssemblyImports imports)
         {
             Module = module;
@@ -17,11 +19,23 @@ namespace SharpWasm
             _vm = new VirtualMachine(this);
 
             var memoryImport = Module.Imports.Memory;
-            if (memoryImport == null) return;
-            Memory = Imports.GetMemory(memoryImport);
-            foreach (var segment in module.Data.DataSegments)
+            if (memoryImport != null)
             {
-                Memory.Write(segment);
+                Memory = Imports.GetMemory(memoryImport);
+                foreach (var segment in module.Data.DataSegments)
+                {
+                    Memory.Write(segment);
+                }
+            }
+
+            var table = Module.Table;
+            if (table != null)
+            {
+                Table = new WebAssemblyTable(table.Initial);
+                foreach (var segment in module.Element.ElementSegments)
+                {
+                    Table.Write(segment);
+                }
             }
         }
 

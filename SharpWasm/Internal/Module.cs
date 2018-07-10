@@ -14,8 +14,10 @@ namespace SharpWasm.Internal
 
         public readonly Types Types;
         public readonly FunctionSelection Functions;
+        public readonly Table Table;
         public readonly Imports Imports;
         public readonly Exports Exports;
+        public readonly Element Element;
         public readonly Code Code;
         public readonly Data Data;
         public readonly ImmutableList<CustomSection> Custom;
@@ -26,8 +28,10 @@ namespace SharpWasm.Internal
             Sections = sections.ToImmutableList();
             Types = Sections.Find(s => s.Id == SectionId.Type) as Types ?? Types.Empty;
             Functions = Sections.Find(s => s.Id == SectionId.Function) as FunctionSelection ?? FunctionSelection.Empty;
+            Table = Sections.Find(s => s.Id == SectionId.Table) as Table;
             Imports = Sections.Find(s => s.Id == SectionId.Import) as Imports ?? Imports.Empty;
             Exports = Sections.Find(s => s.Id == SectionId.Export) as Exports ?? Exports.Empty;
+            Element = Sections.Find(s => s.Id == SectionId.Element) as Element ?? Element.Empty;
             Code = Sections.Find(s => s.Id == SectionId.Code) as Code ?? Code.Empty;
             Data = Sections.Find(s => s.Id == SectionId.Data) as Data ?? Data.Empty;
             Custom = Sections.Where(s => s.Id == SectionId.Custom).Cast<CustomSection>().ToImmutableList();
@@ -43,10 +47,10 @@ namespace SharpWasm.Internal
             if (id < Imports.FunctionCount)
             {
                 var import = Imports.Functions[(int)id];
-                return new ImportFunction(id, Types.TypeList[(int)import.TypeIndex], import.Module, import.Field);
+                return new ImportFunction(id, Types.TypeList[(int)import.TypeIndex], import.Module, import.Field, import.TypeIndex);
             }
             var baseId = (int) (id - Imports.FunctionCount);
-            return new Function(id, Code.Bodies[baseId].Code, Types.TypeList[(int)Functions.FunctionList[baseId]]);
+            return new Function(id, Code.Bodies[baseId].Code, Types.TypeList[(int)Functions.FunctionList[baseId]], Functions.FunctionList[baseId]);
         }
         public Function GetFunction(string name)
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SharpWasm.Internal.Parse;
 
 namespace SharpWasm.Internal
 {
@@ -51,7 +52,7 @@ namespace SharpWasm.Internal
                 case SectionId.Function:
                     return new FunctionSelection(payload);
                 case SectionId.Table:
-                    return new Section(id);
+                    return new Table(payload);
                 case SectionId.Memory:
                     return new Section(id);
                 case SectionId.Global:
@@ -61,7 +62,7 @@ namespace SharpWasm.Internal
                 case SectionId.Start:
                     return new Section(id);
                 case SectionId.Element:
-                    return new Section(id);
+                    return new Element(payload);
                 case SectionId.Code:
                     return new Code(payload);
                 case SectionId.Data:
@@ -124,10 +125,8 @@ namespace SharpWasm.Internal
                 case ImportExportKind.Table:
                     throw new NotImplementedException();
                 case ImportExportKind.Memory:
-                    var haveMax = ReadVarUInt1();
-                    var initial = ReadVarUInt32();
-                    var maximum = haveMax ? ReadVarUInt32() : 0;
-                    return new MemoryImport(module, field, initial, maximum);
+                    var limits = ReadResizableLimits();
+                    return new MemoryImport(module, field, limits.Initial, limits.Maximum);
                 case ImportExportKind.Global:
                     throw new NotImplementedException();
                 default:
@@ -167,6 +166,35 @@ namespace SharpWasm.Internal
             var kind = (ImportExportKind) ReadUInt8();
             var index = ReadVarUInt32();
             return new Export(name, kind, index);
+        }
+
+        public IEnumerable<ElementSegment> ReadElementSegments()
+        {
+            var count = ReadVarUInt32();
+            var exports = new ElementSegment[count];
+
+            for (var i = 0; i < count; i += 1)
+            {
+                exports[i] = ReadElementSegment();
+            }
+
+            return exports;
+        }
+
+        public ElementSegment ReadElementSegment()
+        {
+            var index = ReadVarUInt32();
+            if (index != 0) throw new NotImplementedException();
+            var offset = ReadInitExpr().Offset;
+            var count = ReadVarUInt32();
+            var elements = new uint[count];
+
+            for (var i = 0; i < count; i += 1)
+            {
+                elements[i] = ReadVarUInt32();
+            }
+
+            return new ElementSegment(offset, elements);
         }
 
         public IEnumerable<FunctionBody> ReadFunctionBodies()
@@ -211,13 +239,27 @@ namespace SharpWasm.Internal
         {
             var index = ReadVarUInt32();
             if (index != 0) throw new NotImplementedException();
-            if (ReadUInt8() != (int) Instructions.I32Const) throw new NotImplementedException();
-            var offset = ReadVarInt32();
-            ReadUInt8();
+            var offset = ReadInitExpr().Offset;
             var length = ReadVarUInt32();
             var data = ReadBytes(length);
 
             return new DataSegment(offset, data);
+        }
+
+        public ResizableLimits ReadResizableLimits()
+        {
+            var flags = ReadVarUInt1();
+            var initial = ReadVarUInt32();
+            var maximum = flags ? ReadVarUInt32() : 0;
+            return new ResizableLimits(flags,initial,maximum);
+        }
+
+        public InitExpr ReadInitExpr()
+        {
+            if (ReadUInt8() != (int)Instructions.I32Const) throw new NotImplementedException();
+            var offset = ReadVarInt32();
+            if (ReadUInt8() != (int)Instructions.End) throw new NotImplementedException();
+            return new InitExpr(offset);
         }
 
         public byte ReadUInt8() => _reader.ReadByte();

@@ -53,6 +53,9 @@ namespace SharpWasm.Internal
                     case Instructions.Call:
                         Call(reader.ReadVarUInt32());
                         break;
+                    case Instructions.CallIndirect:
+                        CallIndirect(reader.ReadVarUInt32(), reader.ReadVarUInt1());
+                        break;
                     default:
                         throw new NotImplementedException();
                 }
@@ -79,6 +82,16 @@ namespace SharpWasm.Internal
                     _stack.Push(output);
                 }
             }
+        }
+
+        // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
+        // ReSharper disable once UnusedParameter.Local
+        private void CallIndirect(uint type, bool reserved)
+        {
+            var index = _instance.Table.Get(_stack.Pop());
+            var func = _module.GetFunction(index);
+            if(func.TypeId != type) throw new Exception("Wrong type on indirect call");
+            Call(index);
         }
     }
 }

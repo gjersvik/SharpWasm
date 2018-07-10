@@ -1,33 +1,31 @@
 ﻿using System;
+using SharpWasm.Internal;
 
 namespace SharpWasm
 {
-    public enum TableKind
-    {
-        AnyFunc
-    }
-
     public class WebAssemblyTable
     {
-        public WebAssemblyTable(TableKind element, ulong initial, ulong maximum = 0)
+        private readonly uint[] _functions;
+
+
+        public WebAssemblyTable(ulong initial)
         {
-            throw new NotImplementedException();
+            _functions = new uint[initial];
         }
 
-        public ulong Grow(ulong delta)
+        public uint Get(int index)
         {
-            throw new NotImplementedException();
+            return _functions[index];
         }
 
-        public T Get<T>(ulong index)
+        public void Set(int index, uint value)
         {
-            throw new NotImplementedException();
+            _functions[index] = value;
         }
 
-        public void Set<T>(ulong index, T value)
+        internal void Write(ElementSegment segment)
         {
-            throw new NotImplementedException();
+            Array.Copy(segment.Elems, 0, _functions, segment.Offset, segment.Elems.Length);
         }
-        public readonly ulong Length;
     }
 }
