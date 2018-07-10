@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SharpWasm.Internal
 {
-    internal class WasmReader: IDisposable
+    internal class WasmReader : IDisposable
     {
         private readonly BinaryReader _reader;
         private uint _lastCount;
@@ -18,14 +18,16 @@ namespace SharpWasm.Internal
         public Module ReadModule()
         {
             var header = ReadHeader();
-            if(!header.IsValid()) throw new WebAssemblyCompileError();
+            if (!header.IsValid()) throw new WebAssemblyCompileError();
             var sections = new List<ISection>();
             while (_reader.BaseStream.Position != _reader.BaseStream.Length)
             {
                 sections.Add(ReadSection());
             }
+
             return new Module(header, sections);
         }
+
         public Header ReadHeader()
         {
             var mn = ReadUInt32();
@@ -35,7 +37,7 @@ namespace SharpWasm.Internal
 
         public ISection ReadSection()
         {
-            var id = (SectionId)ReadVarUInt7();
+            var id = (SectionId) ReadVarUInt7();
             var len = ReadVarUInt32();
             var payload = ReadBytes(len);
             switch (id)
@@ -63,7 +65,7 @@ namespace SharpWasm.Internal
                 case SectionId.Code:
                     return new Code(payload);
                 case SectionId.Data:
-                    return new Section(id);
+                    return new Data(payload);
                 default:
                     return new Section(id);
             }
@@ -89,10 +91,10 @@ namespace SharpWasm.Internal
             var param = new DataTypes[count];
             for (var i = 0; i < count; i += 1)
             {
-                param[i] = (DataTypes)ReadVarInt7();
+                param[i] = (DataTypes) ReadVarInt7();
             }
 
-            return ReadVarUInt1() ? new Type(param, (DataTypes)ReadVarInt7()) : new Type(param);
+            return ReadVarUInt1() ? new Type(param, (DataTypes) ReadVarInt7()) : new Type(param);
         }
 
         public IEnumerable<uint> ReadFunction()
@@ -108,23 +110,35 @@ namespace SharpWasm.Internal
             return types;
         }
 
-        public Import ReadImport()
+        public AImport ReadImport()
         {
             var module = ReadString();
             var field = ReadString();
             var kind = (ImportExportKind) ReadUInt8();
 
-            if(kind != ImportExportKind.Function) throw new NotImplementedException();
-
-            var type = ReadVarUInt32();
-
-            return new Import(module,field,type);
+            switch (kind)
+            {
+                case ImportExportKind.Function:
+                    var type = ReadVarUInt32();
+                    return new FunctionImport(module, field, type);
+                case ImportExportKind.Table:
+                    throw new NotImplementedException();
+                case ImportExportKind.Memory:
+                    var haveMax = ReadVarUInt1();
+                    var initial = ReadVarUInt32();
+                    var maximum = haveMax ? ReadVarUInt32() : 0;
+                    return new MemoryImport(module, field, initial, maximum);
+                case ImportExportKind.Global:
+                    throw new NotImplementedException();
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
-        public IEnumerable<Import> ReadImports()
+        public IEnumerable<AImport> ReadImports()
         {
             var count = ReadVarUInt32();
-            var types = new Import[count];
+            var types = new AImport[count];
 
             for (var i = 0; i < count; i += 1)
             {
@@ -152,7 +166,7 @@ namespace SharpWasm.Internal
             var name = ReadString();
             var kind = (ImportExportKind) ReadUInt8();
             var index = ReadVarUInt32();
-            return new Export(name,kind,index);
+            return new Export(name, kind, index);
         }
 
         public IEnumerable<FunctionBody> ReadFunctionBodies()
@@ -177,6 +191,35 @@ namespace SharpWasm.Internal
             if (localCount != 0) throw new Exception("Locals not supported");
             return new FunctionBody(ReadBytes(bodySize));
         }
+
+
+
+        public IEnumerable<DataSegment> ReadData()
+        {
+            var count = ReadVarUInt32();
+            var exports = new DataSegment[count];
+
+            for (var i = 0; i < count; i += 1)
+            {
+                exports[i] = ReadDataSegment();
+            }
+
+            return exports;
+        }
+
+        public DataSegment ReadDataSegment()
+        {
+            var index = ReadVarUInt32();
+            if (index != 0) throw new NotImplementedException();
+            if (ReadUInt8() != (int) Instructions.I32Const) throw new NotImplementedException();
+            var offset = ReadVarInt32();
+            ReadUInt8();
+            var length = ReadVarUInt32();
+            var data = ReadBytes(length);
+
+            return new DataSegment(offset, data);
+        }
+
         public byte ReadUInt8() => _reader.ReadByte();
         public ushort ReadUInt16() => _reader.ReadUInt16();
         public uint ReadUInt32() => _reader.ReadUInt32();
@@ -185,7 +228,8 @@ namespace SharpWasm.Internal
         public uint ReadVarUInt32() => Convert.ToUInt32(ReadVarUInt64());
         public sbyte ReadVarInt7() => Convert.ToSByte(ReadVarInt64());
         public int ReadVarInt32() => Convert.ToInt32(ReadVarInt64());
-        private byte[] ReadBytes(uint len) => _reader.ReadBytes((int)len);
+        private byte[] ReadBytes(uint len) => _reader.ReadBytes((int) len);
+
         public string ReadString()
         {
             var count = ReadVarUInt32();
@@ -206,8 +250,8 @@ namespace SharpWasm.Internal
         {
             _reader.Dispose();
         }
-        
-        private  long ReadVarInt64()
+
+        private long ReadVarInt64()
         {
             _lastCount = 0;
             long value = 0;
@@ -219,11 +263,10 @@ namespace SharpWasm.Internal
 
                 bt = ibt;
 
-                value |= ((long)(bt & 0x7f) << shift);
+                value |= ((long) (bt & 0x7f) << shift);
                 shift += 7;
                 _lastCount += 1;
-            }
-            while (bt >= 128);
+            } while (bt >= 128);
 
             // Sign extend negative numbers.
             if ((bt & 0x40) != 0)
@@ -231,6 +274,7 @@ namespace SharpWasm.Internal
 
             return value;
         }
+
         private ulong ReadVarUInt64()
         {
             _lastCount = 0;
@@ -241,12 +285,13 @@ namespace SharpWasm.Internal
             {
                 var bt = _reader.ReadByte();
 
-                value += (ulong)(bt & 0x7f) << shift;
+                value += (ulong) (bt & 0x7f) << shift;
                 _lastCount += 1;
                 if (bt < 128) break;
 
                 shift += 7;
             }
+
             return value;
         }
     }

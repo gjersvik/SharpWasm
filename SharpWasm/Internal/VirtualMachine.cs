@@ -7,13 +7,15 @@ namespace SharpWasm.Internal
     internal class VirtualMachine
     {
         private readonly Stack<int> _stack = new Stack<int>();
-        private readonly Module _module;
+        private readonly WebAssemblyInstance _instance;
         private readonly WebAssemblyImports _imports;
+        private readonly Module _module;
 
-        public VirtualMachine(Module module, WebAssemblyImports imports)
+        public VirtualMachine(WebAssemblyInstance instance)
         {
-            _module = module;
-            _imports = imports;
+            _instance = instance;
+            _imports = _instance.Imports;
+            _module = _instance.Module;
         }
 
         public int Run(Function func, params int[] args)
@@ -60,7 +62,7 @@ namespace SharpWasm.Internal
         private void Call(uint id)
         {
             var func = _module.GetFunction(id);
-            var param = func.Param.Select(t => _stack.Pop()).ToArray();
+            var param = func.Param.Select(t => _stack.Pop()).Reverse().ToArray();
             if (func is Function bodyFunc)
             {
                 using (var reader = new WasmReader(bodyFunc.Body))
@@ -71,7 +73,7 @@ namespace SharpWasm.Internal
 
             if (func is ImportFunction importFunc)
             {
-                var output = _imports.Call(importFunc, param);
+                var output = _imports.Call(_instance,importFunc, param);
                 if (importFunc.Return == DataTypes.I32)
                 {
                     _stack.Push(output);

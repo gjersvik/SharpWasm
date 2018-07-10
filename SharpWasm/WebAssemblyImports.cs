@@ -6,16 +6,36 @@ namespace SharpWasm
 {
     public class WebAssemblyImports
     {
-        private Dictionary<string, Func<int[], int>> _funcs = new Dictionary<string, Func<int[], int>>();
+        private readonly Dictionary<string, Func<WebAssemblyInstance, int[], int>> _functions = new Dictionary<string, Func<WebAssemblyInstance,int[], int>>();
+        private readonly Dictionary<string, WebAssemblyMemory> _memories = new Dictionary<string, WebAssemblyMemory>();
 
         public void Add(string module, string function, Func<int[],int> func)
         {
-            _funcs[module + "." + function] = func;
+            Add(module,function, (i,a) => func(a));
+        }
+        public void Add(string module, string function, Func<WebAssemblyInstance, int[], int> func)
+        {
+            _functions[module + "." + function] = func;
         }
 
-        internal int Call(ImportFunction importFunc, int[] param)
+        public void Add(string module, string function, WebAssemblyMemory memory)
         {
-            return _funcs[importFunc.Module + "." + importFunc.Field](param);
+            _memories[module + "." + function] = memory;
+        }
+
+        internal int Call(WebAssemblyInstance instance, ImportFunction importFunc, int[] param)
+        {
+            return _functions[importFunc.Module + "." + importFunc.Field](instance,param);
+        }
+
+        internal WebAssemblyMemory GetMemory(MemoryImport import)
+        {
+            return _memories[import.Module + "." + import.Field];
+        }
+
+        public WebAssemblyMemory GetMemory(string module, string function)
+        {
+            return _memories[module + "." + function];
         }
     }
 }

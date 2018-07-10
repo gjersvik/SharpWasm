@@ -1,19 +1,27 @@
 ﻿using System;
+using SharpWasm.Internal;
 
 namespace SharpWasm
 {
     public class WebAssemblyMemory
     {
-        public readonly byte[] Buffer;
+        private readonly byte[] _bytes;
 
-        public WebAssemblyMemory(ulong initial, ulong maximum = 0)
+        public WebAssemblyMemory(uint initial)
         {
-            throw new NotImplementedException();
+            _bytes = new byte[initial * 65536];
         }
 
-        public ulong Grow(ulong delta)
+        public byte[] ReadBytes(int index, int length)
         {
-            throw new NotImplementedException();
+            var output = new byte[length];
+            Array.Copy(_bytes,index,output,0, length);
+            return output;
+        }
+
+        internal void Write(DataSegment segment)
+        {
+            Array.Copy(segment.Data,0,_bytes, segment.Offset,segment.Data.Length);
         }
     }
 }

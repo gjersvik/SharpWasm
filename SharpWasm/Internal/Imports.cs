@@ -1,49 +1,76 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 
 namespace SharpWasm.Internal
 {
-    internal class Imports: ISection
+    internal class Imports : ISection
     {
-        public static readonly Imports Empty = new Imports(ImmutableArray<Import>.Empty);
+        public static readonly Imports Empty = new Imports(ImmutableArray<AImport>.Empty);
 
         public SectionId Id { get; } = SectionId.Import;
-        public readonly ImmutableArray<Import> ImportList;
+        public readonly ImmutableArray<AImport> ImportList;
 
-        public readonly ImmutableArray<Import> Functions;
+        public readonly ImmutableArray<FunctionImport> Functions;
+        public readonly MemoryImport Memory;
         public int FunctionCount => Functions.Length;
 
-        public Imports(byte[] payload): this(FromPayload(payload))
+        public Imports(byte[] payload) : this(FromPayload(payload))
         {
         }
 
-        private Imports(IEnumerable<Import> list)
+        private Imports(IEnumerable<AImport> list)
         {
             ImportList = list.ToImmutableArray();
-            Functions = ImportList;
+            Functions = ImportList.Where(i => i.Kind == ImportExportKind.Function).Cast<FunctionImport>()
+                .ToImmutableArray();
+            Memory = ImportList.FirstOrDefault(i => i.Kind == ImportExportKind.Memory) as MemoryImport;
         }
 
-        private static IEnumerable<Import> FromPayload(byte[] payload)
+        private static IEnumerable<AImport> FromPayload(byte[] payload)
         {
             using (var reader = new WasmReader(payload))
             {
-                return reader.ReadImports().ToImmutableArray();
+                return reader.ReadImports();
             }
         }
     }
 
-    internal class Import
+    internal abstract class AImport
     {
         public readonly string Module;
         public readonly string Field;
-        public readonly ImportExportKind Kind = ImportExportKind.Function;
-        public uint TypeIndex;
+        public readonly ImportExportKind Kind;
 
-        public Import(string module, string field, uint typeIndex)
+        protected AImport(string module, string field, ImportExportKind kind)
         {
             Module = module;
             Field = field;
+            Kind = kind;
+        }
+    }
+
+    internal class FunctionImport : AImport
+    {
+        public readonly uint TypeIndex;
+
+        public FunctionImport(string module, string field, uint typeIndex) : base(module, field,
+            ImportExportKind.Function)
+        {
             TypeIndex = typeIndex;
+        }
+    }
+
+    internal class MemoryImport : AImport
+    {
+        public readonly uint Initial;
+        public readonly uint Maximum;
+
+        public MemoryImport(string module, string field, uint initial, uint maximum = 0) : base(module, field,
+            ImportExportKind.Memory)
+        {
+            Initial = initial;
+            Maximum = maximum;
         }
     }
 }

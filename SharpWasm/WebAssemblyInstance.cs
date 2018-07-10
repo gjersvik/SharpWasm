@@ -4,18 +4,30 @@ namespace SharpWasm
 {
     public class WebAssemblyInstance
     {
-        private readonly Module _module;
+        internal readonly Module Module;
         private readonly VirtualMachine _vm;
+        public readonly WebAssemblyImports Imports;
+
+        public readonly WebAssemblyMemory Memory;
 
         internal WebAssemblyInstance(Module module, WebAssemblyImports imports)
         {
-            _module = module;
-            _vm = new VirtualMachine(_module, imports);
+            Module = module;
+            Imports = imports;
+            _vm = new VirtualMachine(this);
+
+            var memoryImport = Module.Imports.Memory;
+            if (memoryImport == null) return;
+            Memory = Imports.GetMemory(memoryImport);
+            foreach (var segment in module.Data.DataSegments)
+            {
+                Memory.Write(segment);
+            }
         }
 
         public int Run(string name, params int[] args)
         {
-            var function = _module.GetFunction(name);
+            var function = Module.GetFunction(name);
             return _vm.Run(function, args);
         }
     }
