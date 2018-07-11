@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.IO;
+using System.Text;
 using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm.Internal.Parse
@@ -27,6 +28,20 @@ namespace SharpWasm.Internal.Parse
         public static ExternalKind ToExternalKind(BinaryReader reader)
         {
             return (ExternalKind)reader.ReadByte();
+        }
+
+        public static string ToUtf8(BinaryReader reader, uint length)
+        {
+            return Encoding.UTF8.GetString(reader.ReadBytes((int)length));
+        }
+
+        public static ImmutableArray<byte> ToBytes(BinaryReader reader)
+        {
+            using (var ms = new MemoryStream())
+            {
+                reader.BaseStream.CopyTo(ms);
+                return ms.ToArray().ToImmutableArray();
+            }
         }
     }
 }

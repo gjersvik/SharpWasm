@@ -42,34 +42,37 @@ namespace SharpWasm.Internal
             var id = (SectionCode) ReadVarUInt7();
             var len = ReadVarUInt32();
             var payload = ReadBytes(len);
-            switch (id)
+            using (var reader = ParseTools.FromBytes(payload))
             {
-                case SectionCode.Custom:
-                    return new CustomSection(payload);
-                case SectionCode.Type:
-                    return new Types(payload);
-                case SectionCode.Import:
-                    return new Imports(payload);
-                case SectionCode.Function:
-                    return new FunctionSelection(payload);
-                case SectionCode.Table:
-                    return new Table(payload);
-                case SectionCode.Memory:
-                    return new Section(id);
-                case SectionCode.Global:
-                    return new Section(id);
-                case SectionCode.Export:
-                    return new Exports(payload);
-                case SectionCode.Start:
-                    return new Section(id);
-                case SectionCode.Element:
-                    return new Element(payload);
-                case SectionCode.Code:
-                    return new Code(payload);
-                case SectionCode.Data:
-                    return new Data(payload);
-                default:
-                    return new Section(id);
+                switch (id)
+                {
+                    case SectionCode.Custom:
+                        return new Custom(reader);
+                    case SectionCode.Type:
+                        return new Types(payload);
+                    case SectionCode.Import:
+                        return new Imports(payload);
+                    case SectionCode.Function:
+                        return new FunctionSelection(payload);
+                    case SectionCode.Table:
+                        return new Table(payload);
+                    case SectionCode.Memory:
+                        return new Section(id);
+                    case SectionCode.Global:
+                        return new Section(id);
+                    case SectionCode.Export:
+                        return new Exports(payload);
+                    case SectionCode.Start:
+                        return new Section(id);
+                    case SectionCode.Element:
+                        return new Element(payload);
+                    case SectionCode.Code:
+                        return new Code(payload);
+                    case SectionCode.Data:
+                        return new Data(payload);
+                    default:
+                        return new Section(id);
+                }
             }
         }
 

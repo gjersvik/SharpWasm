@@ -21,7 +21,7 @@ namespace SharpWasm.Internal
         public readonly Element Element;
         public readonly Code Code;
         public readonly Data Data;
-        public readonly ImmutableList<CustomSection> Custom;
+        public readonly ImmutableList<Custom> Custom;
 
         public Module(Header header, IEnumerable<ISection> sections)
         {
@@ -35,10 +35,10 @@ namespace SharpWasm.Internal
             Element = Sections.Find(s => s.Id == SectionCode.Element) as Element ?? Element.Empty;
             Code = Sections.Find(s => s.Id == SectionCode.Code) as Code ?? Code.Empty;
             Data = Sections.Find(s => s.Id == SectionCode.Data) as Data ?? Data.Empty;
-            Custom = Sections.Where(s => s.Id == SectionCode.Custom).Cast<CustomSection>().ToImmutableList();
+            Custom = Sections.Where(s => s.Id == SectionCode.Custom).Cast<Custom>().ToImmutableList();
         }
 
-        public IEnumerable<CustomSection> ByName(string name)
+        public IEnumerable<Custom> ByName(string name)
         {
             return Custom.Where(cs => cs.Name == name);
         }

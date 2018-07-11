@@ -9,7 +9,7 @@ namespace SharpWasm
     {
         public IEnumerable<byte[]> CustomSections(string name)
         {
-            return _module.ByName(name).Select(cs => cs.Payload);
+            return _module.ByName(name).Select(cs => cs.PayloadData.ToArray());
         }
 
         public IEnumerable<ModuleExportDescriptor> Exports()
