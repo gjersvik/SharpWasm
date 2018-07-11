@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using SharpWasm.Internal.Parse.Sections;
 
 namespace SharpWasm.Internal
 {
@@ -6,7 +7,7 @@ namespace SharpWasm.Internal
     {
         public static readonly Code Empty = new Code();
 
-        public SectionId Id { get; } = SectionId.Code;
+        public SectionCode Id { get; } = SectionCode.Code;
         public ImmutableArray<FunctionBody> Bodies;
 
         public Code(byte[] payload)

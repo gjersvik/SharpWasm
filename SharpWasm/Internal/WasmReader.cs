@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SharpWasm.Internal.Parse;
+using SharpWasm.Internal.Parse.Sections;
 using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm.Internal
@@ -38,34 +39,34 @@ namespace SharpWasm.Internal
 
         public ISection ReadSection()
         {
-            var id = (SectionId) ReadVarUInt7();
+            var id = (SectionCode) ReadVarUInt7();
             var len = ReadVarUInt32();
             var payload = ReadBytes(len);
             switch (id)
             {
-                case SectionId.Custom:
+                case SectionCode.Custom:
                     return new CustomSection(payload);
-                case SectionId.Type:
+                case SectionCode.Type:
                     return new Types(payload);
-                case SectionId.Import:
+                case SectionCode.Import:
                     return new Imports(payload);
-                case SectionId.Function:
+                case SectionCode.Function:
                     return new FunctionSelection(payload);
-                case SectionId.Table:
+                case SectionCode.Table:
                     return new Table(payload);
-                case SectionId.Memory:
+                case SectionCode.Memory:
                     return new Section(id);
-                case SectionId.Global:
+                case SectionCode.Global:
                     return new Section(id);
-                case SectionId.Export:
+                case SectionCode.Export:
                     return new Exports(payload);
-                case SectionId.Start:
+                case SectionCode.Start:
                     return new Section(id);
-                case SectionId.Element:
+                case SectionCode.Element:
                     return new Element(payload);
-                case SectionId.Code:
+                case SectionCode.Code:
                     return new Code(payload);
-                case SectionId.Data:
+                case SectionCode.Data:
                     return new Data(payload);
                 default:
                     return new Section(id);

@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using SharpWasm.Internal.Parse.Sections;
 
 [assembly: InternalsVisibleTo("SharpWasm.Tests")]
 
@@ -26,15 +27,15 @@ namespace SharpWasm.Internal
         {
             Header = header;
             Sections = sections.ToImmutableList();
-            Types = Sections.Find(s => s.Id == SectionId.Type) as Types ?? Types.Empty;
-            Functions = Sections.Find(s => s.Id == SectionId.Function) as FunctionSelection ?? FunctionSelection.Empty;
-            Table = Sections.Find(s => s.Id == SectionId.Table) as Table;
-            Imports = Sections.Find(s => s.Id == SectionId.Import) as Imports ?? Imports.Empty;
-            Exports = Sections.Find(s => s.Id == SectionId.Export) as Exports ?? Exports.Empty;
-            Element = Sections.Find(s => s.Id == SectionId.Element) as Element ?? Element.Empty;
-            Code = Sections.Find(s => s.Id == SectionId.Code) as Code ?? Code.Empty;
-            Data = Sections.Find(s => s.Id == SectionId.Data) as Data ?? Data.Empty;
-            Custom = Sections.Where(s => s.Id == SectionId.Custom).Cast<CustomSection>().ToImmutableList();
+            Types = Sections.Find(s => s.Id == SectionCode.Type) as Types ?? Types.Empty;
+            Functions = Sections.Find(s => s.Id == SectionCode.Function) as FunctionSelection ?? FunctionSelection.Empty;
+            Table = Sections.Find(s => s.Id == SectionCode.Table) as Table;
+            Imports = Sections.Find(s => s.Id == SectionCode.Import) as Imports ?? Imports.Empty;
+            Exports = Sections.Find(s => s.Id == SectionCode.Export) as Exports ?? Exports.Empty;
+            Element = Sections.Find(s => s.Id == SectionCode.Element) as Element ?? Element.Empty;
+            Code = Sections.Find(s => s.Id == SectionCode.Code) as Code ?? Code.Empty;
+            Data = Sections.Find(s => s.Id == SectionCode.Data) as Data ?? Data.Empty;
+            Custom = Sections.Where(s => s.Id == SectionCode.Custom).Cast<CustomSection>().ToImmutableList();
         }
 
         public IEnumerable<CustomSection> ByName(string name)

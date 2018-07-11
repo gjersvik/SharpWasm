@@ -1,11 +1,12 @@
 ﻿using SharpWasm.Internal.Parse;
+using SharpWasm.Internal.Parse.Sections;
 using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm.Internal
 {
     internal class Table: ISection
     {
-        public SectionId Id { get; } = SectionId.Table;
+        public SectionCode Id { get; } = SectionCode.Table;
         public readonly uint Initial;
         public readonly uint Maximum;
 

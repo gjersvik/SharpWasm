@@ -1,11 +1,6 @@
-﻿namespace SharpWasm.Internal
+﻿namespace SharpWasm.Internal.Parse.Sections
 {
-    internal interface ISection
-    {
-        SectionId Id { get; }
-    }
-
-    internal enum SectionId
+    internal enum SectionCode: byte
     {
         Custom = 0,
         Type,

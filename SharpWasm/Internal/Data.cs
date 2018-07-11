@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using SharpWasm.Internal.Parse.Sections;
 
 namespace SharpWasm.Internal
 {
@@ -7,7 +8,7 @@ namespace SharpWasm.Internal
     {
         public static readonly Data Empty = new Data(ImmutableArray<DataSegment>.Empty);
 
-        public SectionId Id { get; } = SectionId.Data;
+        public SectionCode Id { get; } = SectionCode.Data;
         public readonly ImmutableArray<DataSegment> DataSegments;
 
         public Data(byte[] payload) : this(FromPayload(payload))

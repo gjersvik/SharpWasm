@@ -1,8 +1,10 @@
-﻿namespace SharpWasm.Internal
+﻿using SharpWasm.Internal.Parse.Sections;
+
+namespace SharpWasm.Internal
 {
     internal class CustomSection: ISection
     {
-        public SectionId Id { get; } = SectionId.Custom;
+        public SectionCode Id { get; } = SectionCode.Custom;
         public byte[] Payload { get; }
 
         public readonly string Name;

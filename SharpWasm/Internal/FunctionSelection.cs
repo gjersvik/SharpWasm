@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using SharpWasm.Internal.Parse.Sections;
 
 namespace SharpWasm.Internal
 {
@@ -6,7 +7,7 @@ namespace SharpWasm.Internal
     {
         public static FunctionSelection Empty { get; } = new FunctionSelection();
 
-        public SectionId Id { get; } = SectionId.Function;
+        public SectionCode Id { get; } = SectionCode.Function;
 
         public ImmutableArray<uint> FunctionList;
         public FunctionSelection(byte[] payload)

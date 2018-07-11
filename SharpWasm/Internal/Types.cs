@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using SharpWasm.Internal.Parse.Sections;
 
 namespace SharpWasm.Internal
 {
@@ -7,7 +8,7 @@ namespace SharpWasm.Internal
     {
         public static Types Empty { get; } = new Types();
 
-        public SectionId Id { get; } = SectionId.Type;
+        public SectionCode Id { get; } = SectionCode.Type;
 
         public ImmutableArray<Type> TypeList;
         public Types(byte[] payload)

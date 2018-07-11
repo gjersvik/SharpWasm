@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using SharpWasm.Internal.Parse.Sections;
 
 namespace SharpWasm.Internal
 {
@@ -8,7 +9,7 @@ namespace SharpWasm.Internal
     {
         public static readonly Imports Empty = new Imports(ImmutableArray<AImport>.Empty);
 
-        public SectionId Id { get; } = SectionId.Import;
+        public SectionCode Id { get; } = SectionCode.Import;
         public readonly ImmutableArray<AImport> ImportList;
 
         public readonly ImmutableArray<FunctionImport> Functions;

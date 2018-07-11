@@ -1,12 +1,14 @@
-﻿namespace SharpWasm.Internal
+﻿using SharpWasm.Internal.Parse.Sections;
+
+namespace SharpWasm.Internal
 {
     internal class Section: ISection
     {
-        public Section(SectionId id)
+        public Section(SectionCode id)
         {
             Id = id;
         }
 
-        public SectionId Id { get; }
+        public SectionCode Id { get; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Linq;
 using JetBrains.Annotations;
+using SharpWasm.Internal.Parse.Sections;
 
 namespace SharpWasm.Internal
 {
@@ -8,7 +9,7 @@ namespace SharpWasm.Internal
     {
         public static readonly Exports Empty = new Exports();
 
-        public SectionId Id { get; } = SectionId.Export;
+        public SectionCode Id { get; } = SectionCode.Export;
         public ImmutableArray<Export> ExportList;
 
         public Exports(byte[] payload)
