@@ -1,4 +1,5 @@
 ﻿using SharpWasm.Internal.Parse;
+using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm.Internal
 {

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace SharpWasm.Internal.Parse
+namespace SharpWasm.Internal.Parse.Types
 {
     internal class TableType
     {

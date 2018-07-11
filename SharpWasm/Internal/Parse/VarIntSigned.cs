@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using SharpWasm.Internal.Parse.Types;
+using ValueType = SharpWasm.Internal.Parse.Types.ValueType;
 
 namespace SharpWasm.Internal.Parse
 {

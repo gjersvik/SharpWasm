@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.IO;
+using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm.Internal.Parse
 {

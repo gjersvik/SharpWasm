@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 
-namespace SharpWasm.Internal.Parse
+namespace SharpWasm.Internal.Parse.Types
 {
     internal class FuncType
     {

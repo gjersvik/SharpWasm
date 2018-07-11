@@ -2,7 +2,7 @@
 using System.IO;
 using JetBrains.Annotations;
 
-namespace SharpWasm.Internal.Parse
+namespace SharpWasm.Internal.Parse.Types
 {
     internal class ResizableLimits: IEquatable<ResizableLimits>
     {

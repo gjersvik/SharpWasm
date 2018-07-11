@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SharpWasm.Internal.Parse;
+using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm.Internal
 {
