@@ -42,5 +42,35 @@ namespace SharpWasm.Tests.Internal.Parse
                 Assert.That(number.Count, Is.EqualTo(1));
             }
         }
+
+        [Test]
+        public void ToUInt()
+        {
+            const string hex = "E58E26";
+            using (var reader = BinaryTools.HexToReader(hex))
+            {
+                Assert.That(VarIntUnsigned.ToUInt(reader), Is.EqualTo(624485));
+            }
+        }
+
+        [Test]
+        public void ToByte()
+        {
+            const string hex = "0A";
+            using (var reader = BinaryTools.HexToReader(hex))
+            {
+                Assert.That(VarIntUnsigned.ToByte(reader), Is.EqualTo(10));
+            }
+        }
+
+        [Test]
+        public void ToBool()
+        {
+            const string hex = "01";
+            using (var reader = BinaryTools.HexToReader(hex))
+            {
+                Assert.That(VarIntUnsigned.ToBool(reader), Is.True);
+            }
+        }
     }
 }
