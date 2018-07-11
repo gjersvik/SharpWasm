@@ -40,5 +40,19 @@ namespace SharpWasm.Tests.Internal.Parse
                 Assert.That(limits.Maximum, Is.EqualTo(2));
             }
         }
+
+        [Test]
+        public void Equals()
+        {
+            var a = new ResizableLimits(1);
+            var b = new ResizableLimits(1);
+            Assert.That(a.Equals(a), Is.True);
+            Assert.That(a.Equals(b), Is.True);
+            Assert.That(a.Equals(null), Is.False);
+            Assert.That(a.Equals((object)a), Is.True);
+            Assert.That(a.Equals((object)b), Is.True);
+            Assert.That(a.Equals((object)null), Is.False);
+            Assert.That(a.GetHashCode(), Is.EqualTo(b.GetHashCode()));
+        }
     }
 }

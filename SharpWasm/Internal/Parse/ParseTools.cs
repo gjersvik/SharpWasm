@@ -22,5 +22,10 @@ namespace SharpWasm.Internal.Parse
         {
             return new BinaryReader(new MemoryStream(bytes));
         }
+
+        public static ExternalKind ToExternalKind(BinaryReader reader)
+        {
+            return (ExternalKind)reader.ReadByte();
+        }
     }
 }
