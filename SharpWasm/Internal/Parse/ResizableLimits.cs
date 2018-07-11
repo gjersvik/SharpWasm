@@ -1,16 +1,25 @@
-﻿namespace SharpWasm.Internal.Parse
+﻿using System.IO;
+
+namespace SharpWasm.Internal.Parse
 {
     internal class ResizableLimits
     {
-        public readonly bool Flags ;
+        public readonly bool Flags;
         public readonly uint Initial;
-        public readonly uint Maximum;
+        public readonly uint? Maximum;
 
-        public ResizableLimits(bool flags, uint initial, uint maximum)
+        public ResizableLimits(BinaryReader reader)
         {
-            Flags = flags;
+            Flags = VarIntUnsigned.ToBool(reader);
+            Initial = VarIntUnsigned.ToUInt(reader);
+            if (Flags) Maximum = VarIntUnsigned.ToUInt(reader);
+        }
+
+        public ResizableLimits(uint initial, uint? maximum = null)
+        {
             Initial = initial;
             Maximum = maximum;
+            Flags = Maximum != null;
         }
     }
 }

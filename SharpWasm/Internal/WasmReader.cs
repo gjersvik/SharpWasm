@@ -124,8 +124,8 @@ namespace SharpWasm.Internal
                 case ImportExportKind.Table:
                     throw new NotImplementedException();
                 case ImportExportKind.Memory:
-                    var limits = ReadResizableLimits();
-                    return new MemoryImport(module, field, limits.Initial, limits.Maximum);
+                    var limits = new ResizableLimits(_reader);
+                    return new MemoryImport(module, field, limits.Initial, limits.Maximum ?? 0);
                 case ImportExportKind.Global:
                     throw new NotImplementedException();
                 default:
@@ -243,14 +243,6 @@ namespace SharpWasm.Internal
             var data = ReadBytes(length);
 
             return new DataSegment(offset, data);
-        }
-
-        public ResizableLimits ReadResizableLimits()
-        {
-            var flags = ReadVarUInt1();
-            var initial = ReadVarUInt32();
-            var maximum = flags ? ReadVarUInt32() : 0;
-            return new ResizableLimits(flags,initial,maximum);
         }
 
         public InitExpr ReadInitExpr()

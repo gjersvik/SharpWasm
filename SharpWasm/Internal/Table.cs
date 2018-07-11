@@ -15,14 +15,14 @@ namespace SharpWasm.Internal
         private Table(ResizableLimits limits)
         {
             Initial = limits.Initial;
-            Maximum = limits.Maximum;
+            Maximum = limits.Maximum ?? 0;
         }
 
         private static ResizableLimits FromPayload(byte[] payload)
         {
-            using (var reader = new WasmReader(payload))
+            using (var reader = ParseTools.FromBytes(payload))
             {
-                return reader.ReadResizableLimits();
+                return new ResizableLimits(reader);
             }
         }
     }

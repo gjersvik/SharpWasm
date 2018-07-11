@@ -17,5 +17,10 @@ namespace SharpWasm.Internal.Parse
 
             return builder.MoveToImmutable();
         }
+
+        public static BinaryReader FromBytes(byte[] bytes)
+        {
+            return new BinaryReader(new MemoryStream(bytes));
+        }
     }
 }
