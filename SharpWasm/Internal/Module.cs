@@ -13,7 +13,7 @@ namespace SharpWasm.Internal
         public readonly Header Header;
         public readonly ImmutableList<ISection> Sections;
 
-        public readonly Types Types;
+        public readonly Type Type;
         public readonly FunctionSelection Functions;
         public readonly Table Table;
         public readonly Imports Imports;
@@ -27,7 +27,7 @@ namespace SharpWasm.Internal
         {
             Header = header;
             Sections = sections.ToImmutableList();
-            Types = Sections.Find(s => s.Id == SectionCode.Type) as Types ?? Types.Empty;
+            Type = Sections.Find(s => s.Id == SectionCode.Type) as Type;
             Functions = Sections.Find(s => s.Id == SectionCode.Function) as FunctionSelection ?? FunctionSelection.Empty;
             Table = Sections.Find(s => s.Id == SectionCode.Table) as Table;
             Imports = Sections.Find(s => s.Id == SectionCode.Import) as Imports ?? Imports.Empty;
@@ -48,10 +48,10 @@ namespace SharpWasm.Internal
             if (id < Imports.FunctionCount)
             {
                 var import = Imports.Functions[(int)id];
-                return new ImportFunction(id, Types.TypeList[(int)import.TypeIndex], import.Module, import.Field, import.TypeIndex);
+                return new ImportFunction(id, Type.Entries[(int)import.TypeIndex], import.Module, import.Field, import.TypeIndex);
             }
             var baseId = (int) (id - Imports.FunctionCount);
-            return new Function(id, Code.Bodies[baseId].Code, Types.TypeList[(int)Functions.FunctionList[baseId]], Functions.FunctionList[baseId]);
+            return new Function(id, Code.Bodies[baseId].Code, Type.Entries[(int)Functions.FunctionList[baseId]], Functions.FunctionList[baseId]);
         }
         public Function GetFunction(string name)
         {

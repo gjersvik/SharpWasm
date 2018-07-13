@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ValueType = SharpWasm.Internal.Parse.Types.ValueType;
 
 namespace SharpWasm.Internal
 {
@@ -77,7 +78,7 @@ namespace SharpWasm.Internal
             if (func is ImportFunction importFunc)
             {
                 var output = _imports.Call(_instance,importFunc, param);
-                if (importFunc.Return == DataTypes.I32)
+                if (importFunc.Return == ValueType.I32)
                 {
                     _stack.Push(output);
                 }

@@ -49,7 +49,7 @@ namespace SharpWasm.Internal
                     case SectionCode.Custom:
                         return new Custom(reader);
                     case SectionCode.Type:
-                        return new Types(payload);
+                        return new Parse.Sections.Type(reader);
                     case SectionCode.Import:
                         return new Imports(payload);
                     case SectionCode.Function:
@@ -74,32 +74,6 @@ namespace SharpWasm.Internal
                         return new Section(id);
                 }
             }
-        }
-
-        public IEnumerable<Type> ReadTypes()
-        {
-            var count = ReadVarUInt32();
-            var types = new Type[count];
-
-            for (var i = 0; i < count; i += 1)
-            {
-                types[i] = ReadType();
-            }
-
-            return types;
-        }
-
-        public Type ReadType()
-        {
-            ReadVarInt7();
-            var count = ReadVarUInt32();
-            var param = new DataTypes[count];
-            for (var i = 0; i < count; i += 1)
-            {
-                param[i] = (DataTypes) ReadVarInt7();
-            }
-
-            return ReadVarUInt1() ? new Type(param, (DataTypes) ReadVarInt7()) : new Type(param);
         }
 
         public IEnumerable<uint> ReadFunction()
