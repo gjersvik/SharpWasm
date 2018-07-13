@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using SharpWasm.Internal.Parse;
 using SharpWasm.Internal.Parse.Sections;
+using FunctionSection = SharpWasm.Internal.Parse.Sections.Function;
 
 namespace SharpWasm.Internal
 {
@@ -52,7 +53,7 @@ namespace SharpWasm.Internal
                     case SectionCode.Import:
                         return new Import(reader);
                     case SectionCode.Function:
-                        return new FunctionSelection(payload);
+                        return new FunctionSection(reader);
                     case SectionCode.Table:
                         return new Table(payload);
                     case SectionCode.Memory:
@@ -73,19 +74,6 @@ namespace SharpWasm.Internal
                         return new Section(id);
                 }
             }
-        }
-
-        public IEnumerable<uint> ReadFunction()
-        {
-            var count = ReadVarUInt32();
-            var types = new uint[count];
-
-            for (var i = 0; i < count; i += 1)
-            {
-                types[i] = ReadVarUInt32();
-            }
-
-            return types;
         }
 
         public IEnumerable<Export> ReadExports()
