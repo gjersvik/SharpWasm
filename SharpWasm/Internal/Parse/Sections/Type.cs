@@ -7,6 +7,8 @@ namespace SharpWasm.Internal.Parse.Sections
 {
     internal class Type: ISection
     {
+        public static readonly Type Empty = new Type(ImmutableArray<FuncType>.Empty);
+
         public SectionCode Id { get; } = SectionCode.Type;
         public readonly uint Count;
         public readonly ImmutableArray<FuncType> Entries;

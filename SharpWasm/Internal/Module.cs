@@ -14,9 +14,9 @@ namespace SharpWasm.Internal
         public readonly ImmutableList<ISection> Sections;
 
         public readonly Type Type;
+        public readonly Import Import;
         public readonly FunctionSelection Functions;
         public readonly Table Table;
-        public readonly Imports Imports;
         public readonly Exports Exports;
         public readonly Element Element;
         public readonly Code Code;
@@ -27,10 +27,10 @@ namespace SharpWasm.Internal
         {
             Header = header;
             Sections = sections.ToImmutableList();
-            Type = Sections.Find(s => s.Id == SectionCode.Type) as Type;
+            Type = Sections.Find(s => s.Id == SectionCode.Type) as Type ?? Type.Empty;
+            Import = Sections.Find(s => s.Id == SectionCode.Import) as Import ?? Import.Empty;
             Functions = Sections.Find(s => s.Id == SectionCode.Function) as FunctionSelection ?? FunctionSelection.Empty;
             Table = Sections.Find(s => s.Id == SectionCode.Table) as Table;
-            Imports = Sections.Find(s => s.Id == SectionCode.Import) as Imports ?? Imports.Empty;
             Exports = Sections.Find(s => s.Id == SectionCode.Export) as Exports ?? Exports.Empty;
             Element = Sections.Find(s => s.Id == SectionCode.Element) as Element ?? Element.Empty;
             Code = Sections.Find(s => s.Id == SectionCode.Code) as Code ?? Code.Empty;
@@ -45,12 +45,12 @@ namespace SharpWasm.Internal
 
         public AFunction GetFunction(uint id)
         {
-            if (id < Imports.FunctionCount)
+            if (id < Import.Functions.Length)
             {
-                var import = Imports.Functions[(int)id];
-                return new ImportFunction(id, Type.Entries[(int)import.TypeIndex], import.Module, import.Field, import.TypeIndex);
+                var import = Import.Functions[(int)id];
+                return new ImportFunction(id, Type.Entries[(int)import.Type], import.ModuleStr, import.FieldStr, import.Type);
             }
-            var baseId = (int) (id - Imports.FunctionCount);
+            var baseId = (int) (id - Import.Functions.Length);
             return new Function(id, Code.Bodies[baseId].Code, Type.Entries[(int)Functions.FunctionList[baseId]], Functions.FunctionList[baseId]);
         }
         public Function GetFunction(string name)

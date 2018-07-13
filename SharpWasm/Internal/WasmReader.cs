@@ -4,7 +4,6 @@ using System.IO;
 using System.Text;
 using SharpWasm.Internal.Parse;
 using SharpWasm.Internal.Parse.Sections;
-using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm.Internal
 {
@@ -51,7 +50,7 @@ namespace SharpWasm.Internal
                     case SectionCode.Type:
                         return new Parse.Sections.Type(reader);
                     case SectionCode.Import:
-                        return new Imports(payload);
+                        return new Import(reader);
                     case SectionCode.Function:
                         return new FunctionSelection(payload);
                     case SectionCode.Table:
@@ -84,42 +83,6 @@ namespace SharpWasm.Internal
             for (var i = 0; i < count; i += 1)
             {
                 types[i] = ReadVarUInt32();
-            }
-
-            return types;
-        }
-
-        public AImport ReadImport()
-        {
-            var module = ReadString();
-            var field = ReadString();
-            var kind = (ImportExportKind) ReadUInt8();
-
-            switch (kind)
-            {
-                case ImportExportKind.Function:
-                    var type = ReadVarUInt32();
-                    return new FunctionImport(module, field, type);
-                case ImportExportKind.Table:
-                    throw new NotImplementedException();
-                case ImportExportKind.Memory:
-                    var limits = new ResizableLimits(_reader);
-                    return new MemoryImport(module, field, limits.Initial, limits.Maximum ?? 0);
-                case ImportExportKind.Global:
-                    throw new NotImplementedException();
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-        public IEnumerable<AImport> ReadImports()
-        {
-            var count = ReadVarUInt32();
-            var types = new AImport[count];
-
-            for (var i = 0; i < count; i += 1)
-            {
-                types[i] = ReadImport();
             }
 
             return types;
@@ -237,7 +200,6 @@ namespace SharpWasm.Internal
         public bool ReadVarUInt1() => new VarIntUnsigned(_reader).Bool;
         public byte ReadVarUInt7() => new VarIntUnsigned(_reader).Byte;
         public uint ReadVarUInt32() => new VarIntUnsigned(_reader).UInt;
-        public sbyte ReadVarInt7() => new VarIntSigned(_reader).SByte;
         public int ReadVarInt32() => new VarIntSigned(_reader).Int;
         private byte[] ReadBytes(uint len) => _reader.ReadBytes((int) len);
 
@@ -245,15 +207,6 @@ namespace SharpWasm.Internal
         {
             var count = ReadVarUInt32();
             return Encoding.UTF8.GetString(ReadBytes(count));
-        }
-
-        public byte[] ReadRest()
-        {
-            using (var ms = new MemoryStream())
-            {
-                _reader.BaseStream.CopyTo(ms);
-                return ms.ToArray();
-            }
         }
 
 

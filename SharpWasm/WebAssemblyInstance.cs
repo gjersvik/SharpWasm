@@ -18,7 +18,7 @@ namespace SharpWasm
             Imports = imports;
             _vm = new VirtualMachine(this);
 
-            var memoryImport = Module.Imports.Memory;
+            var memoryImport = Module.Import?.Memory;
             if (memoryImport != null)
             {
                 Memory = Imports.GetMemory(memoryImport);
