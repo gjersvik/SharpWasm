@@ -55,7 +55,7 @@ namespace SharpWasm.Internal
                     case SectionCode.Function:
                         return new FunctionSection(reader);
                     case SectionCode.Table:
-                        return new Table(payload);
+                        return new Table(reader);
                     case SectionCode.Memory:
                         return new Section(id);
                     case SectionCode.Global:

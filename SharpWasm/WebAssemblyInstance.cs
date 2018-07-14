@@ -1,4 +1,5 @@
-﻿using SharpWasm.Internal;
+﻿using System.Linq;
+using SharpWasm.Internal;
 
 namespace SharpWasm
 {
@@ -29,13 +30,10 @@ namespace SharpWasm
             }
 
             var table = Module.Table;
-            if (table != null)
+            Table = new WebAssemblyTable(table.Entries.FirstOrDefault()?.Limits.Initial ?? 0);
+            foreach (var segment in module.Element.ElementSegments)
             {
-                Table = new WebAssemblyTable(table.Initial);
-                foreach (var segment in module.Element.ElementSegments)
-                {
-                    Table.Write(segment);
-                }
+                Table.Write(segment);
             }
         }
 

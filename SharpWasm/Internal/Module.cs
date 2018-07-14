@@ -31,7 +31,7 @@ namespace SharpWasm.Internal
             Type = Sections.Find(s => s.Id == SectionCode.Type) as Type ?? Type.Empty;
             Import = Sections.Find(s => s.Id == SectionCode.Import) as Import ?? Import.Empty;
             Function = Sections.Find(s => s.Id == SectionCode.Function) as FunctionSection ?? FunctionSection.Empty;
-            Table = Sections.Find(s => s.Id == SectionCode.Table) as Table;
+            Table = Sections.Find(s => s.Id == SectionCode.Table) as Table ?? Table.Empty;
             Exports = Sections.Find(s => s.Id == SectionCode.Export) as Exports ?? Exports.Empty;
             Element = Sections.Find(s => s.Id == SectionCode.Element) as Element ?? Element.Empty;
             Code = Sections.Find(s => s.Id == SectionCode.Code) as Code ?? Code.Empty;
