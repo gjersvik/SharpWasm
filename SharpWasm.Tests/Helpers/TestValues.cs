@@ -11,5 +11,7 @@ namespace SharpWasm.Tests.Helpers
         public static readonly TableType TableType = new TableType(ResizableLimits);
         public const string GlobalTypeHex = "7f00";
         public static readonly GlobalType GlobalType = new GlobalType(ValueType.I32,false);
+        public const string MemoryTypeHex = ResizableLimitsHex;
+        public static readonly MemoryType MemoryType = new MemoryType(ResizableLimits);
     }
 }

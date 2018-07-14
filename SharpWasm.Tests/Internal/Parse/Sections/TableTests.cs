@@ -14,7 +14,7 @@ namespace SharpWasm.Tests.Internal.Parse.Sections
             Assert.Multiple(() =>
             {
                 Assert.That(table.Count, Is.EqualTo(1), "Count");
-                Assert.That(table.Entries, Is.EqualTo(new [] { TestValues.TableType }).AsCollection, "Types");
+                Assert.That(table.Entries, Is.EqualTo(new [] { TestValues.TableType }).AsCollection, "Entries");
             });
         }
     }
