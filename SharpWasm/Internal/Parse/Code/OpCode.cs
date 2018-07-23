@@ -1,5 +1,6 @@
 ﻿// ReSharper disable InconsistentNaming
 // ReSharper disable UnusedMember.Global
+// ReSharper disable IdentifierTypo
 namespace SharpWasm.Internal.Parse.Code
 {
     internal enum OpCode: byte
