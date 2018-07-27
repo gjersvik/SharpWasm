@@ -65,7 +65,7 @@ namespace SharpWasm.Internal
                     case SectionCode.Start:
                         return new Start(reader);
                     case SectionCode.Element:
-                        return new Element(payload);
+                        return new Element(reader);
                     case SectionCode.Code:
                         return new Code(payload);
                     case SectionCode.Data:
@@ -74,35 +74,6 @@ namespace SharpWasm.Internal
                         return new Section(id);
                 }
             }
-        }
-
-        public IEnumerable<ElementSegment> ReadElementSegments()
-        {
-            var count = ReadVarUInt32();
-            var exports = new ElementSegment[count];
-
-            for (var i = 0; i < count; i += 1)
-            {
-                exports[i] = ReadElementSegment();
-            }
-
-            return exports;
-        }
-
-        public ElementSegment ReadElementSegment()
-        {
-            var index = ReadVarUInt32();
-            if (index != 0) throw new NotImplementedException();
-            var offset = ReadInitExpr().Offset;
-            var count = ReadVarUInt32();
-            var elements = new uint[count];
-
-            for (var i = 0; i < count; i += 1)
-            {
-                elements[i] = ReadVarUInt32();
-            }
-
-            return new ElementSegment(offset, elements);
         }
 
         public IEnumerable<FunctionBody> ReadFunctionBodies()
@@ -169,13 +140,6 @@ namespace SharpWasm.Internal
         public uint ReadVarUInt32() => new VarIntUnsigned(_reader).UInt;
         public int ReadVarInt32() => new VarIntSigned(_reader).Int;
         private byte[] ReadBytes(uint len) => _reader.ReadBytes((int) len);
-
-        public string ReadString()
-        {
-            var count = ReadVarUInt32();
-            return Encoding.UTF8.GetString(ReadBytes(count));
-        }
-
 
         public void Dispose()
         {
