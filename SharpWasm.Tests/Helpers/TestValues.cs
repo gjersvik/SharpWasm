@@ -1,4 +1,5 @@
-﻿using SharpWasm.Internal.Parse.Code;
+﻿using System.Collections.Immutable;
+using SharpWasm.Internal.Parse.Code;
 using SharpWasm.Internal.Parse.Sections;
 using SharpWasm.Internal.Parse.Types;
 using ValueType = SharpWasm.Internal.Parse.Types.ValueType;
@@ -28,5 +29,11 @@ namespace SharpWasm.Tests.Helpers
 
         public static readonly ElementSegment ElementSegment = new ElementSegment(InitExpr, new uint[] { 1, 2, 42 });
         public const string ElementSegmentHex = "00" + InitExprHex + "0301022A";
+
+        public static readonly LocalEntry LocalEntry = new LocalEntry(10, ValueType.I32);
+        public const string LocalEntryHex = "0A7F";
+
+        public static readonly FunctionBody FunctionBody = new FunctionBody(new[] { LocalEntry, LocalEntry },
+            BinaryTools.HexToBytes(InitExprHex).ToImmutableArray());
     }
 }

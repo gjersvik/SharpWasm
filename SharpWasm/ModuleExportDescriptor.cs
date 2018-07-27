@@ -7,13 +7,13 @@ namespace SharpWasm
 {
     public class ModuleExportDescriptor: IEquatable<ModuleExportDescriptor>
     {
-        public readonly ExternalKind Kind;
-        [NotNull] public readonly string Name;
+        private readonly ExternalKind _kind;
+        [NotNull] private readonly string _name;
 
         public ModuleExportDescriptor(ExternalKind kind, string name)
         {
-            Kind = kind;
-            Name = name;
+            _kind = kind;
+            _name = name;
         }
 
         internal ModuleExportDescriptor(ExportEntry export): this(export.ExternalKind, export.FieldStr)
@@ -25,7 +25,7 @@ namespace SharpWasm
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Kind == other.Kind && string.Equals(Name, other.Name);
+            return _kind == other._kind && string.Equals(_name, other._name);
         }
 
         public override bool Equals(object obj)
@@ -39,7 +39,7 @@ namespace SharpWasm
         {
             unchecked
             {
-                return ((int) Kind * 397) ^ Name.GetHashCode();
+                return ((int) _kind * 397) ^ _name.GetHashCode();
             }
         }
 

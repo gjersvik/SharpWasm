@@ -54,7 +54,7 @@ namespace SharpWasm.Internal
             }
 
             var baseId = (int) (id - Import.Functions.Length);
-            return new Function(id, Code.Bodies[baseId].Code, Type.Entries[(int) Function.Types[baseId]],
+            return new Function(id, Code.Bodies[baseId].Code.ToArray(), Type.Entries[(int) Function.Types[baseId]],
                 Function.Types[baseId]);
         }
 

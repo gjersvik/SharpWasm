@@ -5,7 +5,7 @@ using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm.Internal.Parse.Sections
 {
-    internal class Memory
+    internal class Memory: ISection
     {
         public static readonly Memory Empty = new Memory(ImmutableArray<MemoryType>.Empty);
 

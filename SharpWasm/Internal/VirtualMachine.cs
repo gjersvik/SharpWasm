@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SharpWasm.Internal.Parse.Code;
 using ValueType = SharpWasm.Internal.Parse.Types.ValueType;
 
 namespace SharpWasm.Internal
@@ -37,24 +38,24 @@ namespace SharpWasm.Internal
         {
             while (true)
             {
-                var opCode = (Instructions)reader.ReadUInt8();
+                var opCode = (OpCode)reader.ReadUInt8();
                 switch (opCode)
                 {
-                    case Instructions.End:
+                    case OpCode.End:
                         return;
-                    case Instructions.I32Const:
+                    case OpCode.I32Const:
                         _stack.Push(reader.ReadVarInt32());
                         break;
-                    case Instructions.GetLocal:
+                    case OpCode.GetLocal:
                         _stack.Push(locals[reader.ReadVarUInt32()]);
                         break;
-                    case Instructions.I32Add:
+                    case OpCode.I32Add:
                         _stack.Push(_stack.Pop() + _stack.Pop());
                         break;
-                    case Instructions.Call:
+                    case OpCode.Call:
                         Call(reader.ReadVarUInt32());
                         break;
-                    case Instructions.CallIndirect:
+                    case OpCode.CallIndirect:
                         CallIndirect(reader.ReadVarUInt32(), reader.ReadVarUInt1());
                         break;
                     default:

@@ -33,10 +33,5 @@ namespace SharpWasm
         {
             return _memories[import.ModuleStr + "." + import.FieldStr];
         }
-
-        public WebAssemblyMemory GetMemory(string module, string function)
-        {
-            return _memories[module + "." + function];
-        }
     }
 }

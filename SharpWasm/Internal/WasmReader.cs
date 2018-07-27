@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SharpWasm.Internal.Parse;
+using SharpWasm.Internal.Parse.Code;
 using SharpWasm.Internal.Parse.Sections;
 using FunctionSection = SharpWasm.Internal.Parse.Sections.Function;
 
@@ -57,7 +58,7 @@ namespace SharpWasm.Internal
                     case SectionCode.Table:
                         return new Table(reader);
                     case SectionCode.Memory:
-                        return new Section(id);
+                        return new Memory(reader);
                     case SectionCode.Global:
                         return new Global(reader);
                     case SectionCode.Export:
@@ -67,39 +68,14 @@ namespace SharpWasm.Internal
                     case SectionCode.Element:
                         return new Element(reader);
                     case SectionCode.Code:
-                        return new Code(payload);
+                        return new Code(reader);
                     case SectionCode.Data:
                         return new Data(payload);
                     default:
-                        return new Section(id);
+                        throw new NotImplementedException();
                 }
             }
         }
-
-        public IEnumerable<FunctionBody> ReadFunctionBodies()
-        {
-            var count = ReadVarUInt32();
-            var exports = new FunctionBody[count];
-
-            for (var i = 0; i < count; i += 1)
-            {
-                exports[i] = ReadFunctionBody();
-            }
-
-            return exports;
-        }
-
-        public FunctionBody ReadFunctionBody()
-        {
-            var bodySize = ReadVarUInt32();
-            var localCount = new VarIntUnsigned(_reader);
-            bodySize -= localCount.Count;
-
-            if (localCount.UInt != 0) throw new Exception("Locals not supported");
-            return new FunctionBody(ReadBytes(bodySize));
-        }
-
-
 
         public IEnumerable<DataSegment> ReadData()
         {
@@ -127,9 +103,9 @@ namespace SharpWasm.Internal
 
         public InitExpr ReadInitExpr()
         {
-            if (ReadUInt8() != (int)Instructions.I32Const) throw new NotImplementedException();
+            if (ReadUInt8() != (int)OpCode.I32Const) throw new NotImplementedException();
             var offset = ReadVarInt32();
-            if (ReadUInt8() != (int)Instructions.End) throw new NotImplementedException();
+            if (ReadUInt8() != (int)OpCode.End) throw new NotImplementedException();
             return new InitExpr(offset);
         }
 

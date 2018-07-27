@@ -20,11 +20,6 @@ namespace SharpWasm
             return _functions[index];
         }
 
-        public void Set(int index, uint value)
-        {
-            _functions[index] = value;
-        }
-
         internal void Write(ElementSegment segment)
         {
             var offset = ((Instruction<int>)segment.Offset.Instructions[0]).Immediate;
