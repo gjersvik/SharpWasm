@@ -59,7 +59,7 @@ namespace SharpWasm.Internal
                     case SectionCode.Memory:
                         return new Section(id);
                     case SectionCode.Global:
-                        return new Section(id);
+                        return new Global(reader);
                     case SectionCode.Export:
                         return new Exports(payload);
                     case SectionCode.Start:

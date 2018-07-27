@@ -21,8 +21,24 @@ namespace SharpWasm.Tests.Internal.Parse.Types
         [Test]
         public void Constructor()
         {
-            var initExpr = new InitExpr(new []{new Instruction(OpCode.End)});
+            var initExpr = new InitExpr(new []{Instruction.End});
             Assert.That(initExpr.Instructions.Length, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void Equals()
+        {
+            var a = new InitExpr(new[] { Instruction.End });
+            var b = new InitExpr(new[] { Instruction.End });
+            Assert.That(a.Equals(a), Is.True);
+            Assert.That(a.Equals(b), Is.True);
+            Assert.That(a.Equals(null), Is.False);
+            Assert.That(a.Equals((object)a), Is.True);
+            Assert.That(a.Equals((object)b), Is.True);
+            Assert.That(a.Equals((object)null), Is.False);
+            Assert.That(a.GetHashCode(), Is.EqualTo(b.GetHashCode()));
+            Assert.That(a == b, Is.True);
+            Assert.That(a != b, Is.False);
         }
     }
 }

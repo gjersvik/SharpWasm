@@ -1,4 +1,6 @@
-﻿using SharpWasm.Internal.Parse.Types;
+﻿using SharpWasm.Internal.Parse.Code;
+using SharpWasm.Internal.Parse.Sections;
+using SharpWasm.Internal.Parse.Types;
 using ValueType = SharpWasm.Internal.Parse.Types.ValueType;
 
 namespace SharpWasm.Tests.Helpers
@@ -13,5 +15,10 @@ namespace SharpWasm.Tests.Helpers
         public static readonly GlobalType GlobalType = new GlobalType(ValueType.I32,false);
         public const string MemoryTypeHex = ResizableLimitsHex;
         public static readonly MemoryType MemoryType = new MemoryType(ResizableLimits);
+        public static readonly InitExpr InitExpr = new InitExpr(new IInstruction[]{Instruction.I32Const(42), Instruction.End});
+        public const string InitExprHex = "412A0B";
+
+        public static readonly GlobalEntry GlobalEntry = new GlobalEntry(GlobalType, InitExpr);
+        public const string GlobalEntryHex = GlobalTypeHex + InitExprHex;
     }
 }
