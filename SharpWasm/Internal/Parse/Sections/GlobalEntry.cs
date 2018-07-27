@@ -8,9 +8,9 @@ namespace SharpWasm.Internal.Parse.Sections
     internal class GlobalEntry: IEquatable<GlobalEntry>
     {
         [NotNull] public readonly GlobalType Type;
-        [NotNull] public readonly Types.InitExpr InitExpr;
+        [NotNull] public readonly InitExpr InitExpr;
 
-        public GlobalEntry(GlobalType type, Types.InitExpr initExpr)
+        public GlobalEntry(GlobalType type, InitExpr initExpr)
         {
             Type = type;
             InitExpr = initExpr;
@@ -19,7 +19,7 @@ namespace SharpWasm.Internal.Parse.Sections
         public GlobalEntry(BinaryReader reader)
         {
             Type = new GlobalType(reader);
-            InitExpr = new Types.InitExpr(reader);
+            InitExpr = new InitExpr(reader);
         }
 
         public bool Equals(GlobalEntry other)

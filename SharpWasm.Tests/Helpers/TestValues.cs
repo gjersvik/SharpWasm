@@ -35,5 +35,8 @@ namespace SharpWasm.Tests.Helpers
 
         public static readonly FunctionBody FunctionBody = new FunctionBody(new[] { LocalEntry, LocalEntry },
             BinaryTools.HexToBytes(InitExprHex).ToImmutableArray());
+
+        public static readonly DataSegment DataSegment = new DataSegment(InitExpr, new byte[] { 1, 2, 42 });
+        public const string DataSegmentHex = "00" + InitExprHex + "0301022A";
     }
 }

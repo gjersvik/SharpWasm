@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using SharpWasm.Internal.Parse;
-using SharpWasm.Internal.Parse.Code;
 using SharpWasm.Internal.Parse.Sections;
 using FunctionSection = SharpWasm.Internal.Parse.Sections.Function;
 
@@ -70,49 +69,17 @@ namespace SharpWasm.Internal
                     case SectionCode.Code:
                         return new Code(reader);
                     case SectionCode.Data:
-                        return new Data(payload);
+                        return new Data(reader);
                     default:
                         throw new NotImplementedException();
                 }
             }
         }
 
-        public IEnumerable<DataSegment> ReadData()
-        {
-            var count = ReadVarUInt32();
-            var exports = new DataSegment[count];
-
-            for (var i = 0; i < count; i += 1)
-            {
-                exports[i] = ReadDataSegment();
-            }
-
-            return exports;
-        }
-
-        public DataSegment ReadDataSegment()
-        {
-            var index = ReadVarUInt32();
-            if (index != 0) throw new NotImplementedException();
-            var offset = ReadInitExpr().Offset;
-            var length = ReadVarUInt32();
-            var data = ReadBytes(length);
-
-            return new DataSegment(offset, data);
-        }
-
-        public InitExpr ReadInitExpr()
-        {
-            if (ReadUInt8() != (int)OpCode.I32Const) throw new NotImplementedException();
-            var offset = ReadVarInt32();
-            if (ReadUInt8() != (int)OpCode.End) throw new NotImplementedException();
-            return new InitExpr(offset);
-        }
-
         public byte ReadUInt8() => _reader.ReadByte();
-        public uint ReadUInt32() => _reader.ReadUInt32();
+        private uint ReadUInt32() => _reader.ReadUInt32();
         public bool ReadVarUInt1() => new VarIntUnsigned(_reader).Bool;
-        public byte ReadVarUInt7() => new VarIntUnsigned(_reader).Byte;
+        private byte ReadVarUInt7() => new VarIntUnsigned(_reader).Byte;
         public uint ReadVarUInt32() => new VarIntUnsigned(_reader).UInt;
         public int ReadVarInt32() => new VarIntSigned(_reader).Int;
         private byte[] ReadBytes(uint len) => _reader.ReadBytes((int) len);

@@ -23,7 +23,7 @@ namespace SharpWasm
             if (memoryImport != null)
             {
                 Memory = Imports.GetMemory(memoryImport);
-                foreach (var segment in module.Data.DataSegments)
+                foreach (var segment in module.Data.Entries)
                 {
                     Memory.Write(segment);
                 }
