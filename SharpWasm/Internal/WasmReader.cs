@@ -63,7 +63,7 @@ namespace SharpWasm.Internal
                     case SectionCode.Export:
                         return new Export(reader);
                     case SectionCode.Start:
-                        return new Section(id);
+                        return new Start(reader);
                     case SectionCode.Element:
                         return new Element(payload);
                     case SectionCode.Code:
