@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using SharpWasm.Internal.Parse.Sections;
 using SharpWasm.Tests.Helpers;
-using CodeSection = SharpWasm.Internal.Parse.Sections.Code;
 
 namespace SharpWasm.Tests.Internal.Parse.Sections
 {

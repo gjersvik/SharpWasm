@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using SharpWasm.Internal.Parse.Sections;
 
 namespace SharpWasm.Internal.Parse
 {
@@ -8,10 +9,12 @@ namespace SharpWasm.Internal.Parse
         public static uint ToUInt(BinaryReader reader) => new VarIntUnsigned(reader).UInt;
         public static byte ToByte(BinaryReader reader) => new VarIntUnsigned(reader).Byte;
         public static bool ToBool(BinaryReader reader) => new VarIntUnsigned(reader).Bool;
+        public static SectionCode ToSectionCode(BinaryReader reader) => new VarIntUnsigned(reader).SectionCode;
 
         public readonly uint UInt;
         public byte Byte => Convert.ToByte(UInt);
         public bool Bool => Convert.ToBoolean(UInt);
+        public SectionCode SectionCode => (SectionCode)Byte;
 
         public readonly byte Count;
 

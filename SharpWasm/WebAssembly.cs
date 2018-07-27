@@ -1,5 +1,6 @@
 ﻿using System;
 using SharpWasm.Internal;
+using SharpWasm.Internal.Parse;
 
 namespace SharpWasm
 {
@@ -7,18 +8,19 @@ namespace SharpWasm
     {
         public static WebAssemblyModule Compile(byte[] wasm)
         {
-            using (var reader = new WasmReader(wasm))
+            using (var reader = ParseTools.FromBytes(wasm))
             {
-                return new WebAssemblyModule(reader.ReadModule());
+                return new WebAssemblyModule(new Module(new ParseModule(reader)));
             }
         }
         public static bool Validate(byte[] wasm)
         {
-            using (var reader = new WasmReader(wasm))
+            using (var reader = ParseTools.FromBytes(wasm))
             {
                 try
                 {
-                    reader.ReadModule();
+                    // ReSharper disable once ObjectCreationAsStatement
+                    new ParseModule(reader);
                 }
                 catch (Exception)
                 {

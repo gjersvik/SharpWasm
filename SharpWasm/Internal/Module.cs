@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using SharpWasm.Internal.Parse;
 using SharpWasm.Internal.Parse.Sections;
 using FunctionSection = SharpWasm.Internal.Parse.Sections.Function;
 
@@ -11,32 +12,27 @@ namespace SharpWasm.Internal
 {
     internal class Module
     {
-        public readonly Header Header;
-        public readonly ImmutableList<ISection> Sections;
-
         public readonly Type Type;
         public readonly Import Import;
         public readonly FunctionSection Function;
         public readonly Table Table;
         public readonly Export Export;
         public readonly Element Element;
-        public readonly Code Code;
+        public readonly CodeSection CodeSection;
         public readonly Data Data;
-        public readonly ImmutableList<Custom> Custom;
+        public readonly ImmutableArray<Custom> Custom;
 
-        public Module(Header header, IEnumerable<ISection> sections)
+        public Module(ParseModule parsed)
         {
-            Header = header;
-            Sections = sections.ToImmutableList();
-            Type = Sections.Find(s => s.Id == SectionCode.Type) as Type ?? Type.Empty;
-            Import = Sections.Find(s => s.Id == SectionCode.Import) as Import ?? Import.Empty;
-            Function = Sections.Find(s => s.Id == SectionCode.Function) as FunctionSection ?? FunctionSection.Empty;
-            Table = Sections.Find(s => s.Id == SectionCode.Table) as Table ?? Table.Empty;
-            Export = Sections.Find(s => s.Id == SectionCode.Export) as Export ?? Export.Empty;
-            Element = Sections.Find(s => s.Id == SectionCode.Element) as Element ?? Element.Empty;
-            Code = Sections.Find(s => s.Id == SectionCode.Code) as Code ?? Code.Empty;
-            Data = Sections.Find(s => s.Id == SectionCode.Data) as Data ?? Data.Empty;
-            Custom = Sections.Where(s => s.Id == SectionCode.Custom).Cast<Custom>().ToImmutableList();
+            Type = parsed.Types.FirstOrDefault() ?? Type.Empty;
+            Import = parsed.Imports.FirstOrDefault() ?? Import.Empty;
+            Function = parsed.Functions.FirstOrDefault() ?? FunctionSection.Empty;
+            Table = parsed.Tables.FirstOrDefault() ?? Table.Empty;
+            Export = parsed.Exports.FirstOrDefault() ?? Export.Empty;
+            Element = parsed.Elements.FirstOrDefault() ?? Element.Empty;
+            CodeSection = parsed.Code.FirstOrDefault() ?? CodeSection.Empty;
+            Data = parsed.Data.FirstOrDefault() ?? Data.Empty;
+            Custom = parsed.Customs;
         }
 
         public IEnumerable<Custom> ByName(string name)
@@ -54,7 +50,7 @@ namespace SharpWasm.Internal
             }
 
             var baseId = (int) (id - Import.Functions.Length);
-            return new Function(id, Code.Bodies[baseId].Code.ToArray(), Type.Entries[(int) Function.Types[baseId]],
+            return new Function(id, CodeSection.Bodies[baseId].Code.ToArray(), Type.Entries[(int) Function.Types[baseId]],
                 Function.Types[baseId]);
         }
 

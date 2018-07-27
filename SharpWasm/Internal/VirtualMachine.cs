@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using SharpWasm.Internal.Parse;
 using SharpWasm.Internal.Parse.Code;
 using ValueType = SharpWasm.Internal.Parse.Types.ValueType;
 
@@ -27,36 +29,36 @@ namespace SharpWasm.Internal
 
         private int Run(byte[] code, int[] param)
         {
-            using (var reader = new WasmReader(code))
+            using (var reader = ParseTools.FromBytes(code))
             {
                 Run(reader, param);
             }
             return _stack.Count == 1 ? _stack.Pop() : 0;
         }
 
-        private void Run(WasmReader reader, int[] locals)
+        private void Run(BinaryReader reader, int[] locals)
         {
             while (true)
             {
-                var opCode = (OpCode)reader.ReadUInt8();
+                var opCode = (OpCode)reader.ReadByte();
                 switch (opCode)
                 {
                     case OpCode.End:
                         return;
                     case OpCode.I32Const:
-                        _stack.Push(reader.ReadVarInt32());
+                        _stack.Push(VarIntSigned.ToInt(reader));
                         break;
                     case OpCode.GetLocal:
-                        _stack.Push(locals[reader.ReadVarUInt32()]);
+                        _stack.Push(locals[VarIntUnsigned.ToUInt(reader)]);
                         break;
                     case OpCode.I32Add:
                         _stack.Push(_stack.Pop() + _stack.Pop());
                         break;
                     case OpCode.Call:
-                        Call(reader.ReadVarUInt32());
+                        Call(VarIntUnsigned.ToUInt(reader));
                         break;
                     case OpCode.CallIndirect:
-                        CallIndirect(reader.ReadVarUInt32(), reader.ReadVarUInt1());
+                        CallIndirect(VarIntUnsigned.ToUInt(reader), VarIntUnsigned.ToBool(reader));
                         break;
                     default:
                         throw new NotImplementedException();
@@ -70,7 +72,7 @@ namespace SharpWasm.Internal
             var param = func.Param.Select(t => _stack.Pop()).Reverse().ToArray();
             if (func is Function bodyFunc)
             {
-                using (var reader = new WasmReader(bodyFunc.Body))
+                using (var reader = ParseTools.FromBytes(bodyFunc.Body))
                 {
                     Run(reader, param);
                 }

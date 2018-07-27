@@ -48,5 +48,10 @@ namespace SharpWasm.Internal.Parse
         {
             return reader.ReadBytes((int) count).ToImmutableArray();
         }
+
+        public static BinaryReader ToReader(BinaryReader reader, uint length)
+        {
+            return FromBytes(reader.ReadBytes((int) length));
+        }
     }
 }
