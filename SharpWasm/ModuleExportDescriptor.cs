@@ -1,21 +1,22 @@
 ﻿using System;
 using JetBrains.Annotations;
-using SharpWasm.Internal;
+using SharpWasm.Internal.Parse.Sections;
+using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm
 {
     public class ModuleExportDescriptor: IEquatable<ModuleExportDescriptor>
     {
-        public readonly ImportExportKind Kind;
+        public readonly ExternalKind Kind;
         [NotNull] public readonly string Name;
 
-        public ModuleExportDescriptor(ImportExportKind kind, string name)
+        public ModuleExportDescriptor(ExternalKind kind, string name)
         {
             Kind = kind;
             Name = name;
         }
 
-        internal ModuleExportDescriptor(Export export): this(export.Kind, export.Name)
+        internal ModuleExportDescriptor(ExportEntry export): this(export.ExternalKind, export.FieldStr)
         {
 
         }

@@ -61,7 +61,7 @@ namespace SharpWasm.Internal
                     case SectionCode.Global:
                         return new Global(reader);
                     case SectionCode.Export:
-                        return new Exports(payload);
+                        return new Export(reader);
                     case SectionCode.Start:
                         return new Section(id);
                     case SectionCode.Element:
@@ -74,27 +74,6 @@ namespace SharpWasm.Internal
                         return new Section(id);
                 }
             }
-        }
-
-        public IEnumerable<Export> ReadExports()
-        {
-            var count = ReadVarUInt32();
-            var exports = new Export[count];
-
-            for (var i = 0; i < count; i += 1)
-            {
-                exports[i] = ReadExport();
-            }
-
-            return exports;
-        }
-
-        public Export ReadExport()
-        {
-            var name = ReadString();
-            var kind = (ImportExportKind) ReadUInt8();
-            var index = ReadVarUInt32();
-            return new Export(name, kind, index);
         }
 
         public IEnumerable<ElementSegment> ReadElementSegments()

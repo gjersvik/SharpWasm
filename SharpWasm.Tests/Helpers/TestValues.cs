@@ -20,5 +20,10 @@ namespace SharpWasm.Tests.Helpers
 
         public static readonly GlobalEntry GlobalEntry = new GlobalEntry(GlobalType, InitExpr);
         public const string GlobalEntryHex = GlobalTypeHex + InitExprHex;
+
+        public const string TestStringHex = "0474657374";
+
+        public static readonly ExportEntry ExportEntry = new ExportEntry("test", ExternalKind.Function, 02);
+        public const string ExportEntryHex = TestStringHex + "0002";
     }
 }

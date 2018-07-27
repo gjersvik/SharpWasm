@@ -1,6 +1,6 @@
 ﻿namespace SharpWasm.Internal.Parse.Types
 {
-    internal enum ExternalKind: byte
+    public enum ExternalKind: byte
     {
         Function = 0,
         Table = 1,

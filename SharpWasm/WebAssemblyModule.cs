@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using SharpWasm.Internal;
 
@@ -14,12 +13,7 @@ namespace SharpWasm
 
         public IEnumerable<ModuleExportDescriptor> Exports()
         {
-            return _module.Exports.ExportList.Select(e => new ModuleExportDescriptor(e));
-        }
-
-        public IEnumerable<ModuleImportDescriptor> Import()
-        {
-            throw new NotImplementedException();
+            return _module.Export.Entries.Select(e => new ModuleExportDescriptor(e));
         }
 
         private readonly Module _module;

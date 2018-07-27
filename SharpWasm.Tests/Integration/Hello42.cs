@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using NUnit.Framework;
+using SharpWasm.Internal.Parse.Types;
 using SharpWasm.Tests.Helpers;
 
 namespace SharpWasm.Tests.Integration
@@ -23,7 +24,7 @@ namespace SharpWasm.Tests.Integration
             var exports = module.Exports();
             var export = exports.First();
 
-            Assert.That(export, Is.EqualTo(new ModuleExportDescriptor(ImportExportKind.Function, "main")));
+            Assert.That(export, Is.EqualTo(new ModuleExportDescriptor(ExternalKind.Function, "main")));
         }
         [Test]
         public void RunCode()
