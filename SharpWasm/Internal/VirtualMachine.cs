@@ -36,11 +36,13 @@ namespace SharpWasm.Internal
             return _stack.Count == 1 ? _stack.Pop() : 0;
         }
 
+        // ReSharper disable once SuggestBaseTypeForParameter
         private void Run(BinaryReader reader, int[] locals)
         {
             while (true)
             {
                 var opCode = (OpCode)reader.ReadByte();
+                // ReSharper disable once SwitchStatementMissingSomeCases
                 switch (opCode)
                 {
                     case OpCode.End:
@@ -70,21 +72,23 @@ namespace SharpWasm.Internal
         {
             var func = _module.GetFunction(id);
             var param = func.Param.Select(t => _stack.Pop()).Reverse().ToArray();
-            if (func is Function bodyFunc)
+            switch (func)
             {
-                using (var reader = ParseTools.FromBytes(bodyFunc.Body))
-                {
-                    Run(reader, param);
-                }
-            }
+                case Function bodyFunc:
+                    using (var reader = ParseTools.FromBytes(bodyFunc.Body))
+                    {
+                        Run(reader, param);
+                    }
 
-            if (func is ImportFunction importFunc)
-            {
-                var output = _imports.Call(_instance,importFunc, param);
-                if (importFunc.Return == ValueType.I32)
-                {
-                    _stack.Push(output);
-                }
+                    break;
+                case ImportFunction importFunc:
+                    var output = _imports.Call(_instance,importFunc, param);
+                    if (importFunc.Return == ValueType.I32)
+                    {
+                        _stack.Push(output);
+                    }
+
+                    break;
             }
         }
 

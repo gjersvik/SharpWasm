@@ -12,7 +12,7 @@ namespace SharpWasm.Internal
         
         public bool Import { get; }
 
-        public AFunction(uint id, FuncType type, bool import, uint typeId)
+        protected AFunction(uint id, FuncType type, bool import, uint typeId)
         {
             Id = id;
             Import = import;

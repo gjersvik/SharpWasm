@@ -13,6 +13,7 @@ namespace SharpWasm.Tests.Internal.Parse.Sections
             var table = new Table(new [] { TestValues.TableType });
             Assert.Multiple(() =>
             {
+                Assert.That(table.Id, Is.EqualTo(SectionCode.Table), "Id");
                 Assert.That(table.Count, Is.EqualTo(1), "Count");
                 Assert.That(table.Entries, Is.EqualTo(new [] { TestValues.TableType }).AsCollection, "Entries");
             });

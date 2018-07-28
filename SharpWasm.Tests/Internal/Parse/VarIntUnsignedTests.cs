@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using SharpWasm.Internal.Parse;
+using SharpWasm.Internal.Parse.Sections;
 using SharpWasm.Tests.Helpers;
 
 namespace SharpWasm.Tests.Internal.Parse
@@ -27,6 +28,7 @@ namespace SharpWasm.Tests.Internal.Parse
                 var number = new VarIntUnsigned(reader);
                 Assert.That(number.Byte, Is.EqualTo(1));
                 Assert.That(number.Bool, Is.True);
+                Assert.That(number.SectionCode, Is.EqualTo(SectionCode.Type));
                 Assert.That(number.Count, Is.EqualTo(1));
             }
         }
@@ -39,6 +41,7 @@ namespace SharpWasm.Tests.Internal.Parse
                 var number = new VarIntUnsigned(reader);
                 Assert.That(number.Byte, Is.EqualTo(0));
                 Assert.That(number.Bool, Is.False);
+                Assert.That(number.SectionCode, Is.EqualTo(SectionCode.Custom));
                 Assert.That(number.Count, Is.EqualTo(1));
             }
         }
@@ -70,6 +73,16 @@ namespace SharpWasm.Tests.Internal.Parse
             using (var reader = BinaryTools.HexToReader(hex))
             {
                 Assert.That(VarIntUnsigned.ToBool(reader), Is.True);
+            }
+        }
+
+        [Test]
+        public void ToSectionCode()
+        {
+            const string hex = "01";
+            using (var reader = BinaryTools.HexToReader(hex))
+            {
+                Assert.That(VarIntUnsigned.ToSectionCode(reader), Is.EqualTo(SectionCode.Type));
             }
         }
     }

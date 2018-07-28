@@ -21,6 +21,7 @@ namespace SharpWasm.Tests.Internal.Parse.Sections
             var import = new Import(each);
             Assert.Multiple(() =>
             {
+                Assert.That(import.Id, Is.EqualTo(SectionCode.Import), "Id");
                 Assert.That(import.Count, Is.EqualTo(4), "Count");
                 Assert.That(import.Entries, Is.EqualTo(each), "Entries");
                 Assert.That(import.Functions.FirstOrDefault(), Is.EqualTo(func), "Functions");
