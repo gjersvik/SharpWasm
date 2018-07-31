@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using SharpWasm.Internal;
+using SharpWasm.Internal.Parse.Code;
 using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm.Tests.Internal
@@ -10,7 +11,7 @@ namespace SharpWasm.Tests.Internal
         [Test]
         public void Function()
         {
-            var function = new Function(1, new byte[] {2, 3, 4}, new FuncType(new[] {ValueType.I32}, ValueType.I64), 5);
+            var function = new Function(1, new IInstruction[] {Instruction.Nop, Instruction.End}, new FuncType(new[] {ValueType.I32}, ValueType.I64), 5);
             Assert.Multiple(() =>
             {
                 Assert.That(function.Id, Is.EqualTo(1));
@@ -18,7 +19,7 @@ namespace SharpWasm.Tests.Internal
                 Assert.That(function.Param, Is.EqualTo(new[] {ValueType.I32}));
                 Assert.That(function.Return, Is.EqualTo(ValueType.I64));
                 Assert.That(function.Import, Is.False);
-                Assert.That(function.Body, Is.EqualTo(new byte[] {2, 3, 4}));
+                Assert.That(function.Body, Is.EqualTo(new IInstruction[] { Instruction.Nop, Instruction.End }));
             });
         }
 

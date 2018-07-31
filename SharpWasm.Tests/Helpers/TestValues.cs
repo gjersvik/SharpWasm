@@ -19,6 +19,9 @@ namespace SharpWasm.Tests.Helpers
         public static readonly InitExpr InitExpr = new InitExpr(new IInstruction[]{Instruction.I32Const(42), Instruction.End});
         public const string InitExprHex = "412A0B";
 
+        public static readonly ImmutableArray<IInstruction> InitExprOps =
+            ImmutableArray.Create<IInstruction>(Instruction.I32Const(42), Instruction.End);
+
         public static readonly GlobalEntry GlobalEntry = new GlobalEntry(GlobalType, InitExpr);
         public const string GlobalEntryHex = GlobalTypeHex + InitExprHex;
 
@@ -34,7 +37,7 @@ namespace SharpWasm.Tests.Helpers
         public const string LocalEntryHex = "0A7F";
 
         public static readonly FunctionBody FunctionBody = new FunctionBody(new[] { LocalEntry, LocalEntry },
-            BinaryTools.HexToBytes(InitExprHex).ToImmutableArray());
+            new IInstruction[] { Instruction.I32Const(42), Instruction.End });
 
         public static readonly DataSegment DataSegment = new DataSegment(InitExpr, new byte[] { 1, 2, 42 });
         public const string DataSegmentHex = "00" + InitExprHex + "0301022A";

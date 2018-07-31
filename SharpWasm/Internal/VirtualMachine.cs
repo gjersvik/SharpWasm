@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Collections.Immutable;
 using System.Linq;
-using SharpWasm.Internal.Parse;
 using SharpWasm.Internal.Parse.Code;
 using ValueType = SharpWasm.Internal.Parse.Types.ValueType;
 
@@ -27,40 +26,37 @@ namespace SharpWasm.Internal
             return Run(func.Body, args.ToArray());
         }
 
-        private int Run(byte[] code, int[] param)
+        private int Run(ImmutableArray<IInstruction> code, int[] param)
         {
-            using (var reader = ParseTools.FromBytes(code))
-            {
-                Run(reader, param);
-            }
+            RunCode(code, param);
             return _stack.Count == 1 ? _stack.Pop() : 0;
         }
 
         // ReSharper disable once SuggestBaseTypeForParameter
-        private void Run(BinaryReader reader, int[] locals)
+        private void RunCode(ImmutableArray<IInstruction> code, int[] locals)
         {
-            while (true)
+            for (var ip = 0; ip < code.Length; ip += 1)
             {
-                var opCode = (OpCode)reader.ReadByte();
+                var op = code[ip];
                 // ReSharper disable once SwitchStatementMissingSomeCases
-                switch (opCode)
+                switch (op.OpCode)
                 {
                     case OpCode.End:
                         return;
                     case OpCode.I32Const:
-                        _stack.Push(VarIntSigned.ToInt(reader));
+                        _stack.Push(((Instruction<int>)op).Immediate);
                         break;
                     case OpCode.GetLocal:
-                        _stack.Push(locals[VarIntUnsigned.ToUInt(reader)]);
+                        _stack.Push(locals[((Instruction<uint>)op).Immediate]);
                         break;
                     case OpCode.I32Add:
                         _stack.Push(_stack.Pop() + _stack.Pop());
                         break;
                     case OpCode.Call:
-                        Call(VarIntUnsigned.ToUInt(reader));
+                        Call(((Instruction<uint>)op).Immediate);
                         break;
                     case OpCode.CallIndirect:
-                        CallIndirect(VarIntUnsigned.ToUInt(reader), VarIntUnsigned.ToBool(reader));
+                        CallIndirect(((Instruction<CallIndirect>)op).Immediate);
                         break;
                     default:
                         throw new NotImplementedException();
@@ -75,11 +71,7 @@ namespace SharpWasm.Internal
             switch (func)
             {
                 case Function bodyFunc:
-                    using (var reader = ParseTools.FromBytes(bodyFunc.Body))
-                    {
-                        Run(reader, param);
-                    }
-
+                    RunCode(bodyFunc.Body, param);
                     break;
                 case ImportFunction importFunc:
                     var output = _imports.Call(_instance,importFunc, param);
@@ -94,11 +86,11 @@ namespace SharpWasm.Internal
 
         // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
         // ReSharper disable once UnusedParameter.Local
-        private void CallIndirect(uint type, bool reserved)
+        private void CallIndirect(CallIndirect callIndirect)
         {
             var index = _instance.Table.Get(_stack.Pop());
             var func = _module.GetFunction(index);
-            if(func.TypeId != type) throw new Exception("Wrong type on indirect call");
+            if(func.TypeId != callIndirect.TypeIndex) throw new Exception("Wrong type on indirect call");
             Call(index);
         }
     }

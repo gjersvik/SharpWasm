@@ -11,7 +11,7 @@ namespace SharpWasm.Internal.Parse.Code
         public readonly uint BodySize;
         public readonly uint LocalCount;
         public readonly ImmutableArray<LocalEntry> Locals;
-        public readonly ImmutableArray<byte> Code;
+        public readonly ImmutableArray<IInstruction> Code;
 
         public FunctionBody(BinaryReader reader)
         {
@@ -23,10 +23,20 @@ namespace SharpWasm.Internal.Parse.Code
             Locals = ParseTools.ToArray(reader, LocalCount, r => new LocalEntry(r));
             codeLength -= Locals.Select(l => l.Length).Aggregate(0U, (a, b) => a + b);
 
-            Code = ParseTools.ToBytes(reader, codeLength);
+            var builder = ImmutableArray.CreateBuilder<IInstruction>();
+            using (var codeReader = ParseTools.ToReader(reader, codeLength))
+            {
+                while (codeReader.BaseStream.Position != codeReader.BaseStream.Length)
+                {
+                    builder.Add(Instruction.Parse(codeReader));
+                }
+            }
+
+            builder.Capacity = builder.Count;
+            Code = builder.MoveToImmutable();
         }
 
-        public FunctionBody(IEnumerable<LocalEntry> locals, IEnumerable<byte> code)
+        public FunctionBody(IEnumerable<LocalEntry> locals, IEnumerable<IInstruction> code)
         {
             Locals = locals.ToImmutableArray();
             LocalCount = (uint) Locals.Length;

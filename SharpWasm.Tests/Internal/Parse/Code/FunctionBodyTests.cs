@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SharpWasm.Internal.Parse.Code;
 using SharpWasm.Tests.Helpers;
 
@@ -12,12 +11,12 @@ namespace SharpWasm.Tests.Internal.Parse.Code
         public void Properties()
         {
             var functionBody = new FunctionBody(new[] {TestValues.LocalEntry, TestValues.LocalEntry},
-                BinaryTools.HexToBytes(TestValues.InitExprHex).ToImmutableArray());
+                TestValues.InitExprOps);
             Assert.Multiple(() =>
             {
                 Assert.That(functionBody.LocalCount, Is.EqualTo(2), "LocalCount");
-                Assert.That(functionBody.Locals, Is.EqualTo(new[] { TestValues.LocalEntry, TestValues.LocalEntry }));
-                Assert.That(functionBody.Code, Is.EqualTo(BinaryTools.HexToBytes(TestValues.InitExprHex)), "Code");
+                Assert.That(functionBody.Locals, Is.EqualTo(new[] {TestValues.LocalEntry, TestValues.LocalEntry}));
+                Assert.That(functionBody.Code, Is.EqualTo(TestValues.InitExprOps), "Code");
             });
         }
 
@@ -35,18 +34,18 @@ namespace SharpWasm.Tests.Internal.Parse.Code
             {
                 Assert.That(functionBody.BodySize, Is.EqualTo(8), "BodySize");
                 Assert.That(functionBody.LocalCount, Is.EqualTo(2), "LocalCount");
-                Assert.That(functionBody.Locals, Is.EqualTo(new[] { TestValues.LocalEntry, TestValues.LocalEntry }));
-                Assert.That(functionBody.Code, Is.EqualTo(BinaryTools.HexToBytes(TestValues.InitExprHex)), "Code");
+                Assert.That(functionBody.Locals, Is.EqualTo(new[] {TestValues.LocalEntry, TestValues.LocalEntry}));
+                Assert.That(functionBody.Code, Is.EqualTo(TestValues.InitExprOps).AsCollection, "Code");
             });
         }
 
         [Test]
         public void Equals()
         {
-            var a = new FunctionBody(new[] { TestValues.LocalEntry, TestValues.LocalEntry },
-                BinaryTools.HexToBytes(TestValues.InitExprHex).ToImmutableArray());
-            var b = new FunctionBody(new[] { TestValues.LocalEntry, TestValues.LocalEntry },
-                BinaryTools.HexToBytes(TestValues.InitExprHex).ToImmutableArray());
+            var a = new FunctionBody(new[] {TestValues.LocalEntry, TestValues.LocalEntry},
+                TestValues.InitExprOps);
+            var b = new FunctionBody(new[] {TestValues.LocalEntry, TestValues.LocalEntry},
+                TestValues.InitExprOps);
             Assert.That(a.Equals(a), Is.True);
             Assert.That(a.Equals(b), Is.True);
             Assert.That(a.Equals(null), Is.False);

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using SharpWasm.Internal.Parse.Types;
 
+// ReSharper disable IdentifierTypo
+
 namespace SharpWasm.Internal.Parse.Code
 {
     internal interface IInstruction
@@ -11,8 +13,9 @@ namespace SharpWasm.Internal.Parse.Code
         bool HaveImmediate { get; }
     }
 
-    internal class Instruction: IInstruction, IEquatable<Instruction>
+    internal class Instruction : IInstruction, IEquatable<Instruction>
     {
+        //Control flow operators
         public static readonly Instruction Unreachable = new Instruction(OpCode.Unreachable);
         public static readonly Instruction Nop = new Instruction(OpCode.Nop);
         public static Instruction<BlockType> Block(BlockType value) => new Instruction<BlockType>(OpCode.Block, value);
@@ -25,15 +28,237 @@ namespace SharpWasm.Internal.Parse.Code
         public static Instruction<BrTable> BrTable(BrTable value) => new Instruction<BrTable>(OpCode.BrTable, value);
         public static readonly Instruction Return = new Instruction(OpCode.Return);
 
+        //Call operators
+        public static Instruction<uint> Call(uint value) => new Instruction<uint>(OpCode.Call, value);
+
+        public static Instruction<CallIndirect> CallIndirect(CallIndirect value) =>
+            new Instruction<CallIndirect>(OpCode.CallIndirect, value);
+
+        //Parametric operators
+        public static readonly Instruction Drop = new Instruction(OpCode.Drop);
+        public static readonly Instruction Select = new Instruction(OpCode.Select);
+
+        //Variable access
+        public static Instruction<uint> GetLocal(uint value) => new Instruction<uint>(OpCode.GetLocal, value);
+        public static Instruction<uint> SetLocal(uint value) => new Instruction<uint>(OpCode.SetLocal, value);
+        public static Instruction<uint> TeeLocal(uint value) => new Instruction<uint>(OpCode.TeeLocal, value);
         public static Instruction<uint> GetGlobal(uint value) => new Instruction<uint>(OpCode.GetGlobal, value);
+        public static Instruction<uint> SetGlobal(uint value) => new Instruction<uint>(OpCode.SetGlobal, value);
+
+        //Memory-related operators
+        public static Instruction<MemoryImmediate> I32Load(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.I32Load, value);
+
+        public static Instruction<MemoryImmediate> I64Load(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.I64Load, value);
+
+        public static Instruction<MemoryImmediate> F32Load(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.F32Load, value);
+
+        public static Instruction<MemoryImmediate> F64Load(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.F64Load, value);
+
+        public static Instruction<MemoryImmediate> I32Load8S(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.I32Load8S, value);
+
+        public static Instruction<MemoryImmediate> I32Load8U(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.I32Load8U, value);
+
+        public static Instruction<MemoryImmediate> I32Load16S(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.I32Load16S, value);
+
+        public static Instruction<MemoryImmediate> I32Load16U(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.I32Load16U, value);
+
+        public static Instruction<MemoryImmediate> I64Load8S(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.I64Load8S, value);
+
+        public static Instruction<MemoryImmediate> I64Load8U(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.I64Load8U, value);
+
+        public static Instruction<MemoryImmediate> I64Load16S(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.I64Load16S, value);
+
+        public static Instruction<MemoryImmediate> I64Load16U(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.I64Load16U, value);
+
+        public static Instruction<MemoryImmediate> I64Load32S(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.I64Load32S, value);
+
+        public static Instruction<MemoryImmediate> I64Load32U(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.I64Load32U, value);
+
+        public static Instruction<MemoryImmediate> I32Store(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.I32Store, value);
+
+        public static Instruction<MemoryImmediate> I64Store(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.I64Store, value);
+
+        public static Instruction<MemoryImmediate> F32Store(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.F32Store, value);
+
+        public static Instruction<MemoryImmediate> F64Store(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.F64Store, value);
+
+        public static Instruction<MemoryImmediate> I32Store8(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.I32Store8, value);
+
+        public static Instruction<MemoryImmediate> I32Store16(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.I32Store16, value);
+
+        public static Instruction<MemoryImmediate> I64Store8(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.I64Store8, value);
+
+        public static Instruction<MemoryImmediate> I64Store16(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.I64Store16, value);
+
+        public static Instruction<MemoryImmediate> I64Store32(MemoryImmediate value) =>
+            new Instruction<MemoryImmediate>(OpCode.I64Store32, value);
+
+        public static Instruction<bool> CurrentMemory(bool value) => new Instruction<bool>(OpCode.CurrentMemory, value);
+        public static Instruction<bool> GrowMemory(bool value) => new Instruction<bool>(OpCode.GrowMemory, value);
+
+        //Constants
         public static Instruction<int> I32Const(int value) => new Instruction<int>(OpCode.I32Const, value);
         public static Instruction<long> I64Const(long value) => new Instruction<long>(OpCode.I64Const, value);
         public static Instruction<float> F32Const(float value) => new Instruction<float>(OpCode.F32Const, value);
         public static Instruction<double> F64Const(double value) => new Instruction<double>(OpCode.F64Const, value);
 
+        //Comparison operators
+        public static readonly Instruction I32Eqz = new Instruction(OpCode.I32Eqz);
+        public static readonly Instruction I32Eq = new Instruction(OpCode.I32Eq);
+        public static readonly Instruction I32Ne = new Instruction(OpCode.I32Ne);
+        public static readonly Instruction I32LtS = new Instruction(OpCode.I32LtS);
+        public static readonly Instruction I32LtU = new Instruction(OpCode.I32LtU);
+        public static readonly Instruction I32GtS = new Instruction(OpCode.I32GtS);
+        public static readonly Instruction I32GtU = new Instruction(OpCode.I32GtU);
+        public static readonly Instruction I32LeS = new Instruction(OpCode.I32LeS);
+        public static readonly Instruction I32LeU = new Instruction(OpCode.I32LeU);
+        public static readonly Instruction I32GeS = new Instruction(OpCode.I32GeS);
+        public static readonly Instruction I32GeU = new Instruction(OpCode.I32GeU);
+        public static readonly Instruction I64Eqz = new Instruction(OpCode.I64Eqz);
+        public static readonly Instruction I64Eq = new Instruction(OpCode.I64Eq);
+        public static readonly Instruction I64Ne = new Instruction(OpCode.I64Ne);
+        public static readonly Instruction I64LtS = new Instruction(OpCode.I64LtS);
+        public static readonly Instruction I64LtU = new Instruction(OpCode.I64LtU);
+        public static readonly Instruction I64GtS = new Instruction(OpCode.I64GtS);
+        public static readonly Instruction I64GtU = new Instruction(OpCode.I64GtU);
+        public static readonly Instruction I64LeS = new Instruction(OpCode.I64LeS);
+        public static readonly Instruction I64LeU = new Instruction(OpCode.I64LeU);
+        public static readonly Instruction I64GeS = new Instruction(OpCode.I64GeS);
+        public static readonly Instruction I64GeU = new Instruction(OpCode.I64GeU);
+        public static readonly Instruction F32Eq = new Instruction(OpCode.F32Eq);
+        public static readonly Instruction F32Ne = new Instruction(OpCode.F32Ne);
+        public static readonly Instruction F32Lt = new Instruction(OpCode.F32Lt);
+        public static readonly Instruction F32Gt = new Instruction(OpCode.F32Gt);
+        public static readonly Instruction F32Le = new Instruction(OpCode.F32Le);
+        public static readonly Instruction F32Ge = new Instruction(OpCode.F32Ge);
+        public static readonly Instruction F64Eq = new Instruction(OpCode.F64Eq);
+        public static readonly Instruction F64Ne = new Instruction(OpCode.F64Ne);
+        public static readonly Instruction F64Lt = new Instruction(OpCode.F64Lt);
+        public static readonly Instruction F64Gt = new Instruction(OpCode.F64Gt);
+        public static readonly Instruction F64Le = new Instruction(OpCode.F64Le);
+        public static readonly Instruction F64Ge = new Instruction(OpCode.F64Ge);
+
+        //Numeric operators
+
+        public static readonly Instruction I32Clz = new Instruction(OpCode.I32Clz);
+        public static readonly Instruction I32Ctz = new Instruction(OpCode.I32Ctz);
+        public static readonly Instruction I32Popcnt = new Instruction(OpCode.I32Popcnt);
+        public static readonly Instruction I32Add = new Instruction(OpCode.I32Add);
+        public static readonly Instruction I32Sub = new Instruction(OpCode.I32Sub);
+        public static readonly Instruction I32Mul = new Instruction(OpCode.I32Mul);
+        public static readonly Instruction I32DivS = new Instruction(OpCode.I32DivS);
+        public static readonly Instruction I32DivU = new Instruction(OpCode.I32DivU);
+        public static readonly Instruction I32RemS = new Instruction(OpCode.I32RemS);
+        public static readonly Instruction I32RemU = new Instruction(OpCode.I32RemU);
+        public static readonly Instruction I32And = new Instruction(OpCode.I32And);
+        public static readonly Instruction I32Or = new Instruction(OpCode.I32Or);
+        public static readonly Instruction I32Xor = new Instruction(OpCode.I32Xor);
+        public static readonly Instruction I32Shl = new Instruction(OpCode.I32Shl);
+        public static readonly Instruction I32ShrS = new Instruction(OpCode.I32ShrS);
+        public static readonly Instruction I32ShrU = new Instruction(OpCode.I32ShrU);
+        public static readonly Instruction I32Rotl = new Instruction(OpCode.I32Rotl);
+        public static readonly Instruction I32Rotr = new Instruction(OpCode.I32Rotr);
+        public static readonly Instruction I64Clz = new Instruction(OpCode.I64Clz);
+        public static readonly Instruction I64Ctz = new Instruction(OpCode.I64Ctz);
+        public static readonly Instruction I64Popcnt = new Instruction(OpCode.I64Popcnt);
+        public static readonly Instruction I64Add = new Instruction(OpCode.I64Add);
+        public static readonly Instruction I64Sub = new Instruction(OpCode.I64Sub);
+        public static readonly Instruction I64Mul = new Instruction(OpCode.I64Mul);
+        public static readonly Instruction I64DivS = new Instruction(OpCode.I64DivS);
+        public static readonly Instruction I64DivU = new Instruction(OpCode.I64DivU);
+        public static readonly Instruction I64RemS = new Instruction(OpCode.I64RemS);
+        public static readonly Instruction I64RemU = new Instruction(OpCode.I64RemU);
+        public static readonly Instruction I64And = new Instruction(OpCode.I64And);
+        public static readonly Instruction I64Or = new Instruction(OpCode.I64Or);
+        public static readonly Instruction I64Xor = new Instruction(OpCode.I64Xor);
+        public static readonly Instruction I64Shl = new Instruction(OpCode.I64Shl);
+        public static readonly Instruction I64ShrS = new Instruction(OpCode.I64ShrS);
+        public static readonly Instruction I64ShrU = new Instruction(OpCode.I64ShrU);
+        public static readonly Instruction I64Rotl = new Instruction(OpCode.I64Rotl);
+        public static readonly Instruction I64Rotr = new Instruction(OpCode.I64Rotr);
+        public static readonly Instruction F32Abs = new Instruction(OpCode.F32Abs);
+        public static readonly Instruction F32Neg = new Instruction(OpCode.F32Neg);
+        public static readonly Instruction F32Ceil = new Instruction(OpCode.F32Ceil);
+        public static readonly Instruction F32Floor = new Instruction(OpCode.F32Floor);
+        public static readonly Instruction F32Trunc = new Instruction(OpCode.F32Trunc);
+        public static readonly Instruction F32Nearest = new Instruction(OpCode.F32Nearest);
+        public static readonly Instruction F32Sqrt = new Instruction(OpCode.F32Sqrt);
+        public static readonly Instruction F32Add = new Instruction(OpCode.F32Add);
+        public static readonly Instruction F32Sub = new Instruction(OpCode.F32Sub);
+        public static readonly Instruction F32Mul = new Instruction(OpCode.F32Mul);
+        public static readonly Instruction F32Div = new Instruction(OpCode.F32Div);
+        public static readonly Instruction F32Min = new Instruction(OpCode.F32Min);
+        public static readonly Instruction F32Max = new Instruction(OpCode.F32Max);
+        public static readonly Instruction F32Copysign = new Instruction(OpCode.F32Copysign);
+        public static readonly Instruction F64Abs = new Instruction(OpCode.F64Abs);
+        public static readonly Instruction F64Neg = new Instruction(OpCode.F64Neg);
+        public static readonly Instruction F64Ceil = new Instruction(OpCode.F64Ceil);
+        public static readonly Instruction F64Floor = new Instruction(OpCode.F64Floor);
+        public static readonly Instruction F64Trunc = new Instruction(OpCode.F64Trunc);
+        public static readonly Instruction F64Nearest = new Instruction(OpCode.F64Nearest);
+        public static readonly Instruction F64Sqrt = new Instruction(OpCode.F64Sqrt);
+        public static readonly Instruction F64Add = new Instruction(OpCode.F64Add);
+        public static readonly Instruction F64Sub = new Instruction(OpCode.F64Sub);
+        public static readonly Instruction F64Mul = new Instruction(OpCode.F64Mul);
+        public static readonly Instruction F64Div = new Instruction(OpCode.F64Div);
+        public static readonly Instruction F64Min = new Instruction(OpCode.F64Min);
+        public static readonly Instruction F64Max = new Instruction(OpCode.F64Max);
+        public static readonly Instruction F64Copysign = new Instruction(OpCode.F64Copysign);
+
+        // Conversions
+        public static readonly Instruction I32WrapI64 = new Instruction(OpCode.I32WrapI64);
+        public static readonly Instruction I32TruncSf32 = new Instruction(OpCode.I32TruncSf32);
+        public static readonly Instruction I32TruncUf32 = new Instruction(OpCode.I32TruncUf32);
+        public static readonly Instruction I32TruncSf64 = new Instruction(OpCode.I32TruncSf64);
+        public static readonly Instruction I32TruncUf64 = new Instruction(OpCode.I32TruncUf64);
+        public static readonly Instruction I64ExtendSi32 = new Instruction(OpCode.I64ExtendSi32);
+        public static readonly Instruction I64ExtendUi32 = new Instruction(OpCode.I64ExtendUi32);
+        public static readonly Instruction I64TruncSf32 = new Instruction(OpCode.I64TruncSf32);
+        public static readonly Instruction I64TruncUf32 = new Instruction(OpCode.I64TruncUf32);
+        public static readonly Instruction I64TruncSf64 = new Instruction(OpCode.I64TruncSf64);
+        public static readonly Instruction I64TruncUf64 = new Instruction(OpCode.I64TruncUf64);
+        public static readonly Instruction F32ConvertSi32 = new Instruction(OpCode.F32ConvertSi32);
+        public static readonly Instruction F32ConvertUi32 = new Instruction(OpCode.F32ConvertUi32);
+        public static readonly Instruction F32ConvertSi64 = new Instruction(OpCode.F32ConvertSi64);
+        public static readonly Instruction F32ConvertUi64 = new Instruction(OpCode.F32ConvertUi64);
+        public static readonly Instruction F32DemoteF64 = new Instruction(OpCode.F32DemoteF64);
+        public static readonly Instruction F64ConvertSi32 = new Instruction(OpCode.F64ConvertSi32);
+        public static readonly Instruction F64ConvertUi32 = new Instruction(OpCode.F64ConvertUi32);
+        public static readonly Instruction F64ConvertSi64 = new Instruction(OpCode.F64ConvertSi64);
+        public static readonly Instruction F64ConvertUi64 = new Instruction(OpCode.F64ConvertUi64);
+        public static readonly Instruction F64PromoteF32 = new Instruction(OpCode.F64PromoteF32);
+
+        //Reinterpretations
+        public static readonly Instruction I32ReinterpretF32 = new Instruction(OpCode.I32ReinterpretF32);
+        public static readonly Instruction I64ReinterpretF64 = new Instruction(OpCode.I64ReinterpretF64);
+        public static readonly Instruction F32ReinterpretI32 = new Instruction(OpCode.F32ReinterpretI32);
+        public static readonly Instruction F64ReinterpretI64 = new Instruction(OpCode.F64ReinterpretI64);
+
         public static IInstruction Parse(BinaryReader reader)
         {
-            var opCode = (OpCode)reader.ReadByte();
+            var opCode = (OpCode) reader.ReadByte();
             switch (opCode)
             {
                 case OpCode.Unreachable:
@@ -59,73 +284,73 @@ namespace SharpWasm.Internal.Parse.Code
                 case OpCode.Return:
                     return Return;
                 case OpCode.Call:
-                    break;
+                    return Call(VarIntUnsigned.ToUInt(reader));
                 case OpCode.CallIndirect:
-                    break;
+                    return CallIndirect(new CallIndirect(reader));
                 case OpCode.Drop:
-                    break;
+                    return Drop;
                 case OpCode.Select:
-                    break;
+                    return Select;
                 case OpCode.GetLocal:
-                    break;
+                    return GetLocal(VarIntUnsigned.ToUInt(reader));
                 case OpCode.SetLocal:
-                    break;
+                    return SetLocal(VarIntUnsigned.ToUInt(reader));
                 case OpCode.TeeLocal:
-                    break;
+                    return TeeLocal(VarIntUnsigned.ToUInt(reader));
                 case OpCode.GetGlobal:
                     return GetGlobal(VarIntUnsigned.ToUInt(reader));
                 case OpCode.SetGlobal:
-                    break;
+                    return SetGlobal(VarIntUnsigned.ToUInt(reader));
                 case OpCode.I32Load:
-                    break;
+                    return I32Load(new MemoryImmediate(reader));
                 case OpCode.I64Load:
-                    break;
+                    return I64Load(new MemoryImmediate(reader));
                 case OpCode.F32Load:
-                    break;
+                    return F32Load(new MemoryImmediate(reader));
                 case OpCode.F64Load:
-                    break;
+                    return F64Load(new MemoryImmediate(reader));
                 case OpCode.I32Load8S:
-                    break;
+                    return I32Load8S(new MemoryImmediate(reader));
                 case OpCode.I32Load8U:
-                    break;
+                    return I32Load8U(new MemoryImmediate(reader));
                 case OpCode.I32Load16S:
-                    break;
+                    return I32Load16S(new MemoryImmediate(reader));
                 case OpCode.I32Load16U:
-                    break;
+                    return I32Load16U(new MemoryImmediate(reader));
                 case OpCode.I64Load8S:
-                    break;
+                    return I64Load8S(new MemoryImmediate(reader));
                 case OpCode.I64Load8U:
-                    break;
+                    return I64Load8U(new MemoryImmediate(reader));
                 case OpCode.I64Load16S:
-                    break;
+                    return I64Load16S(new MemoryImmediate(reader));
                 case OpCode.I64Load16U:
-                    break;
+                    return I64Load16U(new MemoryImmediate(reader));
                 case OpCode.I64Load32S:
-                    break;
+                    return I64Load32S(new MemoryImmediate(reader));
                 case OpCode.I64Load32U:
-                    break;
+                    return I64Load32U(new MemoryImmediate(reader));
                 case OpCode.I32Store:
-                    break;
+                    return I32Store(new MemoryImmediate(reader));
                 case OpCode.I64Store:
-                    break;
+                    return I64Store(new MemoryImmediate(reader));
                 case OpCode.F32Store:
-                    break;
+                    return F32Store(new MemoryImmediate(reader));
                 case OpCode.F64Store:
-                    break;
+                    return F64Store(new MemoryImmediate(reader));
                 case OpCode.I32Store8:
-                    break;
+                    return I32Store8(new MemoryImmediate(reader));
                 case OpCode.I32Store16:
-                    break;
+                    return I32Store16(new MemoryImmediate(reader));
                 case OpCode.I64Store8:
-                    break;
+                    return I64Store8(new MemoryImmediate(reader));
                 case OpCode.I64Store16:
-                    break;
+                    return I64Store16(new MemoryImmediate(reader));
                 case OpCode.I64Store32:
-                    break;
+                    return I64Store32(new MemoryImmediate(reader));
                 case OpCode.CurrentMemory:
-                    break;
+                    return CurrentMemory(VarIntUnsigned.ToBool(reader));
                 case OpCode.GrowMemory:
-                    break;
+                    return GrowMemory(VarIntUnsigned.ToBool(reader));
                 case OpCode.I32Const:
                     return I32Const(VarIntSigned.ToInt(reader));
                 case OpCode.I64Const:
@@ -135,253 +360,254 @@ namespace SharpWasm.Internal.Parse.Code
                 case OpCode.F64Const:
                     return F64Const(reader.ReadDouble());
                 case OpCode.I32Eqz:
-                    break;
+                    return I32Eqz;
                 case OpCode.I32Eq:
-                    break;
+                    return I32Eq;
                 case OpCode.I32Ne:
-                    break;
+                    return I32Ne;
                 case OpCode.I32LtS:
-                    break;
+                    return I32LtS;
                 case OpCode.I32LtU:
-                    break;
+                    return I32LtU;
                 case OpCode.I32GtS:
-                    break;
+                    return I32GtS;
                 case OpCode.I32GtU:
-                    break;
+                    return I32GtU;
                 case OpCode.I32LeS:
-                    break;
+                    return I32LeS;
                 case OpCode.I32LeU:
-                    break;
+                    return I32LeU;
                 case OpCode.I32GeS:
-                    break;
+                    return I32GeS;
                 case OpCode.I32GeU:
-                    break;
+                    return I32GeU;
                 case OpCode.I64Eqz:
-                    break;
+                    return I64Eqz;
                 case OpCode.I64Eq:
-                    break;
+                    return I64Eq;
                 case OpCode.I64Ne:
-                    break;
+                    return I64Ne;
                 case OpCode.I64LtS:
-                    break;
+                    return I64LtS;
                 case OpCode.I64LtU:
-                    break;
+                    return I64LtU;
                 case OpCode.I64GtS:
-                    break;
+                    return I64GtS;
                 case OpCode.I64GtU:
-                    break;
+                    return I64GtU;
                 case OpCode.I64LeS:
-                    break;
+                    return I64LeS;
                 case OpCode.I64LeU:
-                    break;
+                    return I64LeU;
                 case OpCode.I64GeS:
-                    break;
+                    return I64GeS;
                 case OpCode.I64GeU:
-                    break;
+                    return I64GeU;
                 case OpCode.F32Eq:
-                    break;
+                    return F32Eq;
                 case OpCode.F32Ne:
-                    break;
+                    return F32Ne;
                 case OpCode.F32Lt:
-                    break;
+                    return F32Lt;
                 case OpCode.F32Gt:
-                    break;
+                    return F32Gt;
                 case OpCode.F32Le:
-                    break;
+                    return F32Le;
                 case OpCode.F32Ge:
-                    break;
+                    return F32Ge;
                 case OpCode.F64Eq:
-                    break;
+                    return F64Eq;
                 case OpCode.F64Ne:
-                    break;
+                    return F64Ne;
                 case OpCode.F64Lt:
-                    break;
+                    return F64Lt;
                 case OpCode.F64Gt:
-                    break;
+                    return F64Gt;
                 case OpCode.F64Le:
-                    break;
+                    return F64Le;
                 case OpCode.F64Ge:
-                    break;
+                    return F64Ge;
                 case OpCode.I32Clz:
-                    break;
+                    return I32Clz;
                 case OpCode.I32Ctz:
-                    break;
+                    return I32Ctz;
                 case OpCode.I32Popcnt:
-                    break;
+                    return I32Popcnt;
                 case OpCode.I32Add:
-                    break;
+                    return I32Add;
                 case OpCode.I32Sub:
-                    break;
+                    return I32Sub;
                 case OpCode.I32Mul:
-                    break;
+                    return I32Mul;
                 case OpCode.I32DivS:
-                    break;
+                    return I32DivS;
                 case OpCode.I32DivU:
-                    break;
+                    return I32DivU;
                 case OpCode.I32RemS:
-                    break;
+                    return I32RemS;
                 case OpCode.I32RemU:
-                    break;
+                    return I32RemU;
                 case OpCode.I32And:
-                    break;
+                    return I32And;
                 case OpCode.I32Or:
-                    break;
+                    return I32Or;
                 case OpCode.I32Xor:
-                    break;
+                    return I32Xor;
                 case OpCode.I32Shl:
-                    break;
+                    return I32Shl;
                 case OpCode.I32ShrS:
-                    break;
+                    return I32ShrS;
                 case OpCode.I32ShrU:
-                    break;
+                    return I32ShrU;
                 case OpCode.I32Rotl:
-                    break;
+                    return I32Rotl;
                 case OpCode.I32Rotr:
-                    break;
+                    return I32Rotr;
                 case OpCode.I64Clz:
-                    break;
+                    return I64Clz;
                 case OpCode.I64Ctz:
-                    break;
+                    return I64Ctz;
                 case OpCode.I64Popcnt:
-                    break;
+                    return I64Popcnt;
                 case OpCode.I64Add:
-                    break;
+                    return I64Add;
                 case OpCode.I64Sub:
-                    break;
+                    return I64Sub;
                 case OpCode.I64Mul:
-                    break;
+                    return I64Mul;
                 case OpCode.I64DivS:
-                    break;
+                    return I64DivS;
                 case OpCode.I64DivU:
-                    break;
+                    return I64DivU;
                 case OpCode.I64RemS:
-                    break;
+                    return I64RemS;
                 case OpCode.I64RemU:
-                    break;
+                    return I64RemU;
                 case OpCode.I64And:
-                    break;
+                    return I64And;
                 case OpCode.I64Or:
-                    break;
+                    return I64Or;
                 case OpCode.I64Xor:
-                    break;
+                    return I64Xor;
                 case OpCode.I64Shl:
-                    break;
+                    return I64Shl;
                 case OpCode.I64ShrS:
-                    break;
+                    return I64ShrS;
                 case OpCode.I64ShrU:
-                    break;
+                    return I64ShrU;
                 case OpCode.I64Rotl:
-                    break;
+                    return I64Rotl;
                 case OpCode.I64Rotr:
-                    break;
+                    return I64Rotr;
                 case OpCode.F32Abs:
-                    break;
+                    return F32Abs;
                 case OpCode.F32Neg:
-                    break;
+                    return F32Neg;
                 case OpCode.F32Ceil:
-                    break;
+                    return F32Ceil;
                 case OpCode.F32Floor:
-                    break;
+                    return F32Floor;
                 case OpCode.F32Trunc:
-                    break;
+                    return F32Trunc;
                 case OpCode.F32Nearest:
-                    break;
+                    return F32Nearest;
                 case OpCode.F32Sqrt:
-                    break;
+                    return F32Sqrt;
                 case OpCode.F32Add:
-                    break;
+                    return F32Add;
                 case OpCode.F32Sub:
-                    break;
+                    return F32Sub;
                 case OpCode.F32Mul:
-                    break;
+                    return F32Mul;
                 case OpCode.F32Div:
-                    break;
+                    return F32Div;
                 case OpCode.F32Min:
-                    break;
+                    return F32Min;
                 case OpCode.F32Max:
-                    break;
+                    return F32Max;
                 case OpCode.F32Copysign:
-                    break;
+                    return F32Copysign;
                 case OpCode.F64Abs:
-                    break;
+                    return F64Abs;
                 case OpCode.F64Neg:
-                    break;
+                    return F64Neg;
                 case OpCode.F64Ceil:
-                    break;
+                    return F64Ceil;
                 case OpCode.F64Floor:
-                    break;
+                    return F64Floor;
                 case OpCode.F64Trunc:
-                    break;
+                    return F64Trunc;
                 case OpCode.F64Nearest:
-                    break;
+                    return F64Nearest;
                 case OpCode.F64Sqrt:
-                    break;
+                    return F64Sqrt;
                 case OpCode.F64Add:
-                    break;
+                    return F64Add;
                 case OpCode.F64Sub:
-                    break;
+                    return F64Sub;
                 case OpCode.F64Mul:
-                    break;
+                    return F64Mul;
                 case OpCode.F64Div:
-                    break;
+                    return F64Div;
                 case OpCode.F64Min:
-                    break;
+                    return F64Min;
                 case OpCode.F64Max:
-                    break;
+                    return F64Max;
                 case OpCode.F64Copysign:
-                    break;
+                    return F64Copysign;
                 case OpCode.I32WrapI64:
-                    break;
-                case OpCode.I32TruncSF32:
-                    break;
-                case OpCode.I32TruncUF32:
-                    break;
-                case OpCode.I32TruncSF64:
-                    break;
-                case OpCode.I32TruncUF64:
-                    break;
-                case OpCode.I64ExtendSI32:
-                    break;
-                case OpCode.I64ExtendUI32:
-                    break;
-                case OpCode.I64TruncSF32:
-                    break;
-                case OpCode.I64TruncUF32:
-                    break;
-                case OpCode.I64TruncSF64:
-                    break;
-                case OpCode.I64TruncUF64:
-                    break;
-                case OpCode.F32ConvertSI32:
-                    break;
-                case OpCode.F32ConvertUI32:
-                    break;
-                case OpCode.F32ConvertSI64:
-                    break;
-                case OpCode.F32ConvertUI64:
-                    break;
+                    return I32WrapI64;
+                case OpCode.I32TruncSf32:
+                    return I32TruncSf32;
+                case OpCode.I32TruncUf32:
+                    return I32TruncUf32;
+                case OpCode.I32TruncSf64:
+                    return I32TruncSf64;
+                case OpCode.I32TruncUf64:
+                    return I32TruncUf64;
+                case OpCode.I64ExtendSi32:
+                    return I64ExtendSi32;
+                case OpCode.I64ExtendUi32:
+                    return I64ExtendUi32;
+                case OpCode.I64TruncSf32:
+                    return I64TruncSf32;
+                case OpCode.I64TruncUf32:
+                    return I64TruncUf32;
+                case OpCode.I64TruncSf64:
+                    return I64TruncSf64;
+                case OpCode.I64TruncUf64:
+                    return I64TruncUf64;
+                case OpCode.F32ConvertSi32:
+                    return F32ConvertSi32;
+                case OpCode.F32ConvertUi32:
+                    return F32ConvertUi32;
+                case OpCode.F32ConvertSi64:
+                    return F32ConvertSi64;
+                case OpCode.F32ConvertUi64:
+                    return F32ConvertUi64;
                 case OpCode.F32DemoteF64:
-                    break;
-                case OpCode.F64ConvertSI32:
-                    break;
-                case OpCode.F64ConvertUI32:
-                    break;
-                case OpCode.F64ConvertSI64:
-                    break;
-                case OpCode.F64ConvertUI64:
-                    break;
+                    return F32DemoteF64;
+                case OpCode.F64ConvertSi32:
+                    return F64ConvertSi32;
+                case OpCode.F64ConvertUi32:
+                    return F64ConvertUi32;
+                case OpCode.F64ConvertSi64:
+                    return F64ConvertSi64;
+                case OpCode.F64ConvertUi64:
+                    return F64ConvertUi64;
                 case OpCode.F64PromoteF32:
-                    break;
+                    return F64PromoteF32;
                 case OpCode.I32ReinterpretF32:
-                    break;
+                    return I32ReinterpretF32;
                 case OpCode.I64ReinterpretF64:
-                    break;
+                    return I64ReinterpretF64;
                 case OpCode.F32ReinterpretI32:
-                    break;
+                    return F32ReinterpretI32;
                 case OpCode.F64ReinterpretI64:
-                    break;
+                    return F64ReinterpretI64;
+                default:
+                    throw new NotImplementedException();
             }
-            throw new NotImplementedException();
         }
 
 
@@ -422,7 +648,8 @@ namespace SharpWasm.Internal.Parse.Code
             return !Equals(left, right);
         }
     }
-    internal class Instruction<T>: IInstruction, IEquatable<Instruction<T>>
+
+    internal class Instruction<T> : IInstruction, IEquatable<Instruction<T>>
     {
         public OpCode OpCode { get; }
         public bool HaveImmediate { get; } = true;

@@ -1,4 +1,6 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
+using SharpWasm.Internal.Parse.Code;
 using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm.Internal
@@ -23,11 +25,11 @@ namespace SharpWasm.Internal
     }
     internal class Function: AFunction
     {
-        public readonly byte[] Body;
+        public readonly ImmutableArray<IInstruction> Body;
 
-        public Function(uint id, byte[] body, FuncType type, uint typeId): base(id,type,false, typeId)
+        public Function(uint id, IEnumerable<IInstruction> body, FuncType type, uint typeId): base(id,type,false, typeId)
         {
-            Body = body;
+            Body = body.ToImmutableArray();
         }
     }
     internal class ImportFunction : AFunction

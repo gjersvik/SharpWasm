@@ -1,6 +1,4 @@
-﻿// ReSharper disable InconsistentNaming
-// ReSharper disable UnusedMember.Global
-// ReSharper disable IdentifierTypo
+﻿// ReSharper disable IdentifierTypo
 namespace SharpWasm.Internal.Parse.Code
 {
     internal enum OpCode: byte
@@ -171,25 +169,25 @@ namespace SharpWasm.Internal.Parse.Code
 
         //Conversions
         I32WrapI64 = 0xa7,
-        I32TruncSF32 = 0xa8,
-        I32TruncUF32 = 0xa9,
-        I32TruncSF64 = 0xaa,
-        I32TruncUF64 = 0xab,
-        I64ExtendSI32 = 0xac,
-        I64ExtendUI32 = 0xad,
-        I64TruncSF32 = 0xae,
-        I64TruncUF32 = 0xaf,
-        I64TruncSF64 = 0xb0,
-        I64TruncUF64 = 0xb1,
-        F32ConvertSI32 = 0xb2,
-        F32ConvertUI32 = 0xb3,
-        F32ConvertSI64 = 0xb4,
-        F32ConvertUI64 = 0xb5,
+        I32TruncSf32 = 0xa8,
+        I32TruncUf32 = 0xa9,
+        I32TruncSf64 = 0xaa,
+        I32TruncUf64 = 0xab,
+        I64ExtendSi32 = 0xac,
+        I64ExtendUi32 = 0xad,
+        I64TruncSf32 = 0xae,
+        I64TruncUf32 = 0xaf,
+        I64TruncSf64 = 0xb0,
+        I64TruncUf64 = 0xb1,
+        F32ConvertSi32 = 0xb2,
+        F32ConvertUi32 = 0xb3,
+        F32ConvertSi64 = 0xb4,
+        F32ConvertUi64 = 0xb5,
         F32DemoteF64 = 0xb6,
-        F64ConvertSI32 = 0xb7,
-        F64ConvertUI32 = 0xb8,
-        F64ConvertSI64 = 0xb9,
-        F64ConvertUI64 = 0xba,
+        F64ConvertSi32 = 0xb7,
+        F64ConvertUi32 = 0xb8,
+        F64ConvertSi64 = 0xb9,
+        F64ConvertUi64 = 0xba,
         F64PromoteF32 = 0xbb,
 
         //Reinterpretations
