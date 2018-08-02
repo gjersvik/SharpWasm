@@ -16,8 +16,12 @@ namespace SharpWasm.Tests.Helpers
 
         public static BinaryReader HexToReader(string hex)
         {
-            var buffer = HexToBytes(hex);
-            return new BinaryReader(new MemoryStream(buffer));
+            return BytesToReader(HexToBytes(hex));
+        }
+
+        public static BinaryReader BytesToReader(params byte[] bytes)
+        {
+            return new BinaryReader(new MemoryStream(bytes));
         }
     }
 }
