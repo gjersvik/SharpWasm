@@ -71,6 +71,39 @@ namespace SharpWasm.Tests.Internal.Running
                 Throws.InstanceOf<WebAssemblyRuntimeException>());
         }
 
+        [Test]
+        public void I32Const()
+        {
+            var stack = new Stack();
+            ExecuteInstruction(Instruction.I32Const(24), stack);
+            Assert.That(stack.PopInt(), Is.EqualTo(24));
+        }
+
+        [Test]
+        public void I64Const()
+        {
+            var stack = new Stack();
+            ExecuteInstruction(Instruction.I64Const(24), stack);
+            Assert.That(stack.PopLong(), Is.EqualTo(24));
+        }
+
+        [Test]
+        public void F32Const()
+        {
+            var stack = new Stack();
+            ExecuteInstruction(Instruction.F32Const(24), stack);
+            Assert.That(stack.PopFloat(), Is.EqualTo(24));
+        }
+
+
+        [Test]
+        public void F64Const()
+        {
+            var stack = new Stack();
+            ExecuteInstruction(Instruction.F64Const(24), stack);
+            Assert.That(stack.PopDouble(), Is.EqualTo(24));
+        }
+
         [TestCase(OpCode.Block)]
         [TestCase(OpCode.Loop)]
         [TestCase(OpCode.If)]
@@ -112,10 +145,6 @@ namespace SharpWasm.Tests.Internal.Running
         [TestCase(OpCode.I64Store32)]
         [TestCase(OpCode.CurrentMemory)]
         [TestCase(OpCode.GrowMemory)]
-        [TestCase(OpCode.I32Const)]
-        [TestCase(OpCode.I64Const)]
-        [TestCase(OpCode.F32Const)]
-        [TestCase(OpCode.F64Const)]
         [TestCase(OpCode.I32Eqz)]
         [TestCase(OpCode.I32Eq)]
         [TestCase(OpCode.I32Ne)]

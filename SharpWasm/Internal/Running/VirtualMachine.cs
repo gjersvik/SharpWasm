@@ -112,13 +112,17 @@ namespace SharpWasm.Internal.Running
                     case OpCode.GrowMemory:
                         throw new NotImplementedException();
                     case OpCode.I32Const:
-                        throw new NotImplementedException();
+                        local.Stack.Push(((Instruction<int>)op).Immediate);
+                        break;
                     case OpCode.I64Const:
-                        throw new NotImplementedException();
+                        local.Stack.Push(((Instruction<long>)op).Immediate);
+                        break;
                     case OpCode.F32Const:
-                        throw new NotImplementedException();
+                        local.Stack.Push(((Instruction<float>)op).Immediate);
+                        break;
                     case OpCode.F64Const:
-                        throw new NotImplementedException();
+                        local.Stack.Push(((Instruction<double>)op).Immediate);
+                        break;
                     case OpCode.I32Eqz:
                         throw new NotImplementedException();
                     case OpCode.I32Eq:
