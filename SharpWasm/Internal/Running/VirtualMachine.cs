@@ -6,7 +6,7 @@ namespace SharpWasm.Internal.Running
 {
     internal static class VirtualMachine
     {
-        public static void ExecuteCode(ImmutableArray<IInstruction> code)
+        public static void ExecuteCode(ImmutableArray<IInstruction> code, Local local)
         {
             for (var ip = 0; ip < code.Length; ip += 1)
             {
@@ -40,7 +40,8 @@ namespace SharpWasm.Internal.Running
                     case OpCode.CallIndirect:
                         throw new NotImplementedException();
                     case OpCode.Drop:
-                        throw new NotImplementedException();
+                        local.Stack.Pop();
+                        break;
                     case OpCode.Select:
                         throw new NotImplementedException();
                     case OpCode.GetLocal:
