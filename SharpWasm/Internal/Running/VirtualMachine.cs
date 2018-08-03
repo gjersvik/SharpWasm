@@ -43,7 +43,14 @@ namespace SharpWasm.Internal.Running
                         local.Stack.Pop();
                         break;
                     case OpCode.Select:
-                        throw new NotImplementedException();
+                        var select = local.Stack.PopInt();
+                        var val2 = local.Stack.Pop();
+                        var val1 = local.Stack.Pop();
+                        if (!Equals(val1.Type, val2.Type))
+                            throw new WebAssemblyRuntimeException(
+                                $"Select need two values of same type found {val2.Type} and {val1.Type}");
+                        local.Stack.Push(select == 0 ? val2 : val1);
+                        break;
                     case OpCode.GetLocal:
                         throw new NotImplementedException();
                     case OpCode.SetLocal:

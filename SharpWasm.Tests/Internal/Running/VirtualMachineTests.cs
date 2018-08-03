@@ -9,37 +9,66 @@ namespace SharpWasm.Tests.Internal.Running
     [TestFixture]
     public class VirtualMachineTests
     {
-        private static Local DefaultLocal => new Local(new Stack());
-
         [Test]
         public void InvalidInstruction()
         {
-            var code = ImmutableArray.Create<IInstruction>(new Instruction((OpCode)0xFF));
-            Assert.That(() => VirtualMachine.ExecuteCode(code, DefaultLocal), Throws.TypeOf<NotImplementedException>());
+            Assert.That(() => ExecuteInstruction(new Instruction((OpCode) 0xFF)),
+                Throws.TypeOf<NotImplementedException>());
         }
 
         [Test]
         public void Unreachable()
         {
-            var code = ImmutableArray.Create<IInstruction>(Instruction.Unreachable);
-            Assert.That(() => VirtualMachine.ExecuteCode(code, DefaultLocal), Throws.Exception.Message.Contain("Unreachable"));
+            Assert.That(() => ExecuteInstruction(Instruction.Unreachable),
+                Throws.Exception.Message.Contain("Unreachable"));
         }
 
         [Test]
         public void Nop()
         {
-            var code = ImmutableArray.Create<IInstruction>(Instruction.Nop);
-            Assert.That(() => VirtualMachine.ExecuteCode(code, DefaultLocal), Throws.Nothing);
+            Assert.That(() => ExecuteInstruction(Instruction.Nop), Throws.Nothing);
         }
 
         [Test]
         public void Drop()
         {
-            var code = ImmutableArray.Create<IInstruction>(Instruction.Drop);
-            var local = DefaultLocal;
-            local.Stack.Push(1);
-            VirtualMachine.ExecuteCode(code, local);
-            Assert.That(local.Stack.Count, Is.EqualTo(0));
+            var stack = new Stack();
+            stack.Push(1);
+            ExecuteInstruction(Instruction.Drop, stack);
+            Assert.That(stack.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void SelectFirst()
+        {
+            var stack = new Stack();
+            stack.Push(1);
+            stack.Push(2);
+            stack.Push(1);
+            ExecuteInstruction(Instruction.Select, stack);
+            Assert.That(stack.PopInt(), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void SelectSecond()
+        {
+            var stack = new Stack();
+            stack.Push(1);
+            stack.Push(2);
+            stack.Push(0);
+            ExecuteInstruction(Instruction.Select, stack);
+            Assert.That(stack.PopInt(), Is.EqualTo(2));
+        }
+
+        [Test]
+        public void SelectWrongType()
+        {
+            var stack = new Stack();
+            stack.Push(1);
+            stack.Push(2.0);
+            stack.Push(0);
+            Assert.That(() => ExecuteInstruction(Instruction.Select, stack),
+                Throws.InstanceOf<WebAssemblyRuntimeException>());
         }
 
         [TestCase(OpCode.Block)]
@@ -53,7 +82,6 @@ namespace SharpWasm.Tests.Internal.Running
         [TestCase(OpCode.Return)]
         [TestCase(OpCode.Call)]
         [TestCase(OpCode.CallIndirect)]
-        [TestCase(OpCode.Select)]
         [TestCase(OpCode.GetLocal)]
         [TestCase(OpCode.SetLocal)]
         [TestCase(OpCode.TeeLocal)]
@@ -213,8 +241,16 @@ namespace SharpWasm.Tests.Internal.Running
         [TestCase(OpCode.F64ReinterpretI64)]
         public void NotImplemented(byte op)
         {
-            var code = ImmutableArray.Create<IInstruction>(new Instruction((OpCode)op));
-            Assert.That(() => VirtualMachine.ExecuteCode(code, DefaultLocal), Throws.TypeOf<NotImplementedException>());
+            Assert.That(() => ExecuteInstruction(new Instruction((OpCode) op)),
+                Throws.TypeOf<NotImplementedException>());
+        }
+
+        private static void ExecuteInstruction(IInstruction instruction, Stack stack = null)
+        {
+            if (stack is null) stack = new Stack();
+            var local = new Local(stack);
+            var code = ImmutableArray.Create(instruction);
+            VirtualMachine.ExecuteCode(code, local);
         }
     }
 }
