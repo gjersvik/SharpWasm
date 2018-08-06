@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using SharpWasm.Internal.Parse.Types;
-
+// ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable IdentifierTypo
 
 namespace SharpWasm.Internal.Parse.Code

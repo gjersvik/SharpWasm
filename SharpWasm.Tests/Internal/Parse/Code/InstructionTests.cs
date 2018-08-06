@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Immutable;
 using NUnit.Framework;
 using SharpWasm.Internal.Parse.Code;
 using SharpWasm.Internal.Parse.Types;
@@ -174,8 +175,60 @@ namespace SharpWasm.Tests.Internal.Parse.Code
         {
             Parse(new []{opCode, (byte)0x40 }, (OpCode) opCode, BlockType.EmptyBlock);
         }
+
+        [TestCase(OpCode.Br)]
+        [TestCase(OpCode.BrIf)]
+        [TestCase(OpCode.GetLocal)]
+        [TestCase(OpCode.SetLocal)]
+        [TestCase(OpCode.TeeLocal)]
+        [TestCase(OpCode.GetGlobal)]
+        [TestCase(OpCode.SetGlobal)]
+        public void ParseUInt(byte opCode)
+        {
+            Parse(new[] { opCode, (byte)0x2A }, (OpCode)opCode, 42U);
+        }
+
         [Test]
-        public void ParseGetGlobal() => Parse(BinaryTools.HexToBytes("232A"), OpCode.GetGlobal, 42U);
+        public void ParseBrTable()
+        {
+            Parse(BinaryTools.HexToBytes("0E040102030405"), OpCode.BrTable, new BrTable(ImmutableArray.Create<uint>(1,2,3,4),5));
+        }
+
+        [TestCase(OpCode.I32Load)]
+        [TestCase(OpCode.I64Load)]
+        [TestCase(OpCode.F32Load)]
+        [TestCase(OpCode.F64Load)]
+        [TestCase(OpCode.I32Load8S)]
+        [TestCase(OpCode.I32Load8U)]
+        [TestCase(OpCode.I32Load16S)]
+        [TestCase(OpCode.I32Load16U)]
+        [TestCase(OpCode.I64Load8S)]
+        [TestCase(OpCode.I64Load8U)]
+        [TestCase(OpCode.I64Load16S)]
+        [TestCase(OpCode.I64Load16U)]
+        [TestCase(OpCode.I64Load32S)]
+        [TestCase(OpCode.I64Load32U)]
+        [TestCase(OpCode.I32Store)]
+        [TestCase(OpCode.I64Store)]
+        [TestCase(OpCode.F32Store)]
+        [TestCase(OpCode.F64Store)]
+        [TestCase(OpCode.I32Store8)]
+        [TestCase(OpCode.I32Store16)]
+        [TestCase(OpCode.I64Store8)]
+        [TestCase(OpCode.I64Store16)]
+        [TestCase(OpCode.I64Store32)]
+        public void ParseMemoryImmediate(byte opCode)
+        {
+            Parse(new[] { opCode, (byte)0x01, (byte)0x02 }, (OpCode)opCode, new MemoryImmediate(1,2));
+        }
+
+        [TestCase(OpCode.CurrentMemory)]
+        [TestCase(OpCode.GrowMemory)]
+        public void ParseBool(byte opCode)
+        {
+            Parse(new[] { opCode, (byte)0x01 }, (OpCode)opCode, true);
+        }
+
         [Test]
         public void ParseI32Const() => Parse(BinaryTools.HexToBytes("412A"), OpCode.I32Const, 42);
         [Test]
