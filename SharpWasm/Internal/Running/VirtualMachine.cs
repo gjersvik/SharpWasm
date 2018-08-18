@@ -124,11 +124,16 @@ namespace SharpWasm.Internal.Running
                         local.Stack.Push(((Instruction<double>)op).Immediate);
                         break;
                     case OpCode.I32Eqz:
-                        throw new NotImplementedException();
+                        local.Stack.Push(local.Stack.PopInt() == 0 ? 1 : 0);
+                        break;
                     case OpCode.I32Eq:
-                        throw new NotImplementedException();
+                        // ReSharper disable once EqualExpressionComparison
+                        local.Stack.Push(local.Stack.PopInt() == local.Stack.PopInt() ? 1 : 0);
+                        break;
                     case OpCode.I32Ne:
-                        throw new NotImplementedException();
+                        // ReSharper disable once EqualExpressionComparison
+                        local.Stack.Push(local.Stack.PopInt() != local.Stack.PopInt() ? 1 : 0);
+                        break;
                     case OpCode.I32LtS:
                         throw new NotImplementedException();
                     case OpCode.I32LtU:

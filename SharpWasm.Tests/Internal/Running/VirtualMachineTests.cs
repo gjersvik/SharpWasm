@@ -95,13 +95,36 @@ namespace SharpWasm.Tests.Internal.Running
             Assert.That(stack.PopFloat(), Is.EqualTo(24));
         }
 
-
         [Test]
         public void F64Const()
         {
             var stack = new Stack();
             ExecuteInstruction(Instruction.F64Const(24), stack);
             Assert.That(stack.PopDouble(), Is.EqualTo(24));
+        }
+
+        [TestCase(OpCode.I32Eqz, 0, ExpectedResult = 1)]
+        [TestCase(OpCode.I32Eqz, 42, ExpectedResult = 0)]
+        [TestCase(OpCode.I32Eqz, -1, ExpectedResult = 0)]
+        public int I32TestOp(byte op, int value)
+        {
+            var stack = new Stack();
+            stack.Push(value);
+            ExecuteInstruction(new Instruction((OpCode)op), stack);
+            return stack.PopInt();
+        }
+
+        [TestCase(OpCode.I32Eq, 42, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I32Eq, 42, -42, ExpectedResult = 0)]
+        [TestCase(OpCode.I32Ne, 42, 42, ExpectedResult = 0)]
+        [TestCase(OpCode.I32Ne, 42, -42, ExpectedResult = 1)]
+        public int I32Relop(byte op, int a, int b)
+        {
+            var stack = new Stack();
+            stack.Push(a);
+            stack.Push(b);
+            ExecuteInstruction(new Instruction((OpCode)op), stack);
+            return stack.PopInt();
         }
 
         [TestCase(OpCode.Block)]
@@ -145,9 +168,6 @@ namespace SharpWasm.Tests.Internal.Running
         [TestCase(OpCode.I64Store32)]
         [TestCase(OpCode.CurrentMemory)]
         [TestCase(OpCode.GrowMemory)]
-        [TestCase(OpCode.I32Eqz)]
-        [TestCase(OpCode.I32Eq)]
-        [TestCase(OpCode.I32Ne)]
         [TestCase(OpCode.I32LtS)]
         [TestCase(OpCode.I32LtU)]
         [TestCase(OpCode.I32GtS)]
