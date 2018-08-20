@@ -118,11 +118,35 @@ namespace SharpWasm.Tests.Internal.Running
         [TestCase(OpCode.I32Eq, 42, -42, ExpectedResult = 0)]
         [TestCase(OpCode.I32Ne, 42, 42, ExpectedResult = 0)]
         [TestCase(OpCode.I32Ne, 42, -42, ExpectedResult = 1)]
+        [TestCase(OpCode.I32LtS, 42, 42, ExpectedResult = 0)]
+        [TestCase(OpCode.I32LtS, -42, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I32LtS, 0, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I32LtU, 42, 42, ExpectedResult = 0)]
+        [TestCase(OpCode.I32LtU, -42, 42, ExpectedResult = 0)]
+        [TestCase(OpCode.I32LtU, 0, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I32GtS, 42, 42, ExpectedResult = 0)]
+        [TestCase(OpCode.I32GtS, 42, -42, ExpectedResult = 1)]
+        [TestCase(OpCode.I32GtS, 42, 0, ExpectedResult = 1)]
+        [TestCase(OpCode.I32GtU, 42, 42, ExpectedResult = 0)]
+        [TestCase(OpCode.I32GtU, 42, -42, ExpectedResult = 0)]
+        [TestCase(OpCode.I32GtU, 42, 0, ExpectedResult = 1)]
+        [TestCase(OpCode.I32LeS, 42, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I32LeS, -42, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I32LeS, 0, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I32LeU, 42, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I32LeU, -42, 42, ExpectedResult = 0)]
+        [TestCase(OpCode.I32LeU, 0, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I32GeS, 42, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I32GeS, 42, -42, ExpectedResult = 1)]
+        [TestCase(OpCode.I32GeS, 42, 0, ExpectedResult = 1)]
+        [TestCase(OpCode.I32GeU, 42, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I32GeU, 42, -42, ExpectedResult = 0)]
+        [TestCase(OpCode.I32GeU, 42, 0, ExpectedResult = 1)]
         public int I32Relop(byte op, int a, int b)
         {
             var stack = new Stack();
-            stack.Push(a);
             stack.Push(b);
+            stack.Push(a);
             ExecuteInstruction(new Instruction((OpCode)op), stack);
             return stack.PopInt();
         }
@@ -168,14 +192,6 @@ namespace SharpWasm.Tests.Internal.Running
         [TestCase(OpCode.I64Store32)]
         [TestCase(OpCode.CurrentMemory)]
         [TestCase(OpCode.GrowMemory)]
-        [TestCase(OpCode.I32LtS)]
-        [TestCase(OpCode.I32LtU)]
-        [TestCase(OpCode.I32GtS)]
-        [TestCase(OpCode.I32GtU)]
-        [TestCase(OpCode.I32LeS)]
-        [TestCase(OpCode.I32LeU)]
-        [TestCase(OpCode.I32GeS)]
-        [TestCase(OpCode.I32GeU)]
         [TestCase(OpCode.I64Eqz)]
         [TestCase(OpCode.I64Eq)]
         [TestCase(OpCode.I64Ne)]
