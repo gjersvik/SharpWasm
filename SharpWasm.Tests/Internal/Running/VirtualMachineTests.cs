@@ -103,6 +103,22 @@ namespace SharpWasm.Tests.Internal.Running
             Assert.That(stack.PopDouble(), Is.EqualTo(24));
         }
 
+        [TestCase(OpCode.I32Add, 5,7, ExpectedResult = 12)]
+        [TestCase(OpCode.I32Sub, 5, 7, ExpectedResult = -2)]
+        [TestCase(OpCode.I32Mul, 5, 7, ExpectedResult = 35)]
+        [TestCase(OpCode.I32DivS, 35, -7, ExpectedResult = -5)]
+        [TestCase(OpCode.I32DivU, 35, 7, ExpectedResult = 5)]
+        [TestCase(OpCode.I32RemS, -37, 7, ExpectedResult = -2)]
+        [TestCase(OpCode.I32RemU, 37, 7, ExpectedResult = 2)]
+        public int Binop(byte op, int a, int b)
+        {
+            var stack = new Stack();
+            stack.Push(b);
+            stack.Push(a);
+            ExecuteInstruction(new Instruction((OpCode)op), stack);
+            return stack.PopInt();
+        }
+
         [TestCase(OpCode.I32Eqz, 0, ExpectedResult = 1)]
         [TestCase(OpCode.I32Eqz, 42, ExpectedResult = 0)]
         [TestCase(OpCode.I32Eqz, -1, ExpectedResult = 0)]
@@ -293,13 +309,6 @@ namespace SharpWasm.Tests.Internal.Running
         [TestCase(OpCode.I32Clz)]
         [TestCase(OpCode.I32Ctz)]
         [TestCase(OpCode.I32Popcnt)]
-        [TestCase(OpCode.I32Add)]
-        [TestCase(OpCode.I32Sub)]
-        [TestCase(OpCode.I32Mul)]
-        [TestCase(OpCode.I32DivS)]
-        [TestCase(OpCode.I32DivU)]
-        [TestCase(OpCode.I32RemS)]
-        [TestCase(OpCode.I32RemU)]
         [TestCase(OpCode.I32And)]
         [TestCase(OpCode.I32Or)]
         [TestCase(OpCode.I32Xor)]

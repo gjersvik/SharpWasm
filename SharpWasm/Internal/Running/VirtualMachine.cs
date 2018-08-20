@@ -237,19 +237,26 @@ namespace SharpWasm.Internal.Running
                         case OpCode.I32Popcnt:
                             throw new NotImplementedException();
                         case OpCode.I32Add:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopInt() + local.Stack.PopInt());
+                            break;
                         case OpCode.I32Sub:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopInt() - local.Stack.PopInt());
+                            break;
                         case OpCode.I32Mul:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopInt() * local.Stack.PopInt());
+                            break;
                         case OpCode.I32DivS:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopInt() / local.Stack.PopInt());
+                            break;
                         case OpCode.I32DivU:
-                            throw new NotImplementedException();
+                            local.Stack.Push((int)((uint)local.Stack.PopInt() / (uint)local.Stack.PopInt()));
+                            break;
                         case OpCode.I32RemS:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopInt() % local.Stack.PopInt());
+                            break;
                         case OpCode.I32RemU:
-                            throw new NotImplementedException();
+                            local.Stack.Push((int)((uint)local.Stack.PopInt() % (uint)local.Stack.PopInt()));
+                            break;
                         case OpCode.I32And:
                             throw new NotImplementedException();
                         case OpCode.I32Or:
