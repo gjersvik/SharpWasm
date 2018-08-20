@@ -8,6 +8,7 @@ namespace SharpWasm.Internal.Running
     internal static class VirtualMachine
     {
         [SuppressMessage("ReSharper", "EqualExpressionComparison")]
+        [SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator")]
         public static void ExecuteCode(ImmutableArray<IInstruction> code, Local local)
         {
             unchecked
@@ -194,29 +195,41 @@ namespace SharpWasm.Internal.Running
                             local.Stack.Push((ulong)local.Stack.PopLong() >= (ulong)local.Stack.PopLong() ? 1 : 0);
                             break;
                         case OpCode.F32Eq:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopFloat() == local.Stack.PopFloat() ? 1 : 0);
+                            break;
                         case OpCode.F32Ne:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopFloat() != local.Stack.PopFloat() ? 1 : 0);
+                            break;
                         case OpCode.F32Lt:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopFloat() < local.Stack.PopFloat() ? 1 : 0);
+                            break;
                         case OpCode.F32Gt:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopFloat() > local.Stack.PopFloat() ? 1 : 0);
+                            break;
                         case OpCode.F32Le:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopFloat() <= local.Stack.PopFloat() ? 1 : 0);
+                            break;
                         case OpCode.F32Ge:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopFloat() >= local.Stack.PopFloat() ? 1 : 0);
+                            break;
                         case OpCode.F64Eq:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopDouble() == local.Stack.PopDouble() ? 1 : 0);
+                            break;
                         case OpCode.F64Ne:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopDouble() != local.Stack.PopDouble() ? 1 : 0);
+                            break;
                         case OpCode.F64Lt:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopDouble() < local.Stack.PopDouble() ? 1 : 0);
+                            break;
                         case OpCode.F64Gt:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopDouble() > local.Stack.PopDouble() ? 1 : 0);
+                            break;
                         case OpCode.F64Le:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopDouble() <= local.Stack.PopDouble() ? 1 : 0);
+                            break;
                         case OpCode.F64Ge:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopDouble() >= local.Stack.PopDouble() ? 1 : 0);
+                            break;
                         case OpCode.I32Clz:
                             throw new NotImplementedException();
                         case OpCode.I32Ctz:
