@@ -161,27 +161,38 @@ namespace SharpWasm.Internal.Running
                             local.Stack.Push((uint) local.Stack.PopInt() >= (uint) local.Stack.PopInt() ? 1 : 0);
                             break;
                         case OpCode.I64Eqz:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopLong() == 0 ? 1 : 0);
+                            break;
                         case OpCode.I64Eq:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopLong() == local.Stack.PopLong() ? 1 : 0);
+                            break;
                         case OpCode.I64Ne:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopLong() != local.Stack.PopLong() ? 1 : 0);
+                            break;
                         case OpCode.I64LtS:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopLong() < local.Stack.PopLong() ? 1 : 0);
+                            break;
                         case OpCode.I64LtU:
-                            throw new NotImplementedException();
+                            local.Stack.Push((ulong)local.Stack.PopLong() < (ulong)local.Stack.PopLong() ? 1 : 0);
+                            break;
                         case OpCode.I64GtS:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopLong() > local.Stack.PopLong() ? 1 : 0);
+                            break;
                         case OpCode.I64GtU:
-                            throw new NotImplementedException();
+                            local.Stack.Push((ulong)local.Stack.PopLong() > (ulong)local.Stack.PopLong() ? 1 : 0);
+                            break;
                         case OpCode.I64LeS:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopLong() <= local.Stack.PopLong() ? 1 : 0);
+                            break;
                         case OpCode.I64LeU:
-                            throw new NotImplementedException();
+                            local.Stack.Push((ulong)local.Stack.PopLong() <= (ulong)local.Stack.PopLong() ? 1 : 0);
+                            break;
                         case OpCode.I64GeS:
-                            throw new NotImplementedException();
+                            local.Stack.Push(local.Stack.PopLong() >= local.Stack.PopLong() ? 1 : 0);
+                            break;
                         case OpCode.I64GeU:
-                            throw new NotImplementedException();
+                            local.Stack.Push((ulong)local.Stack.PopLong() >= (ulong)local.Stack.PopLong() ? 1 : 0);
+                            break;
                         case OpCode.F32Eq:
                             throw new NotImplementedException();
                         case OpCode.F32Ne:

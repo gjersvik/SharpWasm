@@ -106,7 +106,18 @@ namespace SharpWasm.Tests.Internal.Running
         [TestCase(OpCode.I32Eqz, 0, ExpectedResult = 1)]
         [TestCase(OpCode.I32Eqz, 42, ExpectedResult = 0)]
         [TestCase(OpCode.I32Eqz, -1, ExpectedResult = 0)]
-        public int I32TestOp(byte op, int value)
+        public int TestOp(byte op, int value)
+        {
+            var stack = new Stack();
+            stack.Push(value);
+            ExecuteInstruction(new Instruction((OpCode)op), stack);
+            return stack.PopInt();
+        }
+
+        [TestCase(OpCode.I64Eqz, 0, ExpectedResult = 1)]
+        [TestCase(OpCode.I64Eqz, 42, ExpectedResult = 0)]
+        [TestCase(OpCode.I64Eqz, -1, ExpectedResult = 0)]
+        public int TestOp(byte op, long value)
         {
             var stack = new Stack();
             stack.Push(value);
@@ -142,7 +153,44 @@ namespace SharpWasm.Tests.Internal.Running
         [TestCase(OpCode.I32GeU, 42, 42, ExpectedResult = 1)]
         [TestCase(OpCode.I32GeU, 42, -42, ExpectedResult = 0)]
         [TestCase(OpCode.I32GeU, 42, 0, ExpectedResult = 1)]
-        public int I32Relop(byte op, int a, int b)
+        public int Relop(byte op, int a, int b)
+        {
+            var stack = new Stack();
+            stack.Push(b);
+            stack.Push(a);
+            ExecuteInstruction(new Instruction((OpCode)op), stack);
+            return stack.PopInt();
+        }
+
+        [TestCase(OpCode.I64Eq, 42, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I64Eq, 42, -42, ExpectedResult = 0)]
+        [TestCase(OpCode.I64Ne, 42, 42, ExpectedResult = 0)]
+        [TestCase(OpCode.I64Ne, 42, -42, ExpectedResult = 1)]
+        [TestCase(OpCode.I64LtS, 42, 42, ExpectedResult = 0)]
+        [TestCase(OpCode.I64LtS, -42, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I64LtS, 0, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I64LtU, 42, 42, ExpectedResult = 0)]
+        [TestCase(OpCode.I64LtU, -42, 42, ExpectedResult = 0)]
+        [TestCase(OpCode.I64LtU, 0, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I64GtS, 42, 42, ExpectedResult = 0)]
+        [TestCase(OpCode.I64GtS, 42, -42, ExpectedResult = 1)]
+        [TestCase(OpCode.I64GtS, 42, 0, ExpectedResult = 1)]
+        [TestCase(OpCode.I64GtU, 42, 42, ExpectedResult = 0)]
+        [TestCase(OpCode.I64GtU, 42, -42, ExpectedResult = 0)]
+        [TestCase(OpCode.I64GtU, 42, 0, ExpectedResult = 1)]
+        [TestCase(OpCode.I64LeS, 42, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I64LeS, -42, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I64LeS, 0, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I64LeU, 42, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I64LeU, -42, 42, ExpectedResult = 0)]
+        [TestCase(OpCode.I64LeU, 0, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I64GeS, 42, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I64GeS, 42, -42, ExpectedResult = 1)]
+        [TestCase(OpCode.I64GeS, 42, 0, ExpectedResult = 1)]
+        [TestCase(OpCode.I64GeU, 42, 42, ExpectedResult = 1)]
+        [TestCase(OpCode.I64GeU, 42, -42, ExpectedResult = 0)]
+        [TestCase(OpCode.I64GeU, 42, 0, ExpectedResult = 1)]
+        public int Relop(byte op, long a, long b)
         {
             var stack = new Stack();
             stack.Push(b);
@@ -192,17 +240,6 @@ namespace SharpWasm.Tests.Internal.Running
         [TestCase(OpCode.I64Store32)]
         [TestCase(OpCode.CurrentMemory)]
         [TestCase(OpCode.GrowMemory)]
-        [TestCase(OpCode.I64Eqz)]
-        [TestCase(OpCode.I64Eq)]
-        [TestCase(OpCode.I64Ne)]
-        [TestCase(OpCode.I64LtS)]
-        [TestCase(OpCode.I64LtU)]
-        [TestCase(OpCode.I64GtS)]
-        [TestCase(OpCode.I64GtU)]
-        [TestCase(OpCode.I64LeS)]
-        [TestCase(OpCode.I64LeU)]
-        [TestCase(OpCode.I64GeS)]
-        [TestCase(OpCode.I64GeU)]
         [TestCase(OpCode.F32Eq)]
         [TestCase(OpCode.F32Ne)]
         [TestCase(OpCode.F32Lt)]
