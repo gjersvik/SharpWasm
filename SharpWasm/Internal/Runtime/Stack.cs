@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SharpWasm.Internal.Running
+namespace SharpWasm.Internal.Runtime
 {
     internal class Stack
     {

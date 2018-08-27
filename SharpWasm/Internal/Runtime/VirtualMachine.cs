@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using SharpWasm.Internal.Parse.Code;
 
-namespace SharpWasm.Internal.Running
+namespace SharpWasm.Internal.Runtime
 {
     internal static class VirtualMachine
     {

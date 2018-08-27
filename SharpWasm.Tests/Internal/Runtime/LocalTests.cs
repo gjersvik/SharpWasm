@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
-using SharpWasm.Internal.Running;
+using SharpWasm.Internal.Runtime;
 
-namespace SharpWasm.Tests.Internal.Running
+namespace SharpWasm.Tests.Internal.Runtime
 {
     [TestFixture]
     public class LocalTests
