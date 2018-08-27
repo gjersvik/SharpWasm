@@ -22,26 +22,6 @@ namespace SharpWasm.Internal.Runtime
             _stack.Push(stackValue);
         }
 
-        public int PopInt()
-        {
-            return (int) Pop();
-        }
-
-        public long PopLong()
-        {
-            return (long) Pop();
-        }
-
-        public float PopFloat()
-        {
-            return (float) Pop();
-        }
-
-        public double PopDouble()
-        {
-            return (double) Pop();
-        }
-
         public int Count => _stack.Count;
 
         private readonly Stack<Value> _stack;

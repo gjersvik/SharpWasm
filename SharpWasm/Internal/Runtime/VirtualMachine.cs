@@ -11,6 +11,7 @@ namespace SharpWasm.Internal.Runtime
         [SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator")]
         public static void ExecuteCode(ImmutableArray<IInstruction> code, Local local)
         {
+            var stack = local.Stack;
             unchecked
             {
                 for (var ip = 0; ip < code.Length; ip += 1)
@@ -48,13 +49,13 @@ namespace SharpWasm.Internal.Runtime
                             local.Stack.Pop();
                             break;
                         case OpCode.Select:
-                            var select = local.Stack.PopInt();
-                            var val2 = local.Stack.Pop();
-                            var val1 = local.Stack.Pop();
+                            var select = (uint)stack.Pop();
+                            var val2 = stack.Pop();
+                            var val1 = stack.Pop();
                             if (!Equals(val1.Type, val2.Type))
                                 throw new WebAssemblyRuntimeException(
                                     $"Select need two values of same type found {val2.Type} and {val1.Type}");
-                            local.Stack.Push(select == 0 ? val2 : val1);
+                            stack.Push(select == 0 ? val2 : val1);
                             break;
                         case OpCode.GetLocal:
                             throw new NotImplementedException();
@@ -117,118 +118,118 @@ namespace SharpWasm.Internal.Runtime
                         case OpCode.GrowMemory:
                             throw new NotImplementedException();
                         case OpCode.I32Const:
-                            local.Stack.Push(((Instruction<int>) op).Immediate);
+                            stack.Push(((Instruction<int>) op).Immediate);
                             break;
                         case OpCode.I64Const:
-                            local.Stack.Push(((Instruction<long>) op).Immediate);
+                            stack.Push(((Instruction<long>) op).Immediate);
                             break;
                         case OpCode.F32Const:
-                            local.Stack.Push(((Instruction<float>) op).Immediate);
+                            stack.Push(((Instruction<float>) op).Immediate);
                             break;
                         case OpCode.F64Const:
-                            local.Stack.Push(((Instruction<double>) op).Immediate);
+                            stack.Push(((Instruction<double>) op).Immediate);
                             break;
                         case OpCode.I32Eqz:
-                            local.Stack.Push(local.Stack.PopInt() == 0 ? 1 : 0);
+                            stack.Push((uint)stack.Pop() == 0 ? 1 : 0);
                             break;
                         case OpCode.I32Eq:
-                            local.Stack.Push(local.Stack.PopInt() == local.Stack.PopInt() ? 1 : 0);
+                            stack.Push((uint)stack.Pop() == (uint)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.I32Ne:
-                            local.Stack.Push(local.Stack.PopInt() != local.Stack.PopInt() ? 1 : 0);
+                            stack.Push((uint)stack.Pop() != (uint)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.I32LtS:
-                            local.Stack.Push(local.Stack.PopInt() < local.Stack.PopInt() ? 1 : 0);
+                            stack.Push((int)stack.Pop() < (int)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.I32LtU:
-                            local.Stack.Push((uint) local.Stack.PopInt() < (uint) local.Stack.PopInt() ? 1 : 0);
+                            stack.Push((uint)stack.Pop() < (uint)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.I32GtS:
-                            local.Stack.Push(local.Stack.PopInt() > local.Stack.PopInt() ? 1 : 0);
+                            stack.Push((int)stack.Pop() > (int)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.I32GtU:
-                            local.Stack.Push((uint) local.Stack.PopInt() > (uint) local.Stack.PopInt() ? 1 : 0);
+                            stack.Push((uint)stack.Pop() > (uint)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.I32LeS:
-                            local.Stack.Push(local.Stack.PopInt() <= local.Stack.PopInt() ? 1 : 0);
+                            stack.Push((int)stack.Pop() <= (int)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.I32LeU:
-                            local.Stack.Push((uint) local.Stack.PopInt() <= (uint) local.Stack.PopInt() ? 1 : 0);
+                            stack.Push((uint)stack.Pop() <= (uint)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.I32GeS:
-                            local.Stack.Push(local.Stack.PopInt() >= local.Stack.PopInt() ? 1 : 0);
+                            stack.Push((int)stack.Pop() >= (int)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.I32GeU:
-                            local.Stack.Push((uint) local.Stack.PopInt() >= (uint) local.Stack.PopInt() ? 1 : 0);
+                            stack.Push((uint)stack.Pop() >= (uint)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.I64Eqz:
-                            local.Stack.Push(local.Stack.PopLong() == 0 ? 1 : 0);
+                            stack.Push((ulong)stack.Pop() == 0 ? 1 : 0);
                             break;
                         case OpCode.I64Eq:
-                            local.Stack.Push(local.Stack.PopLong() == local.Stack.PopLong() ? 1 : 0);
+                            stack.Push((ulong)stack.Pop() == (ulong)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.I64Ne:
-                            local.Stack.Push(local.Stack.PopLong() != local.Stack.PopLong() ? 1 : 0);
+                            stack.Push((ulong)stack.Pop() != (ulong)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.I64LtS:
-                            local.Stack.Push(local.Stack.PopLong() < local.Stack.PopLong() ? 1 : 0);
+                            stack.Push((long)stack.Pop() < (long)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.I64LtU:
-                            local.Stack.Push((ulong)local.Stack.PopLong() < (ulong)local.Stack.PopLong() ? 1 : 0);
+                            stack.Push((ulong)stack.Pop() < (ulong)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.I64GtS:
-                            local.Stack.Push(local.Stack.PopLong() > local.Stack.PopLong() ? 1 : 0);
+                            stack.Push((long)stack.Pop() > (long)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.I64GtU:
-                            local.Stack.Push((ulong)local.Stack.PopLong() > (ulong)local.Stack.PopLong() ? 1 : 0);
+                            stack.Push((ulong)stack.Pop() > (ulong)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.I64LeS:
-                            local.Stack.Push(local.Stack.PopLong() <= local.Stack.PopLong() ? 1 : 0);
+                            stack.Push((long)stack.Pop() <= (long)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.I64LeU:
-                            local.Stack.Push((ulong)local.Stack.PopLong() <= (ulong)local.Stack.PopLong() ? 1 : 0);
+                            stack.Push((ulong)stack.Pop() <= (ulong)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.I64GeS:
-                            local.Stack.Push(local.Stack.PopLong() >= local.Stack.PopLong() ? 1 : 0);
+                            stack.Push((long)stack.Pop() >= (long)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.I64GeU:
-                            local.Stack.Push((ulong)local.Stack.PopLong() >= (ulong)local.Stack.PopLong() ? 1 : 0);
+                            stack.Push((ulong)stack.Pop() >= (ulong)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.F32Eq:
-                            local.Stack.Push(local.Stack.PopFloat() == local.Stack.PopFloat() ? 1 : 0);
+                            stack.Push((float)stack.Pop() == (float)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.F32Ne:
-                            local.Stack.Push(local.Stack.PopFloat() != local.Stack.PopFloat() ? 1 : 0);
+                            stack.Push((float)stack.Pop() != (float)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.F32Lt:
-                            local.Stack.Push(local.Stack.PopFloat() < local.Stack.PopFloat() ? 1 : 0);
+                            stack.Push((float)stack.Pop() < (float)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.F32Gt:
-                            local.Stack.Push(local.Stack.PopFloat() > local.Stack.PopFloat() ? 1 : 0);
+                            stack.Push((float)stack.Pop() > (float)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.F32Le:
-                            local.Stack.Push(local.Stack.PopFloat() <= local.Stack.PopFloat() ? 1 : 0);
+                            stack.Push((float)stack.Pop() <= (float)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.F32Ge:
-                            local.Stack.Push(local.Stack.PopFloat() >= local.Stack.PopFloat() ? 1 : 0);
+                            stack.Push((float)stack.Pop() >= (float)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.F64Eq:
-                            local.Stack.Push(local.Stack.PopDouble() == local.Stack.PopDouble() ? 1 : 0);
+                            stack.Push((double)stack.Pop() == (double)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.F64Ne:
-                            local.Stack.Push(local.Stack.PopDouble() != local.Stack.PopDouble() ? 1 : 0);
+                            stack.Push((double)stack.Pop() != (double)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.F64Lt:
-                            local.Stack.Push(local.Stack.PopDouble() < local.Stack.PopDouble() ? 1 : 0);
+                            stack.Push((double)stack.Pop() < (double)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.F64Gt:
-                            local.Stack.Push(local.Stack.PopDouble() > local.Stack.PopDouble() ? 1 : 0);
+                            stack.Push((double)stack.Pop() > (double)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.F64Le:
-                            local.Stack.Push(local.Stack.PopDouble() <= local.Stack.PopDouble() ? 1 : 0);
+                            stack.Push((double)stack.Pop() <= (double)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.F64Ge:
-                            local.Stack.Push(local.Stack.PopDouble() >= local.Stack.PopDouble() ? 1 : 0);
+                            stack.Push((double)stack.Pop() >= (double)stack.Pop() ? 1 : 0);
                             break;
                         case OpCode.I32Clz:
                             throw new NotImplementedException();
@@ -237,25 +238,25 @@ namespace SharpWasm.Internal.Runtime
                         case OpCode.I32Popcnt:
                             throw new NotImplementedException();
                         case OpCode.I32Add:
-                            local.Stack.Push(local.Stack.PopInt() + local.Stack.PopInt());
+                            stack.Push((uint)stack.Pop() + (uint)stack.Pop());
                             break;
                         case OpCode.I32Sub:
-                            local.Stack.Push(local.Stack.PopInt() - local.Stack.PopInt());
+                            stack.Push((uint)stack.Pop() - (uint)stack.Pop());
                             break;
                         case OpCode.I32Mul:
-                            local.Stack.Push(local.Stack.PopInt() * local.Stack.PopInt());
+                            stack.Push((uint)stack.Pop() * (uint)stack.Pop());
                             break;
                         case OpCode.I32DivS:
-                            local.Stack.Push(local.Stack.PopInt() / local.Stack.PopInt());
+                            stack.Push((int)stack.Pop() / (int)stack.Pop());
                             break;
                         case OpCode.I32DivU:
-                            local.Stack.Push((int)((uint)local.Stack.PopInt() / (uint)local.Stack.PopInt()));
+                            stack.Push((uint)stack.Pop() / (uint)stack.Pop());
                             break;
                         case OpCode.I32RemS:
-                            local.Stack.Push(local.Stack.PopInt() % local.Stack.PopInt());
+                            stack.Push((int)stack.Pop() % (int)stack.Pop());
                             break;
                         case OpCode.I32RemU:
-                            local.Stack.Push((int)((uint)local.Stack.PopInt() % (uint)local.Stack.PopInt()));
+                            stack.Push((uint)stack.Pop() % (uint)stack.Pop());
                             break;
                         case OpCode.I32And:
                             throw new NotImplementedException();

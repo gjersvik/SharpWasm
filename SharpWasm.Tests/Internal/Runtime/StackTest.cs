@@ -14,10 +14,10 @@ namespace SharpWasm.Tests.Internal.Runtime
             stack.Push(2L);
             stack.Push(3F);
             stack.Push(4.0);
-            Assert.That(stack.PopDouble(),Is.EqualTo(4) );
-            Assert.That(stack.PopFloat(), Is.EqualTo(3));
-            Assert.That(stack.PopLong(), Is.EqualTo(2));
-            Assert.That(stack.PopInt(), Is.EqualTo(1));
+            Assert.That((double)stack.Pop(),Is.EqualTo(4) );
+            Assert.That((float)stack.Pop(), Is.EqualTo(3));
+            Assert.That((long)stack.Pop(), Is.EqualTo(2));
+            Assert.That((int)stack.Pop(), Is.EqualTo(1));
         }
 
         [Test]
@@ -25,7 +25,7 @@ namespace SharpWasm.Tests.Internal.Runtime
         {
             var stack = new Stack();
             stack.Push(2L);
-            Assert.That(() => stack.PopInt(), Throws.Exception.Message.Contain("I64"));
+            Assert.That(() => (int)stack.Pop(), Throws.Exception.Message.Contain("I64"));
         }
 
         [Test]
@@ -33,7 +33,7 @@ namespace SharpWasm.Tests.Internal.Runtime
         {
             var stack = new Stack();
             stack.Push(3F);
-            Assert.That(() => stack.PopLong(), Throws.Exception.Message.Contain("F32"));
+            Assert.That(() => (long)stack.Pop(), Throws.Exception.Message.Contain("F32"));
         }
 
         [Test]
@@ -41,7 +41,7 @@ namespace SharpWasm.Tests.Internal.Runtime
         {
             var stack = new Stack();
             stack.Push(4.0);
-            Assert.That(() => stack.PopFloat(), Throws.Exception.Message.Contain("F64"));
+            Assert.That(() => (float)stack.Pop(), Throws.Exception.Message.Contain("F64"));
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace SharpWasm.Tests.Internal.Runtime
         {
             var stack = new Stack();
             stack.Push(1);
-            Assert.That(() => stack.PopDouble(), Throws.Exception.Message.Contain("I32"));
+            Assert.That(() => (double)stack.Pop(), Throws.Exception.Message.Contain("I32"));
         }
 
         [Test]

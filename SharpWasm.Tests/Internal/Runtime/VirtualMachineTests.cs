@@ -46,7 +46,7 @@ namespace SharpWasm.Tests.Internal.Runtime
             stack.Push(2);
             stack.Push(1);
             ExecuteInstruction(Instruction.Select, stack);
-            Assert.That(stack.PopInt(), Is.EqualTo(1));
+            Assert.That((uint)stack.Pop(), Is.EqualTo(1));
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace SharpWasm.Tests.Internal.Runtime
             stack.Push(2);
             stack.Push(0);
             ExecuteInstruction(Instruction.Select, stack);
-            Assert.That(stack.PopInt(), Is.EqualTo(2));
+            Assert.That((uint)stack.Pop(), Is.EqualTo(2));
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace SharpWasm.Tests.Internal.Runtime
         {
             var stack = new Stack();
             ExecuteInstruction(Instruction.I32Const(24), stack);
-            Assert.That(stack.PopInt(), Is.EqualTo(24));
+            Assert.That((uint)stack.Pop(), Is.EqualTo(24));
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace SharpWasm.Tests.Internal.Runtime
         {
             var stack = new Stack();
             ExecuteInstruction(Instruction.I64Const(24), stack);
-            Assert.That(stack.PopLong(), Is.EqualTo(24));
+            Assert.That((ulong)stack.Pop(), Is.EqualTo(24));
         }
 
         [Test]
@@ -92,7 +92,7 @@ namespace SharpWasm.Tests.Internal.Runtime
         {
             var stack = new Stack();
             ExecuteInstruction(Instruction.F32Const(24), stack);
-            Assert.That(stack.PopFloat(), Is.EqualTo(24));
+            Assert.That((float)stack.Pop(), Is.EqualTo(24));
         }
 
         [Test]
@@ -100,7 +100,7 @@ namespace SharpWasm.Tests.Internal.Runtime
         {
             var stack = new Stack();
             ExecuteInstruction(Instruction.F64Const(24), stack);
-            Assert.That(stack.PopDouble(), Is.EqualTo(24));
+            Assert.That((double)stack.Pop(), Is.EqualTo(24));
         }
 
         [TestCase(OpCode.I32Add, 5,7, ExpectedResult = 12)]
@@ -116,7 +116,7 @@ namespace SharpWasm.Tests.Internal.Runtime
             stack.Push(b);
             stack.Push(a);
             ExecuteInstruction(new Instruction((OpCode)op), stack);
-            return stack.PopInt();
+            return (int)stack.Pop();
         }
 
         [TestCase(OpCode.I32Eqz, 0, ExpectedResult = 1)]
@@ -127,7 +127,7 @@ namespace SharpWasm.Tests.Internal.Runtime
             var stack = new Stack();
             stack.Push(value);
             ExecuteInstruction(new Instruction((OpCode)op), stack);
-            return stack.PopInt();
+            return (int)stack.Pop();
         }
 
         [TestCase(OpCode.I64Eqz, 0, ExpectedResult = 1)]
@@ -138,7 +138,7 @@ namespace SharpWasm.Tests.Internal.Runtime
             var stack = new Stack();
             stack.Push(value);
             ExecuteInstruction(new Instruction((OpCode)op), stack);
-            return stack.PopInt();
+            return (int)stack.Pop();
         }
 
         [TestCase(OpCode.I32Eq, 42, 42, ExpectedResult = 1)]
@@ -175,7 +175,7 @@ namespace SharpWasm.Tests.Internal.Runtime
             stack.Push(b);
             stack.Push(a);
             ExecuteInstruction(new Instruction((OpCode)op), stack);
-            return stack.PopInt();
+            return (int)stack.Pop();
         }
 
         [TestCase(OpCode.I64Eq, 42, 42, ExpectedResult = 1)]
@@ -212,7 +212,7 @@ namespace SharpWasm.Tests.Internal.Runtime
             stack.Push(b);
             stack.Push(a);
             ExecuteInstruction(new Instruction((OpCode)op), stack);
-            return stack.PopInt();
+            return (int)stack.Pop();
         }
 
         [TestCase(OpCode.F32Eq, 42, 42, ExpectedResult = 1)]
@@ -237,7 +237,7 @@ namespace SharpWasm.Tests.Internal.Runtime
             stack.Push(b);
             stack.Push(a);
             ExecuteInstruction(new Instruction((OpCode)op), stack);
-            return stack.PopInt();
+            return (int)stack.Pop();
         }
 
         [TestCase(OpCode.F64Eq, 42, 42, ExpectedResult = 1)]
@@ -262,7 +262,7 @@ namespace SharpWasm.Tests.Internal.Runtime
             stack.Push(b);
             stack.Push(a);
             ExecuteInstruction(new Instruction((OpCode)op), stack);
-            return stack.PopInt();
+            return (int)stack.Pop();
         }
 
         [TestCase(OpCode.Block)]
