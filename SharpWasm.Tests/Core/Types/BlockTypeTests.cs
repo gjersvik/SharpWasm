@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework;
+using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse;
-using SharpWasm.Internal.Parse.Types;
 
-namespace SharpWasm.Tests.Internal.Parse.Types
+namespace SharpWasm.Tests.Core.Types
 {
     [TestFixture]
     public class BlockTypeTests

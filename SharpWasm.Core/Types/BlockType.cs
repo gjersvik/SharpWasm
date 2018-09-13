@@ -1,4 +1,4 @@
-﻿namespace SharpWasm.Internal.Parse.Types
+﻿namespace SharpWasm.Core.Types
 {
     internal enum BlockType: sbyte
     {
