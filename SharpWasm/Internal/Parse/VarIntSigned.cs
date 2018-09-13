@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using SharpWasm.Internal.Parse.Types;
-using ValueType = SharpWasm.Internal.Parse.Types.ValueType;
+using ValueType = SharpWasm.Core.Types.ValueType;
 
 namespace SharpWasm.Internal.Parse
 {
@@ -17,7 +17,7 @@ namespace SharpWasm.Internal.Parse
         public readonly long Long;
         public int Int => Convert.ToInt32(Long);
         public sbyte SByte => Convert.ToSByte(Long);
-        public ValueType ValueType => (ValueType) SByte;
+        public ValueType ValueType => (ValueType)SByte;
         public BlockType BlockType => (BlockType)SByte;
         public ElemType ElemType => (ElemType)SByte;
 

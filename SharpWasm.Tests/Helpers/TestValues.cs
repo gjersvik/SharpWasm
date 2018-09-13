@@ -2,7 +2,7 @@
 using SharpWasm.Internal.Parse.Code;
 using SharpWasm.Internal.Parse.Sections;
 using SharpWasm.Internal.Parse.Types;
-using ValueType = SharpWasm.Internal.Parse.Types.ValueType;
+using ValueType = SharpWasm.Core.Types.ValueType;
 
 namespace SharpWasm.Tests.Helpers
 {

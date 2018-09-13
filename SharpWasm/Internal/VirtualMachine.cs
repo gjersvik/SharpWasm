@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using SharpWasm.Internal.Parse.Code;
-using ValueType = SharpWasm.Internal.Parse.Types.ValueType;
+using ValueType = SharpWasm.Core.Types.ValueType;
 
 namespace SharpWasm.Internal
 {

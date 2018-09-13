@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
-using SharpWasm.Internal.Parse.Types;
+using SharpWasm.Core.Types;
 using SharpWasm.Tests.Helpers;
+using GlobalType = SharpWasm.Internal.Parse.Types.GlobalType;
 
 namespace SharpWasm.Tests.Internal.Parse.Types
 {

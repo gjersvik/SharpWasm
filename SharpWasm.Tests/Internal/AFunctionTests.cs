@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using SharpWasm.Core.Types;
 using SharpWasm.Internal;
 using SharpWasm.Internal.Parse.Code;
 using SharpWasm.Internal.Parse.Types;

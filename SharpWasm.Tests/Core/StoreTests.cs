@@ -150,7 +150,7 @@ namespace SharpWasm.Tests.Core
         }
 
         [ExcludeFromCodeCoverage]
-        private Value? NoopHost(Value[] args)
+        private static Value? NoopHost(Value[] args)
         {
             return null;
         }

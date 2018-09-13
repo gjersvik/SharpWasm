@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpWasm.Internal.Runtime;
-using ValueType = SharpWasm.Internal.Parse.Types.ValueType;
+using ValueType = SharpWasm.Core.Types.ValueType;
 
 namespace SharpWasm.Tests.Internal.Runtime
 {

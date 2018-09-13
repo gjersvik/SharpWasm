@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using SharpWasm.Internal.Parse;
 using SharpWasm.Internal.Parse.Sections;
 using FunctionSection = SharpWasm.Internal.Parse.Sections.Function;
-
-[assembly: InternalsVisibleTo("SharpWasm.Tests")]
 
 namespace SharpWasm.Internal
 {

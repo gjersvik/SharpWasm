@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse.Code;
 using SharpWasm.Internal.Parse.Types;
 

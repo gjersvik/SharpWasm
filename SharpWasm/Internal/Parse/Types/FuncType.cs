@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
+using ValueType = SharpWasm.Core.Types.ValueType;
 
 namespace SharpWasm.Internal.Parse.Types
 {
