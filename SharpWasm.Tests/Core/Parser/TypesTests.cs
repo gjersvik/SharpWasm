@@ -1,35 +1,34 @@
 ﻿using System;
 using System.Collections.Immutable;
 using NUnit.Framework;
-using SharpWasm.Internal.Parse.Types;
 using SharpWasm.Tests.Helpers;
 using ValueType = SharpWasm.Core.Types.ValueType;
 
-namespace SharpWasm.Tests.Internal.Parse.Types
+namespace SharpWasm.Tests.Core.Parser
 {
     [TestFixture]
-    public class FuncTypeTests
+    public class TypesTests
     {
         [Test]
-        public void Parse()
+        public void ToFunctionType()
         {
             const string hex = "60047F7E7D7C017F";
             using (var reader = BinaryTools.HexToReader(hex))
             {
-                var funcType = FuncType.Parse(reader);
+                var funcType = SharpWasm.Core.Parser.Types.ToFunctionType(reader);
                 Assert.That(funcType.Parameters, Is.EqualTo(Values).AsCollection, "Parameters");
-                Assert.That(funcType.Returns, Is.EqualTo(new []{ValueType.I32}).AsCollection, "ReturnType");
+                Assert.That(funcType.Returns, Is.EqualTo(new[] { ValueType.I32 }).AsCollection, "ReturnType");
             }
         }
 
         [Test]
-        public void ParseError()
+        public void ToFunctionTypeError()
         {
             const string hex = "40047F7E7D7C70017F";
             using (var reader = BinaryTools.HexToReader(hex))
             {
                 // ReSharper disable once AccessToDisposedClosure
-                Assert.That(() => FuncType.Parse(reader), Throws.TypeOf<NotImplementedException>() );
+                Assert.That(() => SharpWasm.Core.Parser.Types.ToFunctionType(reader), Throws.TypeOf<NotImplementedException>());
             }
         }
 

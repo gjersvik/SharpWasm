@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.IO;
 
 namespace SharpWasm.Core.Parser
@@ -54,6 +55,19 @@ namespace SharpWasm.Core.Parser
                 Long |= -1L << shift;
 
             return Long;
+        }
+
+        public static ImmutableArray<T> ToVector<T>(BinaryReader reader, Func<BinaryReader, T> parser)
+        {
+            var count = ToUInt(reader);
+            var builder = ImmutableArray.CreateBuilder<T>((int)count);
+
+            for (var i = 0; i < count; i++)
+            {
+                builder.Add(parser(reader));
+            }
+
+            return builder.MoveToImmutable();
         }
     }
 }

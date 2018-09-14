@@ -3,10 +3,8 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Text;
 using SharpWasm.Core.Parser;
-using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse.Sections;
 using SharpWasm.Internal.Parse.Types;
-using ValueType = SharpWasm.Core.Types.ValueType;
 
 namespace SharpWasm.Internal.Parse
 {
@@ -22,12 +20,6 @@ namespace SharpWasm.Internal.Parse
             }
 
             return builder.MoveToImmutable();
-        }
-
-        public static ImmutableArray<T> ToVector<T>(BinaryReader reader, Func<BinaryReader, T> parser)
-        {
-            var count = Values.ToUInt(reader);
-            return ToArray(reader, count, parser);
         }
 
         public static BinaryReader FromBytes(byte[] bytes)
@@ -64,8 +56,6 @@ namespace SharpWasm.Internal.Parse
             return FromBytes(reader.ReadBytes((int) length));
         }
 
-        public static ValueType ToValueType(BinaryReader reader) => (ValueType)Values.ToSByte(reader);
-        public static BlockType ToBlockType(BinaryReader reader) => (BlockType)Values.ToSByte(reader);
         public static ElemType ToElemType(BinaryReader reader) => (ElemType)Values.ToSByte(reader);
         public static SectionCode ToSectionCode(BinaryReader reader) => (SectionCode)Values.ToByte(reader);
     }
