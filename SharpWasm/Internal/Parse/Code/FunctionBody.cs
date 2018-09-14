@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using SharpWasm.Core.Parser;
 
 namespace SharpWasm.Internal.Parse.Code
 {
@@ -15,11 +16,10 @@ namespace SharpWasm.Internal.Parse.Code
 
         public FunctionBody(BinaryReader reader)
         {
-            BodySize = VarIntUnsigned.ToUInt(reader);
+            BodySize = Values.ToUInt(reader);
             var codeLength = BodySize;
-            var localCount = new VarIntUnsigned(reader);
-            LocalCount = localCount.UInt;
-            codeLength -= localCount.Count;
+            LocalCount = Values.UnsignedVar(reader, out var count);
+            codeLength -= count;
             Locals = ParseTools.ToArray(reader, LocalCount, r => new LocalEntry(r));
             codeLength -= Locals.Select(l => l.Length).Aggregate(0U, (a, b) => a + b);
 

@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using SharpWasm.Core.Parser;
 
 namespace SharpWasm.Internal.Parse.Code
 {
@@ -20,9 +21,9 @@ namespace SharpWasm.Internal.Parse.Code
 
         public BrTable(BinaryReader reader)
         {
-            TargetCount = VarIntUnsigned.ToUInt(reader);
-            TargetTable = ParseTools.ToArray(reader, TargetCount, VarIntUnsigned.ToUInt);
-            DefaultTarget = VarIntUnsigned.ToUInt(reader);
+            TargetCount = Values.ToUInt(reader);
+            TargetTable = ParseTools.ToArray(reader, TargetCount,  Values.ToUInt);
+            DefaultTarget = Values.ToUInt(reader);
         }
 
         public bool Equals(BrTable other)

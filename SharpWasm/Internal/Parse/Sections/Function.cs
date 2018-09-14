@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
+using SharpWasm.Core.Parser;
 
 namespace SharpWasm.Internal.Parse.Sections
 {
@@ -20,8 +21,8 @@ namespace SharpWasm.Internal.Parse.Sections
 
         public Function(BinaryReader reader)
         {
-            Count = VarIntUnsigned.ToUInt(reader);
-            Types = ParseTools.ToArray(reader, Count, VarIntUnsigned.ToUInt);
+            Count = Values.ToUInt(reader);
+            Types = ParseTools.ToArray(reader, Count, Values.ToUInt);
         }
     }
 }

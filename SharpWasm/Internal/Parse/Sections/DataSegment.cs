@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using JetBrains.Annotations;
+using SharpWasm.Core.Parser;
 
 namespace SharpWasm.Internal.Parse.Sections
 {
@@ -24,9 +25,9 @@ namespace SharpWasm.Internal.Parse.Sections
 
         public DataSegment(BinaryReader reader)
         {
-            Index = VarIntUnsigned.ToUInt(reader);
+            Index = Values.ToUInt(reader);
             Offset = new Types.InitExpr(reader);
-            Size = VarIntUnsigned.ToUInt(reader);
+            Size = Values.ToUInt(reader);
             Data = ParseTools.ToBytes(reader,Size);
         }
 

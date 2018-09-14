@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using SharpWasm.Core.Parser;
 
 namespace SharpWasm.Internal.Parse.Code
 {
@@ -16,8 +17,8 @@ namespace SharpWasm.Internal.Parse.Code
 
         public MemoryImmediate(BinaryReader reader)
         {
-            Flags = VarIntUnsigned.ToUInt(reader);
-            Offset = VarIntUnsigned.ToUInt(reader);
+            Flags = Values.ToUInt(reader);
+            Offset = Values.ToUInt(reader);
         }
 
         public bool Equals(MemoryImmediate other)

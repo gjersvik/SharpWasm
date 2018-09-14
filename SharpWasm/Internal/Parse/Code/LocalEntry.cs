@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using SharpWasm.Core.Parser;
+using ValueType = SharpWasm.Core.Types.ValueType;
 
 namespace SharpWasm.Internal.Parse.Code
 {
@@ -18,13 +20,11 @@ namespace SharpWasm.Internal.Parse.Code
 
         public LocalEntry(BinaryReader reader)
         {
-            var count = new VarIntUnsigned(reader);
-            Count = count.UInt;
-            Length += count.Count;
-
-            var type = new VarIntSigned(reader);
-            Type = type.ValueType;
-            Length += type.Count;
+            Count = Values.UnsignedVar(reader, out var length);
+            Length += length;
+            
+            Type = (ValueType) Convert.ToSByte(Values.SignedVar(reader, out length));
+            Length += length;
         }
 
         public bool Equals(LocalEntry other)

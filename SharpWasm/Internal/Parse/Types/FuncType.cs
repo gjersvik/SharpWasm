@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using SharpWasm.Core.Parser;
 using SharpWasm.Core.Types;
 
 namespace SharpWasm.Internal.Parse.Types
@@ -8,10 +9,10 @@ namespace SharpWasm.Internal.Parse.Types
     {
         public static FunctionType Parse(BinaryReader reader)
         {
-            if (VarIntSigned.ToSByte(reader) != Form) throw new NotImplementedException();
+            if (Values.ToSByte(reader) != Form) throw new NotImplementedException();
             return new FunctionType(
-                ParseTools.ToVector(reader, VarIntSigned.ToValueType),
-                ParseTools.ToVector(reader, VarIntSigned.ToValueType)
+                ParseTools.ToVector(reader, ParseTools.ToValueType),
+                ParseTools.ToVector(reader, ParseTools.ToValueType)
             );
         }
 

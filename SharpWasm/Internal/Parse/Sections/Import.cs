@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using SharpWasm.Core.Parser;
 using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm.Internal.Parse.Sections
@@ -37,7 +38,7 @@ namespace SharpWasm.Internal.Parse.Sections
 
         private static IEnumerable<ImportEntry> Parse(BinaryReader reader)
         {
-            var count = VarIntUnsigned.ToUInt(reader);
+            var count = Values.ToUInt(reader);
             return ParseTools.ToArray(reader, count, ImportEntry.Parse);
         }
     }

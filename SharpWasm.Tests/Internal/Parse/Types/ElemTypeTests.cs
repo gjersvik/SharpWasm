@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using SharpWasm.Internal.Parse;
 using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm.Tests.Internal.Parse.Types
@@ -10,7 +9,7 @@ namespace SharpWasm.Tests.Internal.Parse.Types
         [Test]
         public void AnyFunc()
         {
-            var elem = new VarIntSigned(-0x10).ElemType;
+            const ElemType elem = (ElemType)(-0x10);
             Assert.That(elem, Is.EqualTo(ElemType.AnyFunc));
         }
     }

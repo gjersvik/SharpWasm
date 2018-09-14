@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using SharpWasm.Core.Parser;
 using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm.Internal.Parse.Sections
@@ -21,10 +22,10 @@ namespace SharpWasm.Internal.Parse.Sections
 
         public ExportEntry(BinaryReader reader)
         {
-            FieldLen = VarIntUnsigned.ToUInt(reader);
+            FieldLen = Values.ToUInt(reader);
             FieldStr = ParseTools.ToUtf8(reader, FieldLen);
             ExternalKind = ParseTools.ToExternalKind(reader);
-            Index = VarIntUnsigned.ToUInt(reader);
+            Index = Values.ToUInt(reader);
         }
 
         public bool Equals(ExportEntry other)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
+using SharpWasm.Core.Parser;
 using SharpWasm.Internal.Parse.Sections;
 using Type = SharpWasm.Internal.Parse.Sections.Type;
 
@@ -59,8 +60,8 @@ namespace SharpWasm.Internal.Parse
             var sections = ImmutableArray.CreateBuilder<ISection>();
             while (reader.BaseStream.Position != reader.BaseStream.Length)
             {
-                var id = VarIntUnsigned.ToSectionCode(reader);
-                var len = VarIntUnsigned.ToUInt(reader);
+                var id = ParseTools.ToSectionCode(reader);
+                var len = Values.ToUInt(reader);
                 using (var subReader = ParseTools.ToReader(reader, len))
                 {
                     switch (id)

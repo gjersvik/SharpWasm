@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using SharpWasm.Core.Types;
-using SharpWasm.Internal.Parse;
 
 namespace SharpWasm.Tests.Core.Types
 {
@@ -10,25 +9,25 @@ namespace SharpWasm.Tests.Core.Types
         [Test]
         public void I32()
         {
-            var value = new VarIntSigned(-0x01).ValueType;
+            const ValueType value = (ValueType)(-0x01);
             Assert.That(value, Is.EqualTo(ValueType.I32));
         }
         [Test]
         public void I64()
         {
-            var value = new VarIntSigned(-0x02).ValueType;
+            const ValueType value = (ValueType)(-0x02);
             Assert.That(value, Is.EqualTo(ValueType.I64));
         }
         [Test]
         public void F32()
         {
-            var value = new VarIntSigned(-0x03).ValueType;
+            const ValueType value = (ValueType)(-0x03);
             Assert.That(value, Is.EqualTo(ValueType.F32));
         }
         [Test]
         public void F64()
         {
-            var value = new VarIntSigned(-0x04).ValueType;
+            const ValueType value = (ValueType)(-0x04);
             Assert.That(value, Is.EqualTo(ValueType.F64));
         }
     }

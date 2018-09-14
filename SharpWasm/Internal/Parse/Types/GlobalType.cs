@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using SharpWasm.Core.Parser;
 using ValueType = SharpWasm.Core.Types.ValueType;
 
 namespace SharpWasm.Internal.Parse.Types
@@ -11,8 +12,8 @@ namespace SharpWasm.Internal.Parse.Types
 
         public GlobalType(BinaryReader reader)
         {
-            ContentType = VarIntSigned.ToValueType(reader);
-            Mutability = VarIntUnsigned.ToBool(reader);
+            ContentType = ParseTools.ToValueType(reader);
+            Mutability = Values.ToBool(reader);
         }
 
         public GlobalType(ValueType contentType, bool mutability)

@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using SharpWasm.Core.Types;
-using SharpWasm.Internal.Parse;
 
 namespace SharpWasm.Tests.Core.Types
 {
@@ -10,31 +9,31 @@ namespace SharpWasm.Tests.Core.Types
         [Test]
         public void I32()
         {
-            var block = new VarIntSigned(-0x01).BlockType;
+            const BlockType block = (BlockType)(-0x01);
             Assert.That(block, Is.EqualTo(BlockType.I32));
         }
         [Test]
         public void I64()
         {
-            var block = new VarIntSigned(-0x02).BlockType;
+            const BlockType block = (BlockType)(-0x02);
             Assert.That(block, Is.EqualTo(BlockType.I64));
         }
         [Test]
         public void F32()
         {
-            var block = new VarIntSigned(-0x03).BlockType;
+            const BlockType block = (BlockType)(-0x03);
             Assert.That(block, Is.EqualTo(BlockType.F32));
         }
         [Test]
         public void F64()
         {
-            var block = new VarIntSigned(-0x04).BlockType;
+            const BlockType block = (BlockType)(-0x04);
             Assert.That(block, Is.EqualTo(BlockType.F64));
         }
         [Test]
         public void EmptyBlock()
         {
-            var block = new VarIntSigned(-0x40).BlockType;
+            const BlockType block = (BlockType)(-0x40);
             Assert.That(block, Is.EqualTo(BlockType.EmptyBlock));
         }
     }

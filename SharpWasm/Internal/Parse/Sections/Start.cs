@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using SharpWasm.Core.Parser;
 
 namespace SharpWasm.Internal.Parse.Sections
 {
@@ -14,7 +15,7 @@ namespace SharpWasm.Internal.Parse.Sections
 
         public Start(BinaryReader reader)
         {
-            Index = VarIntUnsigned.ToUInt(reader);
+            Index = Values.ToUInt(reader);
         }
     }
 }

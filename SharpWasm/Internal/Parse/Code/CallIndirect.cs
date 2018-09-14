@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using SharpWasm.Core.Parser;
 
 namespace SharpWasm.Internal.Parse.Code
 {
@@ -15,8 +16,8 @@ namespace SharpWasm.Internal.Parse.Code
         }
         public CallIndirect(BinaryReader reader)
         {
-            TypeIndex = VarIntUnsigned.ToUInt(reader);
-            Reserved = VarIntUnsigned.ToBool(reader);
+            TypeIndex = Values.ToUInt(reader);
+            Reserved = Values.ToBool(reader);
         }
 
         public bool Equals(CallIndirect other)

@@ -10,7 +10,7 @@ namespace SharpWasm.Internal.Parse.Types
 
         public TableType(BinaryReader reader)
         {
-            ElementType = VarIntSigned.ToElemType(reader);
+            ElementType = ParseTools.ToElemType(reader);
             Limits = new ResizableLimits(reader);
         }
 

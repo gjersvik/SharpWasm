@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using JetBrains.Annotations;
+using SharpWasm.Core.Parser;
 
 namespace SharpWasm.Internal.Parse.Types
 {
@@ -12,9 +13,9 @@ namespace SharpWasm.Internal.Parse.Types
 
         public ResizableLimits(BinaryReader reader)
         {
-            Flags = VarIntUnsigned.ToBool(reader);
-            Initial = VarIntUnsigned.ToUInt(reader);
-            if (Flags) Maximum = VarIntUnsigned.ToUInt(reader);
+            Flags = Values.ToBool(reader);
+            Initial = Values.ToUInt(reader);
+            if (Flags) Maximum = Values.ToUInt(reader);
         }
 
         public ResizableLimits(uint initial, uint? maximum = null)

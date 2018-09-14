@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using SharpWasm.Core.Parser;
 using SharpWasm.Core.Types;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable IdentifierTypo
@@ -266,25 +267,25 @@ namespace SharpWasm.Internal.Parse.Code
                 case OpCode.Nop:
                     return Nop;
                 case OpCode.Block:
-                    return Block(VarIntSigned.ToBlockType(reader));
+                    return Block(ParseTools.ToBlockType(reader));
                 case OpCode.Loop:
-                    return Loop(VarIntSigned.ToBlockType(reader));
+                    return Loop(ParseTools.ToBlockType(reader));
                 case OpCode.If:
-                    return If(VarIntSigned.ToBlockType(reader));
+                    return If(ParseTools.ToBlockType(reader));
                 case OpCode.Else:
                     return Else;
                 case OpCode.End:
                     return End;
                 case OpCode.Br:
-                    return Br(VarIntUnsigned.ToUInt(reader));
+                    return Br(Values.ToUInt(reader));
                 case OpCode.BrIf:
-                    return BrIf(VarIntUnsigned.ToUInt(reader));
+                    return BrIf(Values.ToUInt(reader));
                 case OpCode.BrTable:
                     return BrTable(new BrTable(reader));
                 case OpCode.Return:
                     return Return;
                 case OpCode.Call:
-                    return Call(VarIntUnsigned.ToUInt(reader));
+                    return Call(Values.ToUInt(reader));
                 case OpCode.CallIndirect:
                     return CallIndirect(new CallIndirect(reader));
                 case OpCode.Drop:
@@ -292,15 +293,15 @@ namespace SharpWasm.Internal.Parse.Code
                 case OpCode.Select:
                     return Select;
                 case OpCode.GetLocal:
-                    return GetLocal(VarIntUnsigned.ToUInt(reader));
+                    return GetLocal(Values.ToUInt(reader));
                 case OpCode.SetLocal:
-                    return SetLocal(VarIntUnsigned.ToUInt(reader));
+                    return SetLocal(Values.ToUInt(reader));
                 case OpCode.TeeLocal:
-                    return TeeLocal(VarIntUnsigned.ToUInt(reader));
+                    return TeeLocal(Values.ToUInt(reader));
                 case OpCode.GetGlobal:
-                    return GetGlobal(VarIntUnsigned.ToUInt(reader));
+                    return GetGlobal(Values.ToUInt(reader));
                 case OpCode.SetGlobal:
-                    return SetGlobal(VarIntUnsigned.ToUInt(reader));
+                    return SetGlobal(Values.ToUInt(reader));
                 case OpCode.I32Load:
                     return I32Load(new MemoryImmediate(reader));
                 case OpCode.I64Load:
@@ -348,13 +349,13 @@ namespace SharpWasm.Internal.Parse.Code
                 case OpCode.I64Store32:
                     return I64Store32(new MemoryImmediate(reader));
                 case OpCode.CurrentMemory:
-                    return CurrentMemory(VarIntUnsigned.ToBool(reader));
+                    return CurrentMemory(Values.ToBool(reader));
                 case OpCode.GrowMemory:
-                    return GrowMemory(VarIntUnsigned.ToBool(reader));
+                    return GrowMemory(Values.ToBool(reader));
                 case OpCode.I32Const:
-                    return I32Const(VarIntSigned.ToInt(reader));
+                    return I32Const(Values.ToInt(reader));
                 case OpCode.I64Const:
-                    return I64Const(VarIntSigned.ToLong(reader));
+                    return I64Const(Values.ToLong(reader));
                 case OpCode.F32Const:
                     return F32Const(reader.ReadSingle());
                 case OpCode.F64Const:

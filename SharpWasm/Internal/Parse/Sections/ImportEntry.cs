@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using SharpWasm.Core.Parser;
 using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm.Internal.Parse.Sections
@@ -49,9 +50,9 @@ namespace SharpWasm.Internal.Parse.Sections
 
         private ImportEntry(BinaryReader reader)
         {
-            ModuleLen = VarIntUnsigned.ToUInt(reader);
+            ModuleLen = Values.ToUInt(reader);
             ModuleStr = ParseTools.ToUtf8(reader, ModuleLen);
-            FieldLen = VarIntUnsigned.ToUInt(reader);
+            FieldLen = Values.ToUInt(reader);
             FieldStr = ParseTools.ToUtf8(reader, FieldLen);
             Kind = ParseTools.ToExternalKind(reader);
         }
@@ -63,7 +64,7 @@ namespace SharpWasm.Internal.Parse.Sections
 
         public ImportEntryFunction(BinaryReader reader, ImportEntry entry) : base(entry)
         {
-            Type = VarIntUnsigned.ToUInt(reader);
+            Type = Values.ToUInt(reader);
         }
 
         public ImportEntryFunction(string module, string field, uint type):base(module,field,ExternalKind.Function)
