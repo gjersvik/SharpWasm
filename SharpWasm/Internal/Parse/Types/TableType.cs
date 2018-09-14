@@ -1,20 +1,22 @@
 ﻿using System;
 using System.IO;
+using SharpWasm.Core.Parser;
+using SharpWasm.Core.Types;
 
 namespace SharpWasm.Internal.Parse.Types
 {
     internal class TableType: IEquatable<TableType>
     {
         public readonly ElemType ElementType;
-        public readonly ResizableLimits Limits;
+        public readonly Limits Limits;
 
         public TableType(BinaryReader reader)
         {
             ElementType = ParseTools.ToElemType(reader);
-            Limits = new ResizableLimits(reader);
+            Limits = TypeParser.ToLimits(reader);
         }
 
-        public TableType(ResizableLimits limits)
+        public TableType(Limits limits)
         {
             ElementType = ElemType.AnyFunc;
             Limits = limits;

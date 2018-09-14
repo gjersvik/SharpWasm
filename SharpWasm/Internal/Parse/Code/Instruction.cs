@@ -267,11 +267,11 @@ namespace SharpWasm.Internal.Parse.Code
                 case OpCode.Nop:
                     return Nop;
                 case OpCode.Block:
-                    return Block(Core.Parser.Types.ToBlockType(reader));
+                    return Block(TypeParser.ToBlockType(reader));
                 case OpCode.Loop:
-                    return Loop(Core.Parser.Types.ToBlockType(reader));
+                    return Loop(TypeParser.ToBlockType(reader));
                 case OpCode.If:
-                    return If(Core.Parser.Types.ToBlockType(reader));
+                    return If(TypeParser.ToBlockType(reader));
                 case OpCode.Else:
                     return Else;
                 case OpCode.End:

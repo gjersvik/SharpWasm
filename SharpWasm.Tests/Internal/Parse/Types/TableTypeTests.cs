@@ -1,6 +1,8 @@
 ﻿using NUnit.Framework;
+using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse.Types;
 using SharpWasm.Tests.Helpers;
+using TableType = SharpWasm.Internal.Parse.Types.TableType;
 
 namespace SharpWasm.Tests.Internal.Parse.Types
 {
@@ -10,15 +12,15 @@ namespace SharpWasm.Tests.Internal.Parse.Types
         [Test]
         public void ElementType()
         {
-            var tableType = new TableType(new ResizableLimits(1));
+            var tableType = new TableType(new Limits(1));
             Assert.That(tableType.ElementType, Is.EqualTo(ElemType.AnyFunc));
         }
 
         [Test]
         public void Limits()
         {
-            var tableType = new TableType(new ResizableLimits(1));
-            Assert.That(tableType.Limits, Is.EqualTo(new ResizableLimits(1)));
+            var tableType = new TableType(new Limits(1));
+            Assert.That(tableType.Limits, Is.EqualTo(new Limits(1)));
         }
 
         [Test]
@@ -29,15 +31,15 @@ namespace SharpWasm.Tests.Internal.Parse.Types
             {
                 var tableType = new TableType(reader);
                 Assert.That(tableType.ElementType, Is.EqualTo(ElemType.AnyFunc));
-                Assert.That(tableType.Limits, Is.EqualTo(new ResizableLimits(1)));
+                Assert.That(tableType.Limits, Is.EqualTo(new Limits(1)));
             }
         }
 
         [Test]
         public void Equals()
         {
-            var a = new TableType(TestValues.ResizableLimits);
-            var b = new TableType(TestValues.ResizableLimits);
+            var a = new TableType(TestValues.Limits);
+            var b = new TableType(TestValues.Limits);
             Assert.That(a.Equals(a), Is.True);
             Assert.That(a.Equals(b), Is.True);
             Assert.That(a.Equals(null), Is.False);

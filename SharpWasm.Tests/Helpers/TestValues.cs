@@ -1,21 +1,25 @@
 ﻿using System.Collections.Immutable;
+using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse.Code;
 using SharpWasm.Internal.Parse.Sections;
 using SharpWasm.Internal.Parse.Types;
+using GlobalType = SharpWasm.Internal.Parse.Types.GlobalType;
+using MemoryType = SharpWasm.Internal.Parse.Types.MemoryType;
+using TableType = SharpWasm.Internal.Parse.Types.TableType;
 using ValueType = SharpWasm.Core.Types.ValueType;
 
 namespace SharpWasm.Tests.Helpers
 {
     internal static class TestValues
     {
-        private const string ResizableLimitsHex = "010102";
-        public static readonly ResizableLimits ResizableLimits = new ResizableLimits(1,2);
-        public const string TableTypeHex = "70" + ResizableLimitsHex;
-        public static readonly TableType TableType = new TableType(ResizableLimits);
+        private const string LimitsHex = "010102";
+        public static readonly Limits Limits = new Limits(1,2);
+        public const string TableTypeHex = "70" + LimitsHex;
+        public static readonly TableType TableType = new TableType(Limits);
         public const string GlobalTypeHex = "7f00";
         public static readonly GlobalType GlobalType = new GlobalType(ValueType.I32,false);
-        public const string MemoryTypeHex = ResizableLimitsHex;
-        public static readonly MemoryType MemoryType = new MemoryType(ResizableLimits);
+        public const string MemoryTypeHex = LimitsHex;
+        public static readonly MemoryType MemoryType = new MemoryType(Limits);
         public static readonly InitExpr InitExpr = new InitExpr(new IInstruction[]{Instruction.I32Const(42), Instruction.End});
         public const string InitExprHex = "412A0B";
 

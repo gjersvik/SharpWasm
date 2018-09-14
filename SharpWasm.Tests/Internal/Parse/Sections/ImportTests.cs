@@ -3,7 +3,6 @@ using System.Linq;
 using NUnit.Framework;
 using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse.Sections;
-using SharpWasm.Internal.Parse.Types;
 using GlobalType = SharpWasm.Internal.Parse.Types.GlobalType;
 using MemoryType = SharpWasm.Internal.Parse.Types.MemoryType;
 using TableType = SharpWasm.Internal.Parse.Types.TableType;
@@ -17,8 +16,8 @@ namespace SharpWasm.Tests.Internal.Parse.Sections
         public void OneOfEach()
         {
             var func = new ImportEntryFunction("Test", "Func", 0);
-            var table = new ImportEntryTable("Test", "Table", new TableType(new ResizableLimits(1)));
-            var memory = new ImportEntryMemory("Test", "Memory", new MemoryType(new ResizableLimits(1)));
+            var table = new ImportEntryTable("Test", "Table", new TableType(new Limits(1)));
+            var memory = new ImportEntryMemory("Test", "Memory", new MemoryType(new Limits(1)));
             var global = new ImportEntryGlobal("Test", "Global", new GlobalType(ValueType.I32,false));
             var each = ImmutableArray.Create<ImportEntry>(func, table, memory, global);
 

@@ -1,8 +1,10 @@
 ﻿using System;
 using NUnit.Framework;
+using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse.Sections;
 using SharpWasm.Internal.Parse.Types;
 using SharpWasm.Tests.Helpers;
+using MemoryType = SharpWasm.Internal.Parse.Types.MemoryType;
 
 namespace SharpWasm.Tests.Internal.Parse.Sections
 {
@@ -58,7 +60,7 @@ namespace SharpWasm.Tests.Internal.Parse.Sections
         [Test]
         public void MemoryType()
         {
-            var type = new MemoryType(new ResizableLimits(1));
+            var type = new MemoryType(new Limits(1));
             var memory = new ImportEntryMemory("Test", "Memory", type);
             Assert.That(memory.Type, Is.EqualTo(type));
         }

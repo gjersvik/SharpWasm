@@ -23,7 +23,7 @@ namespace SharpWasm.Internal.Parse.Sections
         public Type(BinaryReader reader)
         {
             Count = Values.ToUInt(reader);
-            Entries = ParseTools.ToArray(reader, Count, Core.Parser.Types.ToFunctionType);
+            Entries = ParseTools.ToArray(reader, Count, TypeParser.ToFunctionType);
         }
     }
 }

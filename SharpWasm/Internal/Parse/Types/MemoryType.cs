@@ -1,18 +1,20 @@
 ﻿using System;
 using System.IO;
+using SharpWasm.Core.Types;
+using SharpWasm.Core.Parser;
 
 namespace SharpWasm.Internal.Parse.Types
 {
     internal class MemoryType: IEquatable<MemoryType>
     {
-        public readonly ResizableLimits Limits;
+        public readonly Limits Limits;
 
         public MemoryType(BinaryReader reader)
         {
-            Limits = new ResizableLimits(reader);
+            Limits = TypeParser.ToLimits(reader);
         }
 
-        public MemoryType(ResizableLimits limits)
+        public MemoryType(Limits limits)
         {
             Limits = limits;
         }

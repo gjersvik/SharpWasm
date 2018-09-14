@@ -12,7 +12,7 @@ namespace SharpWasm.Internal.Parse.Types
 
         public GlobalType(BinaryReader reader)
         {
-            ContentType = Core.Parser.Types.ToValueType(reader);
+            ContentType = TypeParser.ToValueType(reader);
             Mutability = Values.ToBool(reader);
         }
 

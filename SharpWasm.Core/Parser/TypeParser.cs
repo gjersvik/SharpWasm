@@ -5,7 +5,7 @@ using ValueType = SharpWasm.Core.Types.ValueType;
 
 namespace SharpWasm.Core.Parser
 {
-    internal static class Types
+    internal static class TypeParser
     {
         public static ValueType ToValueType(BinaryReader reader) => (ValueType)Values.ToSByte(reader);
         public static BlockType ToBlockType(BinaryReader reader) => (BlockType)Values.ToSByte(reader);
@@ -18,6 +18,15 @@ namespace SharpWasm.Core.Parser
                 Values.ToVector(reader, ToValueType),
                 Values.ToVector(reader, ToValueType)
             );
+        }
+
+        public static Limits ToLimits(BinaryReader reader)
+        {
+            var flags = Values.ToBool(reader);
+            var initial = Values.ToUInt(reader);
+            uint? maximum = null;
+            if (flags) maximum = Values.ToUInt(reader);
+            return new Limits(initial, maximum);
         }
     }
 }
