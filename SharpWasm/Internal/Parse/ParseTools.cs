@@ -20,6 +20,12 @@ namespace SharpWasm.Internal.Parse
             return builder.MoveToImmutable();
         }
 
+        public static ImmutableArray<T> ToVector<T>(BinaryReader reader, Func<BinaryReader, T> parser)
+        {
+            var count = VarIntUnsigned.ToUInt(reader);
+            return ToArray(reader, count, parser);
+        }
+
         public static BinaryReader FromBytes(byte[] bytes)
         {
             return new BinaryReader(new MemoryStream(bytes));

@@ -11,52 +11,14 @@ namespace SharpWasm.Tests.Internal.Parse.Types
     public class FuncTypeTests
     {
         [Test]
-        public void Form()
-        {
-            Assert.That(FuncType.Form, Is.EqualTo(-0x20));
-        }
-
-        [Test]
-        public void ParamCount()
-        {
-            var funcType = new FuncType(Values);
-            Assert.That(funcType.ParamCount, Is.EqualTo(4));
-        }
-
-        [Test]
-        public void ParamTypes()
-        {
-            var funcType = new FuncType(Values);
-            Assert.That(funcType.ParamTypes, Is.EqualTo(Values));
-        }
-
-        [Test]
-        public void ReturnNull()
-        {
-            var funcType = new FuncType(Values);
-            Assert.That(funcType.ReturnCount, Is.False);
-            Assert.That(funcType.ReturnType, Is.Null);
-        }
-
-        [Test]
-        public void ReturnValue()
-        {
-            var funcType = new FuncType(Values, ValueType.I32);
-            Assert.That(funcType.ReturnCount, Is.True);
-            Assert.That(funcType.ReturnType, Is.EqualTo(ValueType.I32));
-        }
-
-        [Test]
         public void Parse()
         {
             const string hex = "60047F7E7D7C017F";
             using (var reader = BinaryTools.HexToReader(hex))
             {
-                var funcType = new FuncType(reader);
-                Assert.That(funcType.ParamCount, Is.EqualTo(4), "ParamCount");
-                Assert.That(funcType.ParamTypes, Is.EqualTo(Values).AsCollection, "ParamTypes");
-                Assert.That(funcType.ReturnCount, Is.True, "ReturnCount");
-                Assert.That(funcType.ReturnType, Is.EqualTo(ValueType.I32), "ReturnType");
+                var funcType = FuncType.Parse(reader);
+                Assert.That(funcType.Parameters, Is.EqualTo(Values).AsCollection, "Parameters");
+                Assert.That(funcType.Returns, Is.EqualTo(new []{ValueType.I32}).AsCollection, "ReturnType");
             }
         }
 
@@ -67,7 +29,7 @@ namespace SharpWasm.Tests.Internal.Parse.Types
             using (var reader = BinaryTools.HexToReader(hex))
             {
                 // ReSharper disable once AccessToDisposedClosure
-                Assert.That(() => new FuncType(reader), Throws.TypeOf<NotImplementedException>() );
+                Assert.That(() => FuncType.Parse(reader), Throws.TypeOf<NotImplementedException>() );
             }
         }
 

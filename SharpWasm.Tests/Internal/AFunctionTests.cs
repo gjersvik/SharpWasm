@@ -2,7 +2,6 @@
 using SharpWasm.Core.Types;
 using SharpWasm.Internal;
 using SharpWasm.Internal.Parse.Code;
-using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm.Tests.Internal
 {
@@ -12,7 +11,7 @@ namespace SharpWasm.Tests.Internal
         [Test]
         public void Function()
         {
-            var function = new Function(1, new IInstruction[] {Instruction.Nop, Instruction.End}, new FuncType(new[] {ValueType.I32}, ValueType.I64), 5);
+            var function = new Function(1, new IInstruction[] {Instruction.Nop, Instruction.End}, new FunctionType(new[] {ValueType.I32}, new []{ValueType.I64}), 5);
             Assert.Multiple(() =>
             {
                 Assert.That(function.Id, Is.EqualTo(1));
@@ -27,7 +26,7 @@ namespace SharpWasm.Tests.Internal
         [Test]
         public void ImportFunction()
         {
-            var function = new ImportFunction(1, new FuncType(new[] {ValueType.I32}, ValueType.I64), "module", "test",
+            var function = new ImportFunction(1, new FunctionType(new[] {ValueType.I32}, new []{ValueType.I64}), "module", "test",
                 5);
             Assert.Multiple(() =>
             {

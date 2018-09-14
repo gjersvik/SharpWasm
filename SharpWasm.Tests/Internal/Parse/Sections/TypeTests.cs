@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
 using NUnit.Framework;
+using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse.Sections;
-using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm.Tests.Internal.Parse.Sections
 {
@@ -22,8 +22,8 @@ namespace SharpWasm.Tests.Internal.Parse.Sections
         [Test]
         public void Count()
         {
-            var type = new Type(new FuncType[]{});
-            Assert.That(type.Entries, Is.EqualTo(ImmutableArray<FuncType>.Empty));
+            var type = new Type(new FunctionType[0]);
+            Assert.That(type.Entries, Is.EqualTo(ImmutableArray<FunctionType>.Empty));
             Assert.That(type.Count, Is.EqualTo(0));
         }
     }

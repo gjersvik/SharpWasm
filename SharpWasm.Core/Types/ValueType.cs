@@ -1,6 +1,6 @@
 ﻿namespace SharpWasm.Core.Types
 {
-    internal enum ValueType : sbyte
+    public enum ValueType : sbyte
     {
         I32 = -1,
         I64 = -2,

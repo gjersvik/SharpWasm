@@ -2,7 +2,6 @@
 using System.Collections.Immutable;
 using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse.Code;
-using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm.Internal
 {
@@ -15,20 +14,27 @@ namespace SharpWasm.Internal
         
         public bool Import { get; }
 
-        protected AFunction(uint id, FuncType type, bool import, uint typeId)
+        protected AFunction(uint id, FunctionType type, bool import, uint typeId)
         {
             Id = id;
             Import = import;
             TypeId = typeId;
-            Param = type.ParamTypes;
-            Return = type.ReturnType;
+            Param = type.Parameters;
+            if (type.Returns.IsEmpty)
+            {
+                Return = null;
+            }
+            else
+            {
+                Return = type.Returns[0];
+            }
         }
     }
     internal class Function: AFunction
     {
         public readonly ImmutableArray<IInstruction> Body;
 
-        public Function(uint id, IEnumerable<IInstruction> body, FuncType type, uint typeId): base(id,type,false, typeId)
+        public Function(uint id, IEnumerable<IInstruction> body, FunctionType type, uint typeId): base(id,type,false, typeId)
         {
             Body = body.ToImmutableArray();
         }
@@ -38,7 +44,7 @@ namespace SharpWasm.Internal
         public readonly string Module;
         public readonly string Field;
 
-        public ImportFunction(uint id, FuncType type, string module, string field, uint typeId) : base(id, type, true, typeId)
+        public ImportFunction(uint id, FunctionType type, string module, string field, uint typeId) : base(id, type, true, typeId)
         {
             Module = module;
             Field = field;
