@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using SharpWasm.Internal.Parse.Code;
 using ValueType = SharpWasm.Core.Types.ValueType;
@@ -33,6 +34,7 @@ namespace SharpWasm.Internal
         }
 
         // ReSharper disable once SuggestBaseTypeForParameter
+        [ExcludeFromCodeCoverage]
         private void RunCode(ImmutableArray<IInstruction> code, int[] locals)
         {
             for (var ip = 0; ip < code.Length; ip += 1)
@@ -64,6 +66,7 @@ namespace SharpWasm.Internal
             }
         }
 
+        [ExcludeFromCodeCoverage]
         private void Call(uint id)
         {
             var func = _module.GetFunction(id);
@@ -86,6 +89,7 @@ namespace SharpWasm.Internal
 
         // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
         // ReSharper disable once UnusedParameter.Local
+        [ExcludeFromCodeCoverage]
         private void CallIndirect(CallIndirect callIndirect)
         {
             var index = _instance.Table.Get(_stack.Pop());

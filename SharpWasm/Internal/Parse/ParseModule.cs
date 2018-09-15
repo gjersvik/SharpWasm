@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using SharpWasm.Core.Parser;
 using SharpWasm.Internal.Parse.Sections;
@@ -55,6 +56,7 @@ namespace SharpWasm.Internal.Parse
             Data = sections.OfType<Data>().ToImmutableArray();
         }
 
+        [ExcludeFromCodeCoverage]
         private static ImmutableArray<ISection> ParseSelections(BinaryReader reader)
         {
             var sections = ImmutableArray.CreateBuilder<ISection>();

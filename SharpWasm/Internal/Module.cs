@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using SharpWasm.Internal.Parse;
 using SharpWasm.Internal.Parse.Sections;
@@ -51,6 +52,7 @@ namespace SharpWasm.Internal
                 _function.Types[baseId]);
         }
 
+        [ExcludeFromCodeCoverage]
         public Function GetFunction(string name)
         {
             var possibleIndex = Export.Func(name);
