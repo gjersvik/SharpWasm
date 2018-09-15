@@ -48,7 +48,7 @@ namespace SharpWasm.Tests.Core
         public void TableType()
         {
             var store = Store.Init();
-            Assert.That(store.TableType(0), Is.EqualTo(new TableType()));
+            Assert.That(store.TableType(0), Is.InstanceOf<TableType>());
         }
 
         [Test]
@@ -90,7 +90,7 @@ namespace SharpWasm.Tests.Core
         public void MemoryType()
         {
             var store = Store.Init();
-            Assert.That(store.MemoryType(0), Is.EqualTo(new MemoryType()));
+            Assert.That(store.MemoryType(0), Is.InstanceOf<MemoryType>());
         }
 
         [Test]
@@ -132,7 +132,7 @@ namespace SharpWasm.Tests.Core
         public void GlobalType()
         {
             var store = Store.Init();
-            Assert.That(store.GlobalType(0), Is.EqualTo(new GlobalType()));
+            Assert.That(store.GlobalType(0), Is.InstanceOf<GlobalType>());
         }
 
         [Test]

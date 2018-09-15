@@ -1,6 +1,6 @@
 ﻿namespace SharpWasm.Core.Types
 {
-    public struct ExternalType
+    public class ExternalType
     {
     }
 }

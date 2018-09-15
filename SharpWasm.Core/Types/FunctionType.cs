@@ -5,10 +5,15 @@ using System.Linq;
 
 namespace SharpWasm.Core.Types
 {
-    public struct FunctionType: IEquatable<FunctionType>
+    public class FunctionType: IEquatable<FunctionType>
     {
         public readonly ImmutableArray<ValueType> Parameters;
         public readonly ImmutableArray<ValueType> Returns;
+
+        public FunctionType() : this(ImmutableArray<ValueType>.Empty)
+        {
+
+        }
 
         public FunctionType(IEnumerable<ValueType> parameters, IEnumerable<ValueType> returns = null)
         {
@@ -16,26 +21,12 @@ namespace SharpWasm.Core.Types
             Returns = returns?.ToImmutableArray() ?? ImmutableArray<ValueType>.Empty;
         }
 
-        public bool Equals(FunctionType other)
-        {
-            return Parameters.SequenceEqual(other.Parameters) && Returns.SequenceEqual(other.Returns);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is null) return false;
-            return obj is FunctionType && Equals((FunctionType) obj);
-        }
-
         public override int GetHashCode()
         {
             unchecked
             {
                 var hash = Parameters.Length.GetHashCode();
-                foreach (var valueType in Parameters.Take(5))
-                {
-                    hash = (hash * 397) ^ valueType.GetHashCode();
-                }
+                hash = Parameters.Take(5).Aggregate(hash, (current, valueType) => (current * 397) ^ valueType.GetHashCode());
 
                 if (!Returns.IsEmpty)
                 {
@@ -46,14 +37,28 @@ namespace SharpWasm.Core.Types
             }
         }
 
+        public bool Equals(FunctionType other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Parameters.SequenceEqual(other.Parameters) && Returns.SequenceEqual(other.Returns);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj.GetType() == GetType() && Equals((FunctionType) obj);
+        }
+
         public static bool operator ==(FunctionType left, FunctionType right)
         {
-            return left.Equals(right);
+            return Equals(left, right);
         }
 
         public static bool operator !=(FunctionType left, FunctionType right)
         {
-            return !left.Equals(right);
+            return !Equals(left, right);
         }
     }
 }

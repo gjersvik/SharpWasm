@@ -2,7 +2,7 @@
 
 namespace SharpWasm.Core.Types
 {
-    internal struct Limits: IEquatable<Limits>
+    internal class Limits: IEquatable<Limits>
     {
         public readonly uint? Max;
         public readonly uint Min;
@@ -15,13 +15,16 @@ namespace SharpWasm.Core.Types
 
         public bool Equals(Limits other)
         {
+            if (other is null) return false;
+            if (ReferenceEquals(this, other)) return true;
             return Max == other.Max && Min == other.Min;
         }
 
         public override bool Equals(object obj)
         {
             if (obj is null) return false;
-            return obj is Limits limits && Equals(limits);
+            if (ReferenceEquals(this, obj)) return true;
+            return obj.GetType() == GetType() && Equals((Limits) obj);
         }
 
         public override int GetHashCode()
@@ -34,12 +37,12 @@ namespace SharpWasm.Core.Types
 
         public static bool operator ==(Limits left, Limits right)
         {
-            return left.Equals(right);
+            return Equals(left, right);
         }
 
         public static bool operator !=(Limits left, Limits right)
         {
-            return !left.Equals(right);
+            return !Equals(left, right);
         }
     }
 }
