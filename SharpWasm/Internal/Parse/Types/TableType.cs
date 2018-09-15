@@ -12,7 +12,7 @@ namespace SharpWasm.Internal.Parse.Types
 
         public TableType(BinaryReader reader)
         {
-            ElementType = ParseTools.ToElemType(reader);
+            ElementType = TypeParser.ToElemType(reader);
             Limits = TypeParser.ToLimits(reader);
         }
 

@@ -56,7 +56,6 @@ namespace SharpWasm.Internal.Parse
             return FromBytes(reader.ReadBytes((int) length));
         }
 
-        public static ElemType ToElemType(BinaryReader reader) => (ElemType)Values.ToSByte(reader);
         public static SectionCode ToSectionCode(BinaryReader reader) => (SectionCode)Values.ToByte(reader);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
-using SharpWasm.Internal.Parse.Types;
+using SharpWasm.Core.Types;
 
-namespace SharpWasm.Tests.Internal.Parse.Types
+namespace SharpWasm.Tests.Core.Types
 {
     [TestFixture]
     public class ElemTypeTests

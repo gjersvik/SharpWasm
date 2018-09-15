@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using SharpWasm.Core.Types;
-using SharpWasm.Internal.Parse.Types;
 using SharpWasm.Tests.Helpers;
 using TableType = SharpWasm.Internal.Parse.Types.TableType;
 
