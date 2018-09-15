@@ -1,9 +1,8 @@
 ﻿using NUnit.Framework;
 using SharpWasm.Core.Types;
 using SharpWasm.Tests.Helpers;
-using MemoryType = SharpWasm.Internal.Parse.Types.MemoryType;
 
-namespace SharpWasm.Tests.Internal.Parse.Types
+namespace SharpWasm.Tests.Core.Types
 {
     [TestFixture]
     public class MemoryTypeTests
@@ -13,17 +12,6 @@ namespace SharpWasm.Tests.Internal.Parse.Types
         {
             var memoryType = new MemoryType(new Limits(1));
             Assert.That(memoryType.Limits, Is.EqualTo(new Limits(1)));
-        }
-
-        [Test]
-        public void Parse()
-        {
-            const string hex = "0001";
-            using (var reader = BinaryTools.HexToReader(hex))
-            {
-                var memoryType = new MemoryType(reader);
-                Assert.That(memoryType.Limits, Is.EqualTo(new Limits(1)));
-            }
         }
 
         [Test]

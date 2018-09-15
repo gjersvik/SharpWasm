@@ -2,7 +2,7 @@
 
 namespace SharpWasm.Core.Types
 {
-    internal class Limits: IEquatable<Limits>
+    public class Limits: IEquatable<Limits>
     {
         public readonly uint? Max;
         public readonly uint Min;

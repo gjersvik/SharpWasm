@@ -72,7 +72,7 @@ namespace SharpWasm.Core
 
         public MemoryType MemoryType(int address)
         {
-            return new MemoryType();
+            return new MemoryType(0);
         }
 
         public byte ReadMemory(int address, uint index)

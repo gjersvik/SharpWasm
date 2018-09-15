@@ -83,7 +83,7 @@ namespace SharpWasm.Tests.Core
         public void AllocMemory()
         {
             var store = Store.Init();
-            Assert.That(store.AllocMemory(new MemoryType()), Is.EqualTo(-1));
+            Assert.That(store.AllocMemory(new MemoryType(0)), Is.EqualTo(-1));
         }
 
         [Test]

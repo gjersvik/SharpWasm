@@ -1,7 +1,10 @@
 ﻿using System;
 using System.IO;
 using SharpWasm.Core.Parser;
+using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse.Types;
+using GlobalType = SharpWasm.Internal.Parse.Types.GlobalType;
+using TableType = SharpWasm.Internal.Parse.Types.TableType;
 
 namespace SharpWasm.Internal.Parse.Sections
 {
@@ -94,7 +97,7 @@ namespace SharpWasm.Internal.Parse.Sections
 
         public ImportEntryMemory(BinaryReader reader, ImportEntry entry) : base(entry)
         {
-            Type = new MemoryType(reader);
+            Type = TypeParser.ToMemoryType(reader);
         }
 
         public ImportEntryMemory(string module, string field, MemoryType type) : base(module, field, ExternalKind.Memory)

@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using NUnit.Framework;
 using SharpWasm.Core.Parser;
+using SharpWasm.Core.Types;
 using SharpWasm.Tests.Helpers;
 using ValueType = SharpWasm.Core.Types.ValueType;
 
@@ -38,7 +39,7 @@ namespace SharpWasm.Tests.Core.Parser
 
 
         [Test]
-        public void Parse()
+        public void ToLimits()
         {
             const string hex = "010102";
             using (var reader = BinaryTools.HexToReader(hex))
@@ -46,6 +47,17 @@ namespace SharpWasm.Tests.Core.Parser
                 var limits = TypeParser.ToLimits(reader);
                 Assert.That(limits.Min, Is.EqualTo(1));
                 Assert.That(limits.Max, Is.EqualTo(2));
+            }
+        }
+
+        [Test]
+        public void ToMemoryType()
+        {
+            const string hex = "0001";
+            using (var reader = BinaryTools.HexToReader(hex))
+            {
+                var memoryType = TypeParser.ToMemoryType(reader);
+                Assert.That(memoryType.Limits, Is.EqualTo(new Limits(1)));
             }
         }
     }

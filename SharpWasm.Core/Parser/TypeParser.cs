@@ -28,5 +28,10 @@ namespace SharpWasm.Core.Parser
             if (flags) maximum = Values.ToUInt(reader);
             return new Limits(initial, maximum);
         }
+
+        public static MemoryType ToMemoryType(BinaryReader reader)
+        {
+            return new MemoryType(ToLimits(reader));
+        }
     }
 }
