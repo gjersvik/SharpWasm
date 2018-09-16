@@ -83,5 +83,17 @@ namespace SharpWasm.Tests.Core.Parser
                 Assert.That(tableType.Limits, Is.EqualTo(new Limits(1)));
             }
         }
+
+        [Test]
+        public void ToGlobalType()
+        {
+            const string hex = "7F00";
+            using (var reader = BinaryTools.HexToReader(hex))
+            {
+                var globalType = TypeParser.ToGlobalType(reader);
+                Assert.That(globalType.ValueType, Is.EqualTo(ValueType.I32));
+                Assert.That(globalType.Mutable, Is.False);
+            }
+        }
     }
 }

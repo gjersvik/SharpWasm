@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using JetBrains.Annotations;
+using SharpWasm.Core.Parser;
+using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm.Internal.Parse.Sections
@@ -18,7 +20,7 @@ namespace SharpWasm.Internal.Parse.Sections
 
         public GlobalEntry(BinaryReader reader)
         {
-            Type = new GlobalType(reader);
+            Type = TypeParser.ToGlobalType(reader);
             InitExpr = new InitExpr(reader);
         }
 

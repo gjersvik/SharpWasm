@@ -42,5 +42,12 @@ namespace SharpWasm.Core.Parser
             var limits = ToLimits(reader);
             return new TableType(limits, elemType);
         }
+
+        public static GlobalType ToGlobalType(BinaryReader reader)
+        {
+            var valueType = ToValueType(reader);
+            var mutable = Values.ToBool(reader);
+            return new GlobalType(valueType, mutable);
+        }
     }
 }

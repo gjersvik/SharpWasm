@@ -2,7 +2,7 @@
 using SharpWasm.Core.Types;
 using SharpWasm.Tests.Helpers;
 
-namespace SharpWasm.Tests.Internal.Parse.Types
+namespace SharpWasm.Tests.Core.Types
 {
     [TestFixture]
     public class TableTypeTests

@@ -125,7 +125,7 @@ namespace SharpWasm.Tests.Core
         public void AllocGlobal()
         {
             var store = Store.Init();
-            Assert.That(store.AllocGlobal(new GlobalType(), new Value()), Is.EqualTo(-1));
+            Assert.That(store.AllocGlobal(new GlobalType(ValueType.I32, false), new Value()), Is.EqualTo(-1));
         }
 
         [Test]

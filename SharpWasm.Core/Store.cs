@@ -102,7 +102,7 @@ namespace SharpWasm.Core
 
         public GlobalType GlobalType(int address)
         {
-            return new GlobalType();
+            return new GlobalType(ValueType.I32,false);
         }
 
         public Value ReadGlobal(int address, uint index)

@@ -3,7 +3,7 @@ using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse.Code;
 using SharpWasm.Internal.Parse.Sections;
 using SharpWasm.Internal.Parse.Types;
-using GlobalType = SharpWasm.Internal.Parse.Types.GlobalType;
+using GlobalType = SharpWasm.Core.Types.GlobalType;
 using TableType = SharpWasm.Core.Types.TableType;
 using ValueType = SharpWasm.Core.Types.ValueType;
 
