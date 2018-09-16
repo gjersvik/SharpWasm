@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using SharpWasm.Core.Parser;
-using SharpWasm.Internal.Parse.Types;
+using SharpWasm.Core.Types;
 
 namespace SharpWasm.Internal.Parse.Sections
 {
@@ -24,7 +24,7 @@ namespace SharpWasm.Internal.Parse.Sections
         {
             FieldLen = Values.ToUInt(reader);
             FieldStr = ParseTools.ToUtf8(reader, FieldLen);
-            ExternalKind = ParseTools.ToExternalKind(reader);
+            ExternalKind = TypeParser.ToExternalKind(reader);
             Index = Values.ToUInt(reader);
         }
 

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using NUnit.Framework;
-using SharpWasm.Internal.Parse.Types;
+using SharpWasm.Core.Types;
 using SharpWasm.Tests.Helpers;
 
 namespace SharpWasm.Tests.Integration

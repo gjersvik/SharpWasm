@@ -4,7 +4,6 @@ using System.IO;
 using System.Text;
 using SharpWasm.Core.Parser;
 using SharpWasm.Internal.Parse.Sections;
-using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm.Internal.Parse
 {
@@ -25,11 +24,6 @@ namespace SharpWasm.Internal.Parse
         public static BinaryReader FromBytes(byte[] bytes)
         {
             return new BinaryReader(new MemoryStream(bytes));
-        }
-
-        public static ExternalKind ToExternalKind(BinaryReader reader)
-        {
-            return (ExternalKind)reader.ReadByte();
         }
 
         public static string ToUtf8(BinaryReader reader, uint length)

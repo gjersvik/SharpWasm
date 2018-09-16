@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
+using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse.Sections;
-using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm
 {

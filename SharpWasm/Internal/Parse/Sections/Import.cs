@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using SharpWasm.Core.Parser;
-using SharpWasm.Internal.Parse.Types;
+using SharpWasm.Core.Types;
 
 namespace SharpWasm.Internal.Parse.Sections
 {

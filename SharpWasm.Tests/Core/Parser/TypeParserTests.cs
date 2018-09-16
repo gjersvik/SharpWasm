@@ -95,5 +95,18 @@ namespace SharpWasm.Tests.Core.Parser
                 Assert.That(globalType.Mutable, Is.False);
             }
         }
+
+        [TestCase("00", ExternalKind.Function)]
+        [TestCase("01", ExternalKind.Table)]
+        [TestCase("02", ExternalKind.Memory)]
+        [TestCase("03", ExternalKind.Global)]
+        public void ToExternalKind(string hex, ExternalKind expect)
+        {
+            using (var reader = BinaryTools.HexToReader(hex))
+            {
+                var kind = TypeParser.ToExternalKind(reader);
+                Assert.That(kind, Is.EqualTo(expect));
+            }
+        }
     }
 }

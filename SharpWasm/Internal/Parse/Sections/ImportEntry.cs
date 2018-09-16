@@ -2,9 +2,6 @@
 using System.IO;
 using SharpWasm.Core.Parser;
 using SharpWasm.Core.Types;
-using SharpWasm.Internal.Parse.Types;
-using GlobalType = SharpWasm.Core.Types.GlobalType;
-using TableType = SharpWasm.Core.Types.TableType;
 
 namespace SharpWasm.Internal.Parse.Sections
 {
@@ -57,7 +54,7 @@ namespace SharpWasm.Internal.Parse.Sections
             ModuleStr = ParseTools.ToUtf8(reader, ModuleLen);
             FieldLen = Values.ToUInt(reader);
             FieldStr = ParseTools.ToUtf8(reader, FieldLen);
-            Kind = ParseTools.ToExternalKind(reader);
+            Kind = TypeParser.ToExternalKind(reader);
         }
     }
 

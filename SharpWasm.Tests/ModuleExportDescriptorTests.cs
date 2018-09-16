@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using SharpWasm.Internal.Parse.Types;
+using SharpWasm.Core.Types;
 
 namespace SharpWasm.Tests
 {

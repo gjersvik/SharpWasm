@@ -49,5 +49,10 @@ namespace SharpWasm.Core.Parser
             var mutable = Values.ToBool(reader);
             return new GlobalType(valueType, mutable);
         }
+
+        public static ExternalKind ToExternalKind(BinaryReader reader)
+        {
+            return (ExternalKind)reader.ReadByte();
+        }
     }
 }
