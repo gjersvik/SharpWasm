@@ -41,7 +41,7 @@ namespace SharpWasm.Tests.Core
         public void AllocTable()
         {
             var store = Store.Init();
-            Assert.That(store.AllocTable(new TableType()), Is.EqualTo(-1));
+            Assert.That(store.AllocTable(new TableType(0)), Is.EqualTo(-1));
         }
 
         [Test]

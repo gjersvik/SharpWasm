@@ -60,5 +60,28 @@ namespace SharpWasm.Tests.Core.Parser
                 Assert.That(memoryType.Limits, Is.EqualTo(new Limits(1)));
             }
         }
+
+        [Test]
+        public void ToElemType()
+        {
+            const string hex = "70";
+            using (var reader = BinaryTools.HexToReader(hex))
+            {
+                var elemType = TypeParser.ToElemType(reader);
+                Assert.That(elemType, Is.EqualTo(ElemType.AnyFunc));
+            }
+        }
+
+        [Test]
+        public void ToTableType()
+        {
+            const string hex = "700001";
+            using (var reader = BinaryTools.HexToReader(hex))
+            {
+                var tableType = TypeParser.ToTableType(reader);
+                Assert.That(tableType.ElemType, Is.EqualTo(ElemType.AnyFunc));
+                Assert.That(tableType.Limits, Is.EqualTo(new Limits(1)));
+            }
+        }
     }
 }

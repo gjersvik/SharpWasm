@@ -42,7 +42,7 @@ namespace SharpWasm.Core
 
         public TableType TableType(int address)
         {
-            return new TableType();
+            return new TableType(0);
         }
 
         public int ReadTable(int address, uint index)

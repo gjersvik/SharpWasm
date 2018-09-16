@@ -4,7 +4,7 @@ using NUnit.Framework;
 using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse.Sections;
 using GlobalType = SharpWasm.Internal.Parse.Types.GlobalType;
-using TableType = SharpWasm.Internal.Parse.Types.TableType;
+using TableType = SharpWasm.Core.Types.TableType;
 
 namespace SharpWasm.Tests.Internal.Parse.Sections
 {

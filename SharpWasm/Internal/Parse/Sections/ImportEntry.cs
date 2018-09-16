@@ -4,7 +4,7 @@ using SharpWasm.Core.Parser;
 using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse.Types;
 using GlobalType = SharpWasm.Internal.Parse.Types.GlobalType;
-using TableType = SharpWasm.Internal.Parse.Types.TableType;
+using TableType = SharpWasm.Core.Types.TableType;
 
 namespace SharpWasm.Internal.Parse.Sections
 {
@@ -82,7 +82,7 @@ namespace SharpWasm.Internal.Parse.Sections
 
         public ImportEntryTable(BinaryReader reader, ImportEntry entry) : base(entry)
         {
-            Type = new TableType(reader);
+            Type = TypeParser.ToTableType(reader);
         }
 
         public ImportEntryTable(string module, string field, TableType type) : base(module, field, ExternalKind.Table)

@@ -4,7 +4,7 @@ using SharpWasm.Internal.Parse.Code;
 using SharpWasm.Internal.Parse.Sections;
 using SharpWasm.Internal.Parse.Types;
 using GlobalType = SharpWasm.Internal.Parse.Types.GlobalType;
-using TableType = SharpWasm.Internal.Parse.Types.TableType;
+using TableType = SharpWasm.Core.Types.TableType;
 using ValueType = SharpWasm.Core.Types.ValueType;
 
 namespace SharpWasm.Tests.Helpers

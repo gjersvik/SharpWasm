@@ -1,6 +1,6 @@
 ﻿namespace SharpWasm.Core.Types
 {
-    internal enum ElemType: sbyte
+    public enum ElemType: sbyte
     {
         AnyFunc = -0x10
     }

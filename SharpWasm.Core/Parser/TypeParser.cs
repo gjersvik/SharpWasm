@@ -35,5 +35,12 @@ namespace SharpWasm.Core.Parser
         }
 
         public static ElemType ToElemType(BinaryReader reader) => (ElemType)Values.ToSByte(reader);
+
+        public static TableType ToTableType(BinaryReader reader)
+        {
+            var elemType = ToElemType(reader);
+            var limits = ToLimits(reader);
+            return new TableType(limits, elemType);
+        }
     }
 }

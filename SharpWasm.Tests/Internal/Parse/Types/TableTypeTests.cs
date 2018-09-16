@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using SharpWasm.Core.Types;
 using SharpWasm.Tests.Helpers;
-using TableType = SharpWasm.Internal.Parse.Types.TableType;
 
 namespace SharpWasm.Tests.Internal.Parse.Types
 {
@@ -12,7 +11,7 @@ namespace SharpWasm.Tests.Internal.Parse.Types
         public void ElementType()
         {
             var tableType = new TableType(new Limits(1));
-            Assert.That(tableType.ElementType, Is.EqualTo(ElemType.AnyFunc));
+            Assert.That(tableType.ElemType, Is.EqualTo(ElemType.AnyFunc));
         }
 
         [Test]
@@ -20,18 +19,6 @@ namespace SharpWasm.Tests.Internal.Parse.Types
         {
             var tableType = new TableType(new Limits(1));
             Assert.That(tableType.Limits, Is.EqualTo(new Limits(1)));
-        }
-
-        [Test]
-        public void Parse()
-        {
-            const string hex = "700001";
-            using (var reader = BinaryTools.HexToReader(hex))
-            {
-                var tableType = new TableType(reader);
-                Assert.That(tableType.ElementType, Is.EqualTo(ElemType.AnyFunc));
-                Assert.That(tableType.Limits, Is.EqualTo(new Limits(1)));
-            }
         }
 
         [Test]
