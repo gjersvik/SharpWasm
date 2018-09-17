@@ -7,7 +7,7 @@ namespace SharpWasm.Core.Parser
 {
     internal static class TypeParser
     {
-        public static ValueType ToValueType(BinaryReader reader) => (ValueType)Values.ToSByte(reader);
+        private static ValueType ToValueType(BinaryReader reader) => (ValueType)Values.ToSByte(reader);
         public static BlockType ToBlockType(BinaryReader reader) => (BlockType)Values.ToSByte(reader);
 
         public static FunctionType ToFunctionType(BinaryReader reader)
