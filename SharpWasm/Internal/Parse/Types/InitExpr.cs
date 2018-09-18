@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using SharpWasm.Core.Code;
 using SharpWasm.Internal.Parse.Code;
 
 namespace SharpWasm.Internal.Parse.Types

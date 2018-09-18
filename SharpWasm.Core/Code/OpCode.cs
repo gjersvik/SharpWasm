@@ -1,5 +1,5 @@
 ﻿// ReSharper disable IdentifierTypo
-namespace SharpWasm.Internal.Parse.Code
+namespace SharpWasm.Core.Code
 {
     internal enum OpCode: byte
     {
