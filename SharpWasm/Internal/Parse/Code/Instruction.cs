@@ -288,7 +288,7 @@ namespace SharpWasm.Internal.Parse.Code
                 case OpCode.Call:
                     return Call(Values.ToUInt(reader));
                 case OpCode.CallIndirect:
-                    return CallIndirect(new CallIndirect(reader));
+                    return CallIndirect(CodeParser.ToCallIndirect(reader));
                 case OpCode.Drop:
                     return Drop;
                 case OpCode.Select:

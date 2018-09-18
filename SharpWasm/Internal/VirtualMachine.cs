@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using SharpWasm.Core.Code;
 using SharpWasm.Internal.Parse.Code;
 using ValueType = SharpWasm.Core.Types.ValueType;
 

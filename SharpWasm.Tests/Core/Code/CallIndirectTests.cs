@@ -1,8 +1,7 @@
 ﻿using NUnit.Framework;
-using SharpWasm.Internal.Parse.Code;
-using SharpWasm.Tests.Helpers;
+using SharpWasm.Core.Code;
 
-namespace SharpWasm.Tests.Internal.Parse.Code
+namespace SharpWasm.Tests.Core.Code
 {
     [TestFixture]
     public class CallIndirectTests
@@ -14,23 +13,6 @@ namespace SharpWasm.Tests.Internal.Parse.Code
             Assert.Multiple(() =>
             {
                 Assert.That(callIndirect.TypeIndex, Is.EqualTo(5), "TypeIndex");
-                Assert.That(callIndirect.Reserved, Is.True, "Reserved");
-            });
-        }
-
-        [Test]
-        public void Binary()
-        {
-            const string hex = "0401";
-            CallIndirect callIndirect;
-            using (var reader = BinaryTools.HexToReader(hex))
-            {
-                callIndirect = new CallIndirect(reader);
-            }
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(callIndirect.TypeIndex, Is.EqualTo(4), "TypeIndex");
                 Assert.That(callIndirect.Reserved, Is.True, "Reserved");
             });
         }

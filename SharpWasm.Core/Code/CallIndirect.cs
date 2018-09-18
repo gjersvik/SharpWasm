@@ -1,23 +1,16 @@
 ﻿using System;
-using System.IO;
-using SharpWasm.Core.Parser;
 
-namespace SharpWasm.Internal.Parse.Code
+namespace SharpWasm.Core.Code
 {
     internal class CallIndirect: IEquatable<CallIndirect>
     {
         public readonly uint TypeIndex;
         public readonly bool Reserved;
 
-        public CallIndirect(uint typeIndex, bool reserved)
+        public CallIndirect(uint typeIndex, bool reserved = false)
         {
             TypeIndex = typeIndex;
             Reserved = reserved;
-        }
-        public CallIndirect(BinaryReader reader)
-        {
-            TypeIndex = Values.ToUInt(reader);
-            Reserved = Values.ToBool(reader);
         }
 
         public bool Equals(CallIndirect other)

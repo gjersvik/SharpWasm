@@ -23,5 +23,22 @@ namespace SharpWasm.Tests.Core.Parser
                 Assert.That(brTable.DefaultTarget, Is.EqualTo(5), "DefaultTarget");
             });
         }
+
+        [Test]
+        public void ToCallIndirect()
+        {
+            const string hex = "0401";
+            CallIndirect callIndirect;
+            using (var reader = BinaryTools.HexToReader(hex))
+            {
+                callIndirect = CodeParser.ToCallIndirect(reader);
+            }
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(callIndirect.TypeIndex, Is.EqualTo(4), "TypeIndex");
+                Assert.That(callIndirect.Reserved, Is.True, "Reserved");
+            });
+        }
     }
 }
