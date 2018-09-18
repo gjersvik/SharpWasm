@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
 using NUnit.Framework;
+using SharpWasm.Core.Code;
 using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse.Code;
 using SharpWasm.Tests.Helpers;

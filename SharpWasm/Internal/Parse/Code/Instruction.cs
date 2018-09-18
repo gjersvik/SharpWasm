@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using SharpWasm.Core.Code;
 using SharpWasm.Core.Parser;
 using SharpWasm.Core.Types;
 // ReSharper disable MemberCanBePrivate.Global
@@ -281,7 +282,7 @@ namespace SharpWasm.Internal.Parse.Code
                 case OpCode.BrIf:
                     return BrIf(Values.ToUInt(reader));
                 case OpCode.BrTable:
-                    return BrTable(new BrTable(reader));
+                    return BrTable(CodeParser.ToBrTable(reader));
                 case OpCode.Return:
                     return Return;
                 case OpCode.Call:

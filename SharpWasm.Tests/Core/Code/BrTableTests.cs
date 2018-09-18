@@ -1,9 +1,8 @@
 ﻿using System.Collections.Immutable;
 using NUnit.Framework;
-using SharpWasm.Internal.Parse.Code;
-using SharpWasm.Tests.Helpers;
+using SharpWasm.Core.Code;
 
-namespace SharpWasm.Tests.Internal.Parse.Code
+namespace SharpWasm.Tests.Core.Code
 {
     [TestFixture]
     public class BrTableTests
@@ -14,26 +13,7 @@ namespace SharpWasm.Tests.Internal.Parse.Code
             var brTable = new BrTable(ImmutableArray.Create<uint>(1,2,3,4), 5);
             Assert.Multiple(() =>
             {
-                Assert.That(brTable.TargetCount, Is.EqualTo(4), "TargetCount");
                 Assert.That(brTable.TargetTable, Is.EqualTo(new []{1,2,3,4}), "TargetTable");
-                Assert.That(brTable.DefaultTarget, Is.EqualTo(5), "DefaultTarget");
-            });
-        }
-
-        [Test]
-        public void Binary()
-        {
-            const string hex = "040102030405";
-            BrTable brTable;
-            using (var reader = BinaryTools.HexToReader(hex))
-            {
-                brTable = new BrTable(reader);
-            }
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(brTable.TargetCount, Is.EqualTo(4), "TargetCount");
-                Assert.That(brTable.TargetTable, Is.EqualTo(new[] { 1, 2, 3, 4 }), "TargetTable");
                 Assert.That(brTable.DefaultTarget, Is.EqualTo(5), "DefaultTarget");
             });
         }
