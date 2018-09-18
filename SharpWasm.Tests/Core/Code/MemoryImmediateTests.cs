@@ -1,8 +1,7 @@
 ﻿using NUnit.Framework;
-using SharpWasm.Internal.Parse.Code;
-using SharpWasm.Tests.Helpers;
+using SharpWasm.Core.Code;
 
-namespace SharpWasm.Tests.Internal.Parse.Code
+namespace SharpWasm.Tests.Core.Code
 {
     [TestFixture]
     public class MemoryImmediateTests
@@ -11,23 +10,6 @@ namespace SharpWasm.Tests.Internal.Parse.Code
         public void Properties()
         {
             var memoryImmediate = new MemoryImmediate(1,2);
-            Assert.Multiple(() =>
-            {
-                Assert.That(memoryImmediate.Flags, Is.EqualTo(1), "Flags");
-                Assert.That(memoryImmediate.Offset, Is.EqualTo(2), "Offset");
-            });
-        }
-
-        [Test]
-        public void Binary()
-        {
-            const string hex = "0102";
-            MemoryImmediate memoryImmediate;
-            using (var reader = BinaryTools.HexToReader(hex))
-            {
-                memoryImmediate = new MemoryImmediate(reader);
-            }
-
             Assert.Multiple(() =>
             {
                 Assert.That(memoryImmediate.Flags, Is.EqualTo(1), "Flags");

@@ -304,51 +304,51 @@ namespace SharpWasm.Internal.Parse.Code
                 case OpCode.SetGlobal:
                     return SetGlobal(Values.ToUInt(reader));
                 case OpCode.I32Load:
-                    return I32Load(new MemoryImmediate(reader));
+                    return I32Load(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.I64Load:
-                    return I64Load(new MemoryImmediate(reader));
+                    return I64Load(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.F32Load:
-                    return F32Load(new MemoryImmediate(reader));
+                    return F32Load(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.F64Load:
-                    return F64Load(new MemoryImmediate(reader));
+                    return F64Load(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.I32Load8S:
-                    return I32Load8S(new MemoryImmediate(reader));
+                    return I32Load8S(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.I32Load8U:
-                    return I32Load8U(new MemoryImmediate(reader));
+                    return I32Load8U(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.I32Load16S:
-                    return I32Load16S(new MemoryImmediate(reader));
+                    return I32Load16S(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.I32Load16U:
-                    return I32Load16U(new MemoryImmediate(reader));
+                    return I32Load16U(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.I64Load8S:
-                    return I64Load8S(new MemoryImmediate(reader));
+                    return I64Load8S(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.I64Load8U:
-                    return I64Load8U(new MemoryImmediate(reader));
+                    return I64Load8U(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.I64Load16S:
-                    return I64Load16S(new MemoryImmediate(reader));
+                    return I64Load16S(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.I64Load16U:
-                    return I64Load16U(new MemoryImmediate(reader));
+                    return I64Load16U(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.I64Load32S:
-                    return I64Load32S(new MemoryImmediate(reader));
+                    return I64Load32S(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.I64Load32U:
-                    return I64Load32U(new MemoryImmediate(reader));
+                    return I64Load32U(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.I32Store:
-                    return I32Store(new MemoryImmediate(reader));
+                    return I32Store(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.I64Store:
-                    return I64Store(new MemoryImmediate(reader));
+                    return I64Store(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.F32Store:
-                    return F32Store(new MemoryImmediate(reader));
+                    return F32Store(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.F64Store:
-                    return F64Store(new MemoryImmediate(reader));
+                    return F64Store(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.I32Store8:
-                    return I32Store8(new MemoryImmediate(reader));
+                    return I32Store8(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.I32Store16:
-                    return I32Store16(new MemoryImmediate(reader));
+                    return I32Store16(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.I64Store8:
-                    return I64Store8(new MemoryImmediate(reader));
+                    return I64Store8(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.I64Store16:
-                    return I64Store16(new MemoryImmediate(reader));
+                    return I64Store16(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.I64Store32:
-                    return I64Store32(new MemoryImmediate(reader));
+                    return I64Store32(CodeParser.ToMemoryImmediate(reader));
                 case OpCode.CurrentMemory:
                     return CurrentMemory(Values.ToBool(reader));
                 case OpCode.GrowMemory:

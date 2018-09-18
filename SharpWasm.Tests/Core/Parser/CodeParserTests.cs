@@ -40,5 +40,22 @@ namespace SharpWasm.Tests.Core.Parser
                 Assert.That(callIndirect.Reserved, Is.True, "Reserved");
             });
         }
+
+        [Test]
+        public void ToMemoryImmediate()
+        {
+            const string hex = "0102";
+            MemoryImmediate memoryImmediate;
+            using (var reader = BinaryTools.HexToReader(hex))
+            {
+                memoryImmediate = CodeParser.ToMemoryImmediate(reader);
+            }
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(memoryImmediate.Flags, Is.EqualTo(1), "Flags");
+                Assert.That(memoryImmediate.Offset, Is.EqualTo(2), "Offset");
+            });
+        }
     }
 }

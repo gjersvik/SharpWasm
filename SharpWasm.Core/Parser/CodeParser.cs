@@ -19,5 +19,12 @@ namespace SharpWasm.Core.Parser
             var reserved = Values.ToBool(reader);
             return new CallIndirect(typeIndex,reserved);
         }
+
+        public static MemoryImmediate ToMemoryImmediate(BinaryReader reader)
+        {
+            var flags = Values.ToUInt(reader);
+            var offset = Values.ToUInt(reader);
+            return new MemoryImmediate(flags, offset);
+        }
     }
 }
