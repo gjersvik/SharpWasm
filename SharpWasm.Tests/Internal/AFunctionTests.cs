@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
+using SharpWasm.Core.Code;
 using SharpWasm.Core.Types;
 using SharpWasm.Internal;
-using SharpWasm.Internal.Parse.Code;
 
 namespace SharpWasm.Tests.Internal
 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using SharpWasm.Core.Code;
 using SharpWasm.Core.Parser;
 
 namespace SharpWasm.Internal.Parse.Code
@@ -28,7 +29,7 @@ namespace SharpWasm.Internal.Parse.Code
             {
                 while (codeReader.BaseStream.Position != codeReader.BaseStream.Length)
                 {
-                    builder.Add(Instruction.Parse(codeReader));
+                    builder.Add(CodeParser.ToInstruction(codeReader));
                 }
             }
 

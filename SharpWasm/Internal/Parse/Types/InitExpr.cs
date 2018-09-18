@@ -4,11 +4,11 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using SharpWasm.Core.Code;
-using SharpWasm.Internal.Parse.Code;
+using SharpWasm.Core.Parser;
 
 namespace SharpWasm.Internal.Parse.Types
 {
-    internal class InitExpr: IEquatable<InitExpr>
+    internal class InitExpr : IEquatable<InitExpr>
     {
         public readonly ImmutableArray<IInstruction> Instructions;
 
@@ -22,7 +22,7 @@ namespace SharpWasm.Internal.Parse.Types
             var builder = ImmutableArray.CreateBuilder<IInstruction>(2);
             do
             {
-                builder.Add(Instruction.Parse(reader));
+                builder.Add(CodeParser.ToInstruction(reader));
             } while (builder.Last().OpCode != OpCode.End);
 
             builder.Capacity = builder.Count;

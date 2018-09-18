@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using SharpWasm.Core.Code;
 using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse.Code;
 using SharpWasm.Internal.Parse.Sections;

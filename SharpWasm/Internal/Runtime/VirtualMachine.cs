@@ -2,7 +2,6 @@
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using SharpWasm.Core.Code;
-using SharpWasm.Internal.Parse.Code;
 
 namespace SharpWasm.Internal.Runtime
 {

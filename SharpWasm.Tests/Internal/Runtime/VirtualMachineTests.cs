@@ -2,7 +2,6 @@
 using System.Collections.Immutable;
 using NUnit.Framework;
 using SharpWasm.Core.Code;
-using SharpWasm.Internal.Parse.Code;
 using SharpWasm.Internal.Runtime;
 
 namespace SharpWasm.Tests.Internal.Runtime

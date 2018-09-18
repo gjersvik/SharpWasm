@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using SharpWasm.Internal.Parse.Code;
+using SharpWasm.Core.Code;
 using SharpWasm.Internal.Parse.Sections;
 
 namespace SharpWasm

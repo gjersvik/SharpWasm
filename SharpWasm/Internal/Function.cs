@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using SharpWasm.Core.Code;
 using SharpWasm.Core.Types;
-using SharpWasm.Internal.Parse.Code;
 
 namespace SharpWasm.Internal
 {
