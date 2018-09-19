@@ -11,12 +11,12 @@ namespace SharpWasm.Tests.Core.Segments
         [Test]
         public void Constructor()
         {
-            var global = new Element(0, new IInstruction[] { Instruction.I32Const(3), Instruction.End }, new uint[] { 1, 2, 3 });
+            var element = new Element(0, new IInstruction[] { Instruction.I32Const(3), Instruction.End }, new uint[] { 1, 2, 3 });
             Assert.Multiple(() =>
             {
-                Assert.That(global.Table, Is.EqualTo(0).AsCollection, "Table");
-                Assert.That(global.Offset, Is.EqualTo(new IInstruction[] { Instruction.I32Const(3), Instruction.End }).AsCollection, "Offset");
-                Assert.That(global.Init, Is.EqualTo(new uint[] { 1, 2, 3 }).AsCollection, "Init");
+                Assert.That(element.Table, Is.EqualTo(0).AsCollection, "Table");
+                Assert.That(element.Offset, Is.EqualTo(new IInstruction[] { Instruction.I32Const(3), Instruction.End }).AsCollection, "Offset");
+                Assert.That(element.Init, Is.EqualTo(new uint[] { 1, 2, 3 }).AsCollection, "Init");
             });
         }
 
