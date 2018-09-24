@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.IO;
+using System.Text;
 
 namespace SharpWasm.Core.Parser
 {
@@ -68,6 +69,12 @@ namespace SharpWasm.Core.Parser
             }
 
             return builder.MoveToImmutable();
+        }
+
+        public static string ToName(BinaryReader reader)
+        {
+            var length = ToUInt(reader);
+            return Encoding.UTF8.GetString(reader.ReadBytes((int)length));
         }
     }
 }

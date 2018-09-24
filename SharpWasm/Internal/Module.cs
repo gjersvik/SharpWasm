@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using SharpWasm.Internal.Parse;
@@ -18,7 +17,7 @@ namespace SharpWasm.Internal
         public readonly Element Element;
         private readonly CodeSection _code;
         public readonly Data Data;
-        private readonly ImmutableArray<Custom> _custom;
+        private readonly ImmutableDictionary<string, ImmutableArray<byte>> _custom;
 
         public Module(ParseModule parsed)
         {
@@ -33,9 +32,9 @@ namespace SharpWasm.Internal
             _custom = parsed.Customs;
         }
 
-        public IEnumerable<Custom> ByName(string name)
+        public ImmutableArray<byte> ByName(string name)
         {
-            return _custom.Where(cs => cs.Name == name);
+            return _custom.ContainsKey(name) ? _custom[name] : ImmutableArray<byte>.Empty;
         }
 
         public AFunction GetFunction(uint id)

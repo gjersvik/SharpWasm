@@ -39,6 +39,7 @@ namespace SharpWasm.Tests.Core
             var module = new Module();
             Assert.Multiple(() =>
             {
+                Assert.That(module.Custom, Is.Empty, "Custom");
                 Assert.That(module.Types, Is.Empty, "Types");
                 Assert.That(module.Funcs, Is.Empty, "Funcs");
                 Assert.That(module.Tables, Is.Empty, "Tables");

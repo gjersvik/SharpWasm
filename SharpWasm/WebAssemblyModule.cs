@@ -6,9 +6,9 @@ namespace SharpWasm
 {
     public class WebAssemblyModule
     {
-        public IEnumerable<byte[]> CustomSections(string name)
+        public byte[] CustomSections(string name)
         {
-            return _module.ByName(name).Select(cs => cs.PayloadData.ToArray());
+            return _module.ByName(name).ToArray();
         }
 
         public IEnumerable<ModuleExportDescriptor> Exports()

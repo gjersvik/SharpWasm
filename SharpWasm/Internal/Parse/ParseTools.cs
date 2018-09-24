@@ -31,15 +31,6 @@ namespace SharpWasm.Internal.Parse
             return Encoding.UTF8.GetString(reader.ReadBytes((int)length));
         }
 
-        public static ImmutableArray<byte> ToBytes(BinaryReader reader)
-        {
-            using (var ms = new MemoryStream())
-            {
-                reader.BaseStream.CopyTo(ms);
-                return ms.ToArray().ToImmutableArray();
-            }
-        }
-
         public static ImmutableArray<byte> ToBytes(BinaryReader reader, uint count)
         {
             return reader.ReadBytes((int) count).ToImmutableArray();

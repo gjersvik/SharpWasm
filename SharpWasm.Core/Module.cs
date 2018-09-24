@@ -30,6 +30,7 @@ namespace SharpWasm.Core
             return new Tuple<string, ExternalType>[0];
         }
 
+        internal readonly ImmutableDictionary<string, ImmutableArray<byte>> Custom = ImmutableDictionary<string, ImmutableArray<byte>>.Empty;
         internal readonly ImmutableArray<FunctionType> Types = ImmutableArray<FunctionType>.Empty;
         internal readonly ImmutableArray<Function> Funcs = ImmutableArray<Function>.Empty;
         internal readonly ImmutableArray<TableType> Tables = ImmutableArray<TableType>.Empty;

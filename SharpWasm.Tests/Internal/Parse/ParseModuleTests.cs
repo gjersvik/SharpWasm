@@ -16,7 +16,7 @@ namespace SharpWasm.Tests.Internal.Parse
             {
                 Assert.That(module.MagicNumber, Is.EqualTo(0x6d736100));
                 Assert.That(module.Version, Is.EqualTo(1));
-                Assert.That(module.Sections, Is.Empty, "Sections");
+                Assert.That(module.ClassicSections, Is.Empty, "ClassicSections");
                 Assert.That(module.Customs, Is.Empty, "Customs");
                 Assert.That(module.Types, Is.Empty, "Types");
                 Assert.That(module.Imports, Is.Empty, "Imports");

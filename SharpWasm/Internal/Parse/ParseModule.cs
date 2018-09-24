@@ -13,9 +13,9 @@ namespace SharpWasm.Internal.Parse
     {
         public readonly uint MagicNumber;
         public readonly uint Version;
-        public readonly ImmutableArray<ISection> Sections;
+        public readonly ImmutableArray<ISection> ClassicSections;
 
-        public readonly ImmutableArray<Custom> Customs;
+        public readonly ImmutableDictionary<string, ImmutableArray<byte>> Customs;
         public readonly ImmutableArray<Type> Types;
         public readonly ImmutableArray<Import> Imports;
         public readonly ImmutableArray<Sections.Function> Functions;
@@ -28,7 +28,8 @@ namespace SharpWasm.Internal.Parse
         public readonly ImmutableArray<CodeSection> Code;
         public readonly ImmutableArray<Data> Data;
 
-        public ParseModule(IEnumerable<ISection> sections) : this(0x6d736100, 0x1, sections.ToImmutableArray())
+
+        public ParseModule(IEnumerable<ISection> sections) : this(0x6d736100, 0x1, new Tuple<ImmutableArray<ISection>, Core.Parser.Sections>(sections.ToImmutableArray(),new Core.Parser.Sections()))
         {
         }
 
@@ -36,30 +37,34 @@ namespace SharpWasm.Internal.Parse
         {
         }
 
-        private ParseModule(uint magicNumber, uint version, ImmutableArray<ISection> sections)
+        private ParseModule(uint magicNumber, uint version, Tuple<ImmutableArray<ISection>, Core.Parser.Sections> sections)
         {
             MagicNumber = magicNumber;
             Version = version;
-            Sections = sections;
+            ClassicSections = sections.Item1;
+            var newSections = sections.Item2;
 
-            Customs = sections.OfType<Custom>().ToImmutableArray();
-            Types = sections.OfType<Type>().ToImmutableArray();
-            Imports = sections.OfType<Import>().ToImmutableArray();
-            Functions = sections.OfType<Sections.Function>().ToImmutableArray();
-            Tables = sections.OfType<Table>().ToImmutableArray();
-            Memories = sections.OfType<Memory>().ToImmutableArray();
-            Globals = sections.OfType<Global>().ToImmutableArray();
-            Exports = sections.OfType<Export>().ToImmutableArray();
-            Starts = sections.OfType<Start>().ToImmutableArray();
-            Elements = sections.OfType<Element>().ToImmutableArray();
-            Code = sections.OfType<CodeSection>().ToImmutableArray();
-            Data = sections.OfType<Data>().ToImmutableArray();
+            Customs = newSections.Custom;
+            // ReSharper disable ImpureMethodCallOnReadonlyValueField
+            Types = ClassicSections.OfType<Type>().ToImmutableArray();
+            Imports = ClassicSections.OfType<Import>().ToImmutableArray();
+            Functions = ClassicSections.OfType<Sections.Function>().ToImmutableArray();
+            Tables = ClassicSections.OfType<Table>().ToImmutableArray();
+            Memories = ClassicSections.OfType<Memory>().ToImmutableArray();
+            Globals = ClassicSections.OfType<Global>().ToImmutableArray();
+            Exports = ClassicSections.OfType<Export>().ToImmutableArray();
+            Starts = ClassicSections.OfType<Start>().ToImmutableArray();
+            Elements = ClassicSections.OfType<Element>().ToImmutableArray();
+            Code = ClassicSections.OfType<CodeSection>().ToImmutableArray();
+            Data = ClassicSections.OfType<Data>().ToImmutableArray();
+            // ReSharper enable ImpureMethodCallOnReadonlyValueField
         }
 
         [ExcludeFromCodeCoverage]
-        private static ImmutableArray<ISection> ParseSelections(BinaryReader reader)
+        private static Tuple<ImmutableArray<ISection>,Core.Parser.Sections> ParseSelections(BinaryReader reader)
         {
             var sections = ImmutableArray.CreateBuilder<ISection>();
+            var newSections = new Core.Parser.Sections();
             while (reader.BaseStream.Position != reader.BaseStream.Length)
             {
                 var id = ParseTools.ToSectionCode(reader);
@@ -69,7 +74,7 @@ namespace SharpWasm.Internal.Parse
                     switch (id)
                     {
                         case SectionCode.Custom:
-                            sections.Add(new Custom(subReader));
+                            newSections.ParseCustom(subReader);
                             break;
                         case SectionCode.Type:
                             sections.Add(new Type(subReader));
@@ -111,7 +116,7 @@ namespace SharpWasm.Internal.Parse
             }
 
             sections.Capacity = sections.Count;
-            return sections.MoveToImmutable();
+            return new Tuple<ImmutableArray<ISection>, Core.Parser.Sections>(sections.MoveToImmutable(), newSections);
         }
     }
 }
