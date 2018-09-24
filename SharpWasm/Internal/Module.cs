@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse;
 using SharpWasm.Internal.Parse.Sections;
 using FunctionSection = SharpWasm.Internal.Parse.Sections.Function;
@@ -9,7 +10,7 @@ namespace SharpWasm.Internal
 {
     internal class Module
     {
-        private readonly Type _type;
+        private readonly ImmutableArray<FunctionType> _type;
         public readonly Import Import;
         private readonly FunctionSection _function;
         public readonly Table Table;
@@ -21,7 +22,7 @@ namespace SharpWasm.Internal
 
         public Module(ParseModule parsed)
         {
-            _type = parsed.Types.FirstOrDefault() ?? Type.Empty;
+            _type = parsed.Types;
             Import = parsed.Imports.FirstOrDefault() ?? Import.Empty;
             _function = parsed.Functions.FirstOrDefault() ?? FunctionSection.Empty;
             Table = parsed.Tables.FirstOrDefault() ?? Table.Empty;
@@ -42,12 +43,12 @@ namespace SharpWasm.Internal
             if (id < Import.Functions.Length)
             {
                 var import = Import.Functions[(int) id];
-                return new ImportFunction(id, _type.Entries[(int) import.Type], import.ModuleStr, import.FieldStr,
+                return new ImportFunction(id, _type[(int) import.Type], import.ModuleStr, import.FieldStr,
                     import.Type);
             }
 
             var baseId = (int) (id - Import.Functions.Length);
-            return new Function(id, _code.Bodies[baseId].Code, _type.Entries[(int) _function.Types[baseId]],
+            return new Function(id, _code.Bodies[baseId].Code, _type[(int) _function.Types[baseId]],
                 _function.Types[baseId]);
         }
 

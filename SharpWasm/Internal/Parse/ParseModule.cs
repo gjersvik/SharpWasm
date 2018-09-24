@@ -4,8 +4,8 @@ using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using SharpWasm.Core.Parser;
+using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse.Sections;
-using Type = SharpWasm.Internal.Parse.Sections.Type;
 
 namespace SharpWasm.Internal.Parse
 {
@@ -16,7 +16,7 @@ namespace SharpWasm.Internal.Parse
         public readonly ImmutableArray<ISection> ClassicSections;
 
         public readonly ImmutableDictionary<string, ImmutableArray<byte>> Customs;
-        public readonly ImmutableArray<Type> Types;
+        public readonly ImmutableArray<FunctionType> Types;
         public readonly ImmutableArray<Import> Imports;
         public readonly ImmutableArray<Sections.Function> Functions;
         public readonly ImmutableArray<Table> Tables;
@@ -45,8 +45,8 @@ namespace SharpWasm.Internal.Parse
             var newSections = sections.Item2;
 
             Customs = newSections.Custom;
+            Types = newSections.Type;
             // ReSharper disable ImpureMethodCallOnReadonlyValueField
-            Types = ClassicSections.OfType<Type>().ToImmutableArray();
             Imports = ClassicSections.OfType<Import>().ToImmutableArray();
             Functions = ClassicSections.OfType<Sections.Function>().ToImmutableArray();
             Tables = ClassicSections.OfType<Table>().ToImmutableArray();
@@ -77,7 +77,7 @@ namespace SharpWasm.Internal.Parse
                             newSections.ParseCustom(subReader);
                             break;
                         case SectionCode.Type:
-                            sections.Add(new Type(subReader));
+                            newSections.ParseType(subReader);
                             break;
                         case SectionCode.Import:
                             sections.Add(new Import(subReader));
