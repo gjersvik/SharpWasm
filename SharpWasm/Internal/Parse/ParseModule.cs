@@ -23,12 +23,12 @@ namespace SharpWasm.Internal.Parse
         public readonly ImmutableDictionary<string, ImmutableArray<byte>> Customs;
         public readonly ImmutableArray<FunctionType> Types;
         public readonly ImmutableArray<Import> Imports;
-        public readonly ImmutableArray<Sections.Function> Functions;
-        public readonly ImmutableArray<Table> Tables;
-        public readonly ImmutableArray<Memory> Memories;
+        public readonly ImmutableArray<uint> Functions;
+        public readonly ImmutableArray<TableType> Tables;
+        public readonly ImmutableArray<MemoryType> Memories;
         public readonly ImmutableArray<Global> Globals;
         public readonly ImmutableArray<Export> Exports;
-        public readonly ImmutableArray<Start> Starts;
+        public readonly uint? Starts;
         public readonly ImmutableArray<Element> Elements;
         public readonly ImmutableArray<CodeSection> Code;
         public readonly ImmutableArray<Data> Data;
@@ -52,13 +52,14 @@ namespace SharpWasm.Internal.Parse
             Customs = newSections.Custom;
             Types = newSections.Type;
             Imports = newSections.Import;
+            Functions = newSections.Function;
+            Tables = newSections.Table;
+            Memories = newSections.Memory;
+
+            Starts = newSections.Start;
             // ReSharper disable ImpureMethodCallOnReadonlyValueField
-            Functions = ClassicSections.OfType<Sections.Function>().ToImmutableArray();
-            Tables = ClassicSections.OfType<Table>().ToImmutableArray();
-            Memories = ClassicSections.OfType<Memory>().ToImmutableArray();
             Globals = ClassicSections.OfType<Global>().ToImmutableArray();
             Exports = ClassicSections.OfType<Export>().ToImmutableArray();
-            Starts = ClassicSections.OfType<Start>().ToImmutableArray();
             Elements = ClassicSections.OfType<Element>().ToImmutableArray();
             Code = ClassicSections.OfType<CodeSection>().ToImmutableArray();
             Data = ClassicSections.OfType<Data>().ToImmutableArray();
@@ -88,13 +89,13 @@ namespace SharpWasm.Internal.Parse
                             newSections.ParseImport(subReader);
                             break;
                         case SectionCode.Function:
-                            sections.Add(new Sections.Function(subReader));
+                            newSections.ParseFunction(subReader);
                             break;
                         case SectionCode.Table:
-                            sections.Add(new Table(subReader));
+                            newSections.ParseTable(subReader);
                             break;
                         case SectionCode.Memory:
-                            sections.Add(new Memory(subReader));
+                            newSections.ParseMemory(subReader);
                             break;
                         case SectionCode.Global:
                             sections.Add(new Global(subReader));
@@ -103,7 +104,7 @@ namespace SharpWasm.Internal.Parse
                             sections.Add(new Export(subReader));
                             break;
                         case SectionCode.Start:
-                            sections.Add(new Start(subReader));
+                            newSections.ParseStart(subReader);
                             break;
                         case SectionCode.Element:
                             sections.Add(new Element(subReader));

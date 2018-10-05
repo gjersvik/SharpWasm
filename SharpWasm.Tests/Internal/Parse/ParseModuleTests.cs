@@ -25,7 +25,7 @@ namespace SharpWasm.Tests.Internal.Parse
                 Assert.That(module.Memories, Is.Empty, "Memories");
                 Assert.That(module.Globals, Is.Empty, "Globals");
                 Assert.That(module.Exports, Is.Empty, "Exports");
-                Assert.That(module.Starts, Is.Empty, "Starts");
+                Assert.That(module.Starts, Is.Null, "Starts");
                 Assert.That(module.Elements, Is.Empty, "Elements");
                 Assert.That(module.Code, Is.Empty, "Code");
                 Assert.That(module.Data, Is.Empty, "Data");

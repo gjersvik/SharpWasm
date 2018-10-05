@@ -8,7 +8,6 @@ using SharpWasm.Internal.Parse.Sections;
 using Data = SharpWasm.Internal.Parse.Sections.Data;
 using Element = SharpWasm.Internal.Parse.Sections.Element;
 using Export = SharpWasm.Internal.Parse.Sections.Export;
-using FunctionSection = SharpWasm.Internal.Parse.Sections.Function;
 
 namespace SharpWasm.Internal
 {
@@ -16,8 +15,8 @@ namespace SharpWasm.Internal
     {
         private readonly ImmutableArray<FunctionType> _type;
         public readonly ImmutableArray<Import> Import;
-        private readonly FunctionSection _function;
-        public readonly Table Table;
+        private readonly ImmutableArray<uint> _function;
+        public readonly ImmutableArray<TableType> Table;
         public readonly Export Export;
         public readonly Element Element;
         private readonly CodeSection _code;
@@ -28,8 +27,8 @@ namespace SharpWasm.Internal
         {
             _type = parsed.Types;
             Import = parsed.Imports;
-            _function = parsed.Functions.FirstOrDefault() ?? FunctionSection.Empty;
-            Table = parsed.Tables.FirstOrDefault() ?? Table.Empty;
+            _function = parsed.Functions;
+            Table = parsed.Tables;
             Export = parsed.Exports.FirstOrDefault() ?? Export.Empty;
             Element = parsed.Elements.FirstOrDefault() ?? Element.Empty;
             _code = parsed.Code.FirstOrDefault() ?? CodeSection.Empty;
@@ -54,9 +53,9 @@ namespace SharpWasm.Internal
                     importFunctions[(int)id]);
             }
 
-            var baseId = (int) (id - importFunctions.Length);
-            return new Function(id, _code.Bodies[baseId].Code, _type[(int) _function.Types[baseId]],
-                _function.Types[baseId]);
+            var baseId = (int) (id - Import.Count(i => i.Type == ExternalKind.Function));
+            return new Function(id, _code.Bodies[baseId].Code, _type[(int) _function[baseId]],
+                _function[baseId]);
         }
 
         [ExcludeFromCodeCoverage]
