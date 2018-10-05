@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using SharpWasm.Core.Segments;
 using SharpWasm.Internal;
-using SharpWasm.Internal.Parse.Sections;
 
 namespace SharpWasm
 {
@@ -29,9 +29,9 @@ namespace SharpWasm
             return _functions[importFunc.Module + "." + importFunc.Field](instance,param);
         }
 
-        internal WebAssemblyMemory GetMemory(ImportEntryMemory import)
+        internal WebAssemblyMemory GetMemory(Import import)
         {
-            return _memories[import.ModuleStr + "." + import.FieldStr];
+            return _memories[import.Module + "." + import.Name];
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using SharpWasm.Core.Types;
 using SharpWasm.Internal;
 
 namespace SharpWasm
@@ -19,7 +20,7 @@ namespace SharpWasm
             Imports = imports;
             _vm = new VirtualMachine(this);
 
-            var memoryImport = Module.Import?.Memory;
+            var memoryImport = Module.Import.SingleOrDefault(i => i.Type == ExternalKind.Memory);
             if (memoryImport != null)
             {
                 Memory = Imports.GetMemory(memoryImport);

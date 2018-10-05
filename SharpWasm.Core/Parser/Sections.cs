@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.IO;
+using SharpWasm.Core.Segments;
 using SharpWasm.Core.Types;
 
 namespace SharpWasm.Core.Parser
@@ -8,6 +9,7 @@ namespace SharpWasm.Core.Parser
     {
         public ImmutableDictionary<string, ImmutableArray<byte>> Custom { get; private set; } = ImmutableDictionary<string, ImmutableArray<byte>>.Empty;
         public ImmutableArray<FunctionType> Type { get; private set; } = ImmutableArray<FunctionType>.Empty;
+        public ImmutableArray<Import> Import { get; private set; } = ImmutableArray<Import>.Empty;
 
         public void ParseCustom(BinaryReader reader)
         {
@@ -22,6 +24,11 @@ namespace SharpWasm.Core.Parser
         public void ParseType(BinaryReader reader)
         {
             Type = Values.ToVector(reader, TypeParser.ToFunctionType);
+        }
+
+        public void ParseImport(BinaryReader reader)
+        {
+            Import = Values.ToVector(reader, SegmentsParser.ToImport);
         }
     }
 }

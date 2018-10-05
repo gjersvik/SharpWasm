@@ -4,8 +4,13 @@ using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using SharpWasm.Core.Parser;
+using SharpWasm.Core.Segments;
 using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse.Sections;
+using Data = SharpWasm.Internal.Parse.Sections.Data;
+using Element = SharpWasm.Internal.Parse.Sections.Element;
+using Export = SharpWasm.Internal.Parse.Sections.Export;
+using Global = SharpWasm.Internal.Parse.Sections.Global;
 
 namespace SharpWasm.Internal.Parse
 {
@@ -46,8 +51,8 @@ namespace SharpWasm.Internal.Parse
 
             Customs = newSections.Custom;
             Types = newSections.Type;
+            Imports = newSections.Import;
             // ReSharper disable ImpureMethodCallOnReadonlyValueField
-            Imports = ClassicSections.OfType<Import>().ToImmutableArray();
             Functions = ClassicSections.OfType<Sections.Function>().ToImmutableArray();
             Tables = ClassicSections.OfType<Table>().ToImmutableArray();
             Memories = ClassicSections.OfType<Memory>().ToImmutableArray();
@@ -80,7 +85,7 @@ namespace SharpWasm.Internal.Parse
                             newSections.ParseType(subReader);
                             break;
                         case SectionCode.Import:
-                            sections.Add(new Import(subReader));
+                            newSections.ParseImport(subReader);
                             break;
                         case SectionCode.Function:
                             sections.Add(new Sections.Function(subReader));

@@ -1,9 +1,13 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using SharpWasm.Core.Segments;
 using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse;
 using SharpWasm.Internal.Parse.Sections;
+using Data = SharpWasm.Internal.Parse.Sections.Data;
+using Element = SharpWasm.Internal.Parse.Sections.Element;
+using Export = SharpWasm.Internal.Parse.Sections.Export;
 using FunctionSection = SharpWasm.Internal.Parse.Sections.Function;
 
 namespace SharpWasm.Internal
@@ -11,7 +15,7 @@ namespace SharpWasm.Internal
     internal class Module
     {
         private readonly ImmutableArray<FunctionType> _type;
-        public readonly Import Import;
+        public readonly ImmutableArray<Import> Import;
         private readonly FunctionSection _function;
         public readonly Table Table;
         public readonly Export Export;
@@ -23,7 +27,7 @@ namespace SharpWasm.Internal
         public Module(ParseModule parsed)
         {
             _type = parsed.Types;
-            Import = parsed.Imports.FirstOrDefault() ?? Import.Empty;
+            Import = parsed.Imports;
             _function = parsed.Functions.FirstOrDefault() ?? FunctionSection.Empty;
             Table = parsed.Tables.FirstOrDefault() ?? Table.Empty;
             Export = parsed.Exports.FirstOrDefault() ?? Export.Empty;
@@ -40,14 +44,17 @@ namespace SharpWasm.Internal
 
         public AFunction GetFunction(uint id)
         {
-            if (id < Import.Functions.Length)
+            var imports = Import.Where(i => i.Type == ExternalKind.Function).ToImmutableArray();
+            var importFunctions = Import.Where(i => i.Function != null).Select(i => i.Function).Cast<uint>()
+                .ToImmutableArray();
+            if (id < imports.Length)
             {
-                var import = Import.Functions[(int) id];
-                return new ImportFunction(id, _type[(int) import.Type], import.ModuleStr, import.FieldStr,
-                    import.Type);
+                var import = imports[(int) id];
+                return new ImportFunction(id, _type[(int)importFunctions[(int)id]], import.Module, import.Name,
+                    importFunctions[(int)id]);
             }
 
-            var baseId = (int) (id - Import.Functions.Length);
+            var baseId = (int) (id - importFunctions.Length);
             return new Function(id, _code.Bodies[baseId].Code, _type[(int) _function.Types[baseId]],
                 _function.Types[baseId]);
         }
