@@ -21,5 +21,17 @@ namespace SharpWasm.Tests.Core.Parser
             Assert.That(memory, Is.EqualTo(new[] {TestValues.MemoryType, TestValues.MemoryType}).AsCollection,
                 "Entries");
         }
+
+        [Test]
+        public void Start()
+        {
+            const string hex = "2A";
+            var sections = new Sections();
+            using (var reader = BinaryTools.HexToReader(hex))
+            {
+                sections.ParseStart(reader);
+            }
+            Assert.That(sections.Start, Is.EqualTo(42));
+        }
     }
 }
