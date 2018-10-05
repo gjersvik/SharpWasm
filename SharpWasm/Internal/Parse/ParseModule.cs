@@ -18,7 +18,7 @@ namespace SharpWasm.Internal.Parse
         public readonly ImmutableDictionary<string, ImmutableArray<byte>> Customs;
         public readonly ImmutableArray<FunctionType> Types;
         public readonly ImmutableArray<Import> Imports;
-        public readonly ImmutableArray<Sections.Function> Functions;
+        public readonly ImmutableArray<uint> Functions;
         public readonly ImmutableArray<Table> Tables;
         public readonly ImmutableArray<Memory> Memories;
         public readonly ImmutableArray<Global> Globals;
@@ -46,9 +46,10 @@ namespace SharpWasm.Internal.Parse
 
             Customs = newSections.Custom;
             Types = newSections.Type;
+
+            Functions = newSections.Function;
             // ReSharper disable ImpureMethodCallOnReadonlyValueField
             Imports = ClassicSections.OfType<Import>().ToImmutableArray();
-            Functions = ClassicSections.OfType<Sections.Function>().ToImmutableArray();
             Tables = ClassicSections.OfType<Table>().ToImmutableArray();
             Memories = ClassicSections.OfType<Memory>().ToImmutableArray();
             Globals = ClassicSections.OfType<Global>().ToImmutableArray();
@@ -83,7 +84,7 @@ namespace SharpWasm.Internal.Parse
                             sections.Add(new Import(subReader));
                             break;
                         case SectionCode.Function:
-                            sections.Add(new Sections.Function(subReader));
+                            newSections.ParseFunction(subReader);
                             break;
                         case SectionCode.Table:
                             sections.Add(new Table(subReader));

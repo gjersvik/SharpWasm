@@ -9,6 +9,8 @@ namespace SharpWasm.Core.Parser
         public ImmutableDictionary<string, ImmutableArray<byte>> Custom { get; private set; } = ImmutableDictionary<string, ImmutableArray<byte>>.Empty;
         public ImmutableArray<FunctionType> Type { get; private set; } = ImmutableArray<FunctionType>.Empty;
 
+        public ImmutableArray<uint> Function { get; private set; } = ImmutableArray<uint>.Empty;
+
         public void ParseCustom(BinaryReader reader)
         {
             var name = Values.ToName(reader);
@@ -22,6 +24,11 @@ namespace SharpWasm.Core.Parser
         public void ParseType(BinaryReader reader)
         {
             Type = Values.ToVector(reader, TypeParser.ToFunctionType);
+        }
+
+        public void ParseFunction(BinaryReader reader)
+        {
+            Function = Values.ToVector(reader, Values.ToUInt);
         }
     }
 }

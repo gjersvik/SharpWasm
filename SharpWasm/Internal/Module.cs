@@ -4,7 +4,6 @@ using System.Linq;
 using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse;
 using SharpWasm.Internal.Parse.Sections;
-using FunctionSection = SharpWasm.Internal.Parse.Sections.Function;
 
 namespace SharpWasm.Internal
 {
@@ -12,7 +11,7 @@ namespace SharpWasm.Internal
     {
         private readonly ImmutableArray<FunctionType> _type;
         public readonly Import Import;
-        private readonly FunctionSection _function;
+        private readonly ImmutableArray<uint> _function;
         public readonly Table Table;
         public readonly Export Export;
         public readonly Element Element;
@@ -24,7 +23,7 @@ namespace SharpWasm.Internal
         {
             _type = parsed.Types;
             Import = parsed.Imports.FirstOrDefault() ?? Import.Empty;
-            _function = parsed.Functions.FirstOrDefault() ?? FunctionSection.Empty;
+            _function = parsed.Functions;
             Table = parsed.Tables.FirstOrDefault() ?? Table.Empty;
             Export = parsed.Exports.FirstOrDefault() ?? Export.Empty;
             Element = parsed.Elements.FirstOrDefault() ?? Element.Empty;
@@ -48,8 +47,8 @@ namespace SharpWasm.Internal
             }
 
             var baseId = (int) (id - Import.Functions.Length);
-            return new Function(id, _code.Bodies[baseId].Code, _type[(int) _function.Types[baseId]],
-                _function.Types[baseId]);
+            return new Function(id, _code.Bodies[baseId].Code, _type[(int) _function[baseId]],
+                _function[baseId]);
         }
 
         [ExcludeFromCodeCoverage]
