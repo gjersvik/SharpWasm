@@ -12,7 +12,7 @@ namespace SharpWasm.Internal
         private readonly ImmutableArray<FunctionType> _type;
         public readonly Import Import;
         private readonly ImmutableArray<uint> _function;
-        public readonly Table Table;
+        public readonly ImmutableArray<TableType> Table;
         public readonly Export Export;
         public readonly Element Element;
         private readonly CodeSection _code;
@@ -24,7 +24,7 @@ namespace SharpWasm.Internal
             _type = parsed.Types;
             Import = parsed.Imports.FirstOrDefault() ?? Import.Empty;
             _function = parsed.Functions;
-            Table = parsed.Tables.FirstOrDefault() ?? Table.Empty;
+            Table = parsed.Tables;
             Export = parsed.Exports.FirstOrDefault() ?? Export.Empty;
             Element = parsed.Elements.FirstOrDefault() ?? Element.Empty;
             _code = parsed.Code.FirstOrDefault() ?? CodeSection.Empty;

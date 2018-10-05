@@ -30,7 +30,7 @@ namespace SharpWasm
             }
 
             var table = Module.Table;
-            Table = new WebAssemblyTable(table.Entries.FirstOrDefault()?.Limits.Min ?? 0);
+            Table = new WebAssemblyTable(table.FirstOrDefault()?.Limits.Min ?? 0);
             foreach (var segment in module.Element.Entries)
             {
                 Table.Write(segment);

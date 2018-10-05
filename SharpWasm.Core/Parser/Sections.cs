@@ -6,10 +6,12 @@ namespace SharpWasm.Core.Parser
 {
     internal class Sections
     {
-        public ImmutableDictionary<string, ImmutableArray<byte>> Custom { get; private set; } = ImmutableDictionary<string, ImmutableArray<byte>>.Empty;
-        public ImmutableArray<FunctionType> Type { get; private set; } = ImmutableArray<FunctionType>.Empty;
+        public ImmutableDictionary<string, ImmutableArray<byte>> Custom { get; private set; } =
+            ImmutableDictionary<string, ImmutableArray<byte>>.Empty;
 
+        public ImmutableArray<FunctionType> Type { get; private set; } = ImmutableArray<FunctionType>.Empty;
         public ImmutableArray<uint> Function { get; private set; } = ImmutableArray<uint>.Empty;
+        public ImmutableArray<TableType> Table { get; private set; } = ImmutableArray<TableType>.Empty;
 
         public void ParseCustom(BinaryReader reader)
         {
@@ -29,6 +31,11 @@ namespace SharpWasm.Core.Parser
         public void ParseFunction(BinaryReader reader)
         {
             Function = Values.ToVector(reader, Values.ToUInt);
+        }
+
+        public void ParseTable(BinaryReader reader)
+        {
+            Table = Values.ToVector(reader, TypeParser.ToTableType);
         }
     }
 }
