@@ -32,5 +32,13 @@ namespace SharpWasm.Core.Parser
             var initExpr = CodeParser.ToInitExpr(reader);
             return new Global(type, initExpr);
         }
+
+        public static Export ToExport(BinaryReader reader)
+        {
+            var name = Values.ToName(reader);
+            var externalKind = TypeParser.ToExternalKind(reader);
+            var index = Values.ToUInt(reader);
+            return new Export(name, externalKind, index);
+        }
     }
 }

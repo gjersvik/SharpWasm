@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using SharpWasm.Core.Parser;
 using SharpWasm.Core.Segments;
+using SharpWasm.Core.Types;
 using SharpWasm.Tests.Helpers;
 
 namespace SharpWasm.Tests.Core.Parser
@@ -56,6 +57,24 @@ namespace SharpWasm.Tests.Core.Parser
             {
                 Assert.That(globalEntry.Type, Is.EqualTo(TestValues.GlobalType), "Type");
                 Assert.That(globalEntry.Init, Is.EqualTo(TestValues.InitExpr).AsCollection, "Init");
+            });
+        }
+
+        [Test]
+        public void ToExport()
+        {
+            const string hex = TestValues.TestStringHex + "0002";
+            Export exportEntry;
+            using (var reader = BinaryTools.HexToReader(hex))
+            {
+                exportEntry = SegmentsParser.ToExport(reader);
+            }
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(exportEntry.Name, Is.EqualTo("test"), "Name");
+                Assert.That(exportEntry.Type, Is.EqualTo(ExternalKind.Function), "Type");
+                Assert.That(exportEntry.Index, Is.EqualTo(2), "Index");
             });
         }
     }

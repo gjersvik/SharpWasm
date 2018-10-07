@@ -29,8 +29,8 @@ namespace SharpWasm.Tests.Helpers
 
         public const string TestStringHex = "0474657374";
 
-        public static readonly ExportEntry ExportEntry = new ExportEntry("test", ExternalKind.Function, 02);
-        public const string ExportEntryHex = TestStringHex + "0002";
+        public static readonly Export Export = new Export("test", ExternalKind.Function, 02);
+        public const string ExportHex = TestStringHex + "0002";
 
         public static readonly ElementSegment ElementSegment = new ElementSegment(InitExpr, new uint[] { 1, 2, 42 });
         public const string ElementSegmentHex = "00" + InitExprHex + "0301022A";

@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
+using SharpWasm.Core.Segments;
 using SharpWasm.Core.Types;
-using SharpWasm.Internal.Parse.Sections;
 
 namespace SharpWasm
 {
@@ -16,7 +16,7 @@ namespace SharpWasm
             _name = name;
         }
 
-        internal ModuleExportDescriptor(ExportEntry export): this(export.ExternalKind, export.FieldStr)
+        internal ModuleExportDescriptor(Export export): this(export.Type, export.Name)
         {
 
         }

@@ -7,7 +7,6 @@ using SharpWasm.Internal.Parse;
 using SharpWasm.Internal.Parse.Sections;
 using Data = SharpWasm.Internal.Parse.Sections.Data;
 using Element = SharpWasm.Internal.Parse.Sections.Element;
-using Export = SharpWasm.Internal.Parse.Sections.Export;
 
 namespace SharpWasm.Internal
 {
@@ -17,7 +16,7 @@ namespace SharpWasm.Internal
         public readonly ImmutableArray<Import> Import;
         private readonly ImmutableArray<uint> _function;
         public readonly ImmutableArray<TableType> Table;
-        public readonly Export Export;
+        public readonly ImmutableArray<Export> Export;
         public readonly Element Element;
         private readonly CodeSection _code;
         public readonly Data Data;
@@ -29,7 +28,7 @@ namespace SharpWasm.Internal
             Import = parsed.Imports;
             _function = parsed.Functions;
             Table = parsed.Tables;
-            Export = parsed.Exports.FirstOrDefault() ?? Export.Empty;
+            Export = parsed.Exports;
             Element = parsed.Elements.FirstOrDefault() ?? Element.Empty;
             _code = parsed.Code.FirstOrDefault() ?? CodeSection.Empty;
             Data = parsed.Data.FirstOrDefault() ?? Data.Empty;
@@ -49,8 +48,8 @@ namespace SharpWasm.Internal
             if (id < imports.Length)
             {
                 var import = imports[(int) id];
-                return new ImportFunction(id, _type[(int)importFunctions[(int)id]], import.Module, import.Name,
-                    importFunctions[(int)id]);
+                return new ImportFunction(id, _type[(int) importFunctions[(int) id]], import.Module, import.Name,
+                    importFunctions[(int) id]);
             }
 
             var baseId = (int) (id - Import.Count(i => i.Type == ExternalKind.Function));
@@ -61,7 +60,8 @@ namespace SharpWasm.Internal
         [ExcludeFromCodeCoverage]
         public Function GetFunction(string name)
         {
-            var possibleIndex = Export.Func(name);
+            var possibleIndex = Export.Where(e => e.Type == ExternalKind.Function).SingleOrDefault(e => e.Name == name)
+                ?.Index;
             if (possibleIndex is uint index) return GetFunction(index) as Function;
             return null;
         }

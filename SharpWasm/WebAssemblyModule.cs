@@ -13,7 +13,7 @@ namespace SharpWasm
 
         public IEnumerable<ModuleExportDescriptor> Exports()
         {
-            return _module.Export.Entries.Select(e => new ModuleExportDescriptor(e));
+            return _module.Export.Select(e => new ModuleExportDescriptor(e));
         }
 
         private readonly Module _module;
