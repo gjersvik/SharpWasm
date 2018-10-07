@@ -32,8 +32,8 @@ namespace SharpWasm.Tests.Helpers
         public static readonly Export Export = new Export("test", ExternalKind.Function, 02);
         public const string ExportHex = TestStringHex + "0002";
 
-        public static readonly ElementSegment ElementSegment = new ElementSegment(InitExpr, new uint[] { 1, 2, 42 });
-        public const string ElementSegmentHex = "00" + InitExprHex + "0301022A";
+        public static readonly Element Element = new Element(0,InitExpr, new uint[] { 1, 2, 42 });
+        public const string ElementHex = "00" + InitExprHex + "0301022A";
 
         public static readonly LocalEntry LocalEntry = new LocalEntry(10, ValueType.I32);
         public const string LocalEntryHex = "0A7F";

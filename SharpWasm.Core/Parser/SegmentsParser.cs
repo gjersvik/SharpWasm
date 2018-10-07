@@ -40,5 +40,13 @@ namespace SharpWasm.Core.Parser
             var index = Values.ToUInt(reader);
             return new Export(name, externalKind, index);
         }
+
+        public static Element ToElement(BinaryReader reader)
+        {
+            var index = Values.ToUInt(reader);
+            var offset = CodeParser.ToInitExpr(reader);
+            var elements = Values.ToVector(reader, Values.ToUInt);
+            return new Element(index, offset, elements);
+        }
     }
 }

@@ -6,7 +6,6 @@ using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse;
 using SharpWasm.Internal.Parse.Sections;
 using Data = SharpWasm.Internal.Parse.Sections.Data;
-using Element = SharpWasm.Internal.Parse.Sections.Element;
 
 namespace SharpWasm.Internal
 {
@@ -17,7 +16,7 @@ namespace SharpWasm.Internal
         private readonly ImmutableArray<uint> _function;
         public readonly ImmutableArray<TableType> Table;
         public readonly ImmutableArray<Export> Export;
-        public readonly Element Element;
+        public readonly ImmutableArray<Element> Element;
         private readonly CodeSection _code;
         public readonly Data Data;
         private readonly ImmutableDictionary<string, ImmutableArray<byte>> _custom;
@@ -29,7 +28,7 @@ namespace SharpWasm.Internal
             _function = parsed.Functions;
             Table = parsed.Tables;
             Export = parsed.Exports;
-            Element = parsed.Elements.FirstOrDefault() ?? Element.Empty;
+            Element = parsed.Elements;
             _code = parsed.Code.FirstOrDefault() ?? CodeSection.Empty;
             Data = parsed.Data.FirstOrDefault() ?? Data.Empty;
             _custom = parsed.Customs;

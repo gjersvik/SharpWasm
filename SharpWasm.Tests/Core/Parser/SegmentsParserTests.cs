@@ -77,5 +77,23 @@ namespace SharpWasm.Tests.Core.Parser
                 Assert.That(exportEntry.Index, Is.EqualTo(2), "Index");
             });
         }
+
+        [Test]
+        public void ToElement()
+        {
+            const string hex = "00" + TestValues.InitExprHex + "0301022A";
+            Element elementSegment;
+            using (var reader = BinaryTools.HexToReader(hex))
+            {
+                elementSegment = SegmentsParser.ToElement(reader);
+            }
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(elementSegment.Table, Is.EqualTo(0), "Table");
+                Assert.That(elementSegment.Offset, Is.EqualTo(TestValues.InitExpr).AsCollection, "Offset");
+                Assert.That(elementSegment.Init, Is.EqualTo(new uint[] { 1, 2, 42 }), "Init");
+            });
+        }
     }
 }
