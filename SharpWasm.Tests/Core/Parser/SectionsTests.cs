@@ -33,5 +33,18 @@ namespace SharpWasm.Tests.Core.Parser
             }
             Assert.That(sections.Start, Is.EqualTo(42));
         }
+
+        [Test]
+        public void Global()
+        {
+            const string hex = "02" + TestValues.GlobalHex + TestValues.GlobalHex;
+            var sections = new Sections();
+            using (var reader = BinaryTools.HexToReader(hex))
+            {
+                sections.ParseGlobal(reader);
+            }
+            Assert.That(sections.Global,
+                Is.EqualTo(new[] { TestValues.Global, TestValues.Global }).AsCollection, "Entries");
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpWasm.Core.Parser;
+using SharpWasm.Core.Segments;
 using SharpWasm.Tests.Helpers;
 
 namespace SharpWasm.Tests.Core.Parser
@@ -9,7 +10,7 @@ namespace SharpWasm.Tests.Core.Parser
     public class SegmentsParserTests
     {
         [Test]
-        public void ParseWrongKind()
+        public void ToImportWrongKind()
         {
             const string hex = "0161016204";
             using (var reader = BinaryTools.HexToReader(hex))
@@ -20,7 +21,7 @@ namespace SharpWasm.Tests.Core.Parser
         }
 
         [Test]
-        public void ParseTable()
+        public void ToImportTable()
         {
             const string hex = "0161016201" + TestValues.TableTypeHex;
             using (var reader = BinaryTools.HexToReader(hex))
@@ -31,7 +32,7 @@ namespace SharpWasm.Tests.Core.Parser
         }
 
         [Test]
-        public void ParseGlobal()
+        public void ToImportGlobal()
         {
             const string hex = "0161016203" + TestValues.GlobalTypeHex;
             using (var reader = BinaryTools.HexToReader(hex))
@@ -39,6 +40,23 @@ namespace SharpWasm.Tests.Core.Parser
                 var import = SegmentsParser.ToImport(reader);
                 Assert.That(import.Global, Is.EqualTo(TestValues.GlobalType));
             }
+        }
+
+        [Test]
+        public void ToGlobal()
+        {
+            const string hex = TestValues.GlobalTypeHex + TestValues.InitExprHex;
+            Global globalEntry;
+            using (var reader = BinaryTools.HexToReader(hex))
+            {
+                globalEntry = SegmentsParser.ToGlobal(reader);
+            }
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(globalEntry.Type, Is.EqualTo(TestValues.GlobalType), "Type");
+                Assert.That(globalEntry.Init, Is.EqualTo(TestValues.InitExpr).AsCollection, "Init");
+            });
         }
     }
 }

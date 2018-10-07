@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using SharpWasm.Core.Code;
+using SharpWasm.Core.Segments;
 using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse.Code;
 using SharpWasm.Internal.Parse.Sections;
@@ -23,8 +24,8 @@ namespace SharpWasm.Tests.Helpers
             ImmutableArray.Create<IInstruction>(Instruction.I32Const(42), Instruction.End);
         public const string InitExprHex = "412A0B";
 
-        public static readonly GlobalEntry GlobalEntry = new GlobalEntry(GlobalType, InitExpr);
-        public const string GlobalEntryHex = GlobalTypeHex + InitExprHex;
+        public static readonly Global Global = new Global(GlobalType, InitExpr);
+        public const string GlobalHex = GlobalTypeHex + InitExprHex;
 
         public const string TestStringHex = "0474657374";
 

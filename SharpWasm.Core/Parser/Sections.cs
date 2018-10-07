@@ -15,6 +15,7 @@ namespace SharpWasm.Core.Parser
         public ImmutableArray<uint> Function { get; private set; } = ImmutableArray<uint>.Empty;
         public ImmutableArray<TableType> Table { get; private set; } = ImmutableArray<TableType>.Empty;
         public ImmutableArray<MemoryType> Memory { get; private set; } = ImmutableArray<MemoryType>.Empty;
+        public ImmutableArray<Global> Global { get; private set; } = ImmutableArray<Global>.Empty;
         public uint? Start { get; private set; }
 
         public void ParseCustom(BinaryReader reader)
@@ -50,6 +51,11 @@ namespace SharpWasm.Core.Parser
         public void ParseMemory(BinaryReader reader)
         {
             Memory = Values.ToVector(reader, TypeParser.ToMemoryType);
+        }
+
+        public void ParseGlobal(BinaryReader reader)
+        {
+            Global = Values.ToVector(reader, SegmentsParser.ToGlobal);
         }
 
         public void ParseStart(BinaryReader reader)

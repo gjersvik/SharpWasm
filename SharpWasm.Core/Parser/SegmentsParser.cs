@@ -25,5 +25,12 @@ namespace SharpWasm.Core.Parser
                     throw new NotImplementedException();
             }
         }
+
+        public static Global ToGlobal(BinaryReader reader)
+        {
+            var type = TypeParser.ToGlobalType(reader);
+            var initExpr = CodeParser.ToInitExpr(reader);
+            return new Global(type, initExpr);
+        }
     }
 }
