@@ -11,12 +11,12 @@ namespace SharpWasm.Tests.Internal.Parse.Code
         public void Properties()
         {
             var functionBody = new FunctionBody(new[] {TestValues.LocalEntry, TestValues.LocalEntry},
-                TestValues.InitExprOps);
+                TestValues.InitExpr);
             Assert.Multiple(() =>
             {
                 Assert.That(functionBody.LocalCount, Is.EqualTo(2), "LocalCount");
                 Assert.That(functionBody.Locals, Is.EqualTo(new[] {TestValues.LocalEntry, TestValues.LocalEntry}));
-                Assert.That(functionBody.Code, Is.EqualTo(TestValues.InitExprOps), "Code");
+                Assert.That(functionBody.Code, Is.EqualTo(TestValues.InitExpr), "Code");
             });
         }
 
@@ -35,7 +35,7 @@ namespace SharpWasm.Tests.Internal.Parse.Code
                 Assert.That(functionBody.BodySize, Is.EqualTo(8), "BodySize");
                 Assert.That(functionBody.LocalCount, Is.EqualTo(2), "LocalCount");
                 Assert.That(functionBody.Locals, Is.EqualTo(new[] {TestValues.LocalEntry, TestValues.LocalEntry}));
-                Assert.That(functionBody.Code, Is.EqualTo(TestValues.InitExprOps).AsCollection, "Code");
+                Assert.That(functionBody.Code, Is.EqualTo(TestValues.InitExpr).AsCollection, "Code");
             });
         }
 
@@ -43,9 +43,9 @@ namespace SharpWasm.Tests.Internal.Parse.Code
         public void Equals()
         {
             var a = new FunctionBody(new[] {TestValues.LocalEntry, TestValues.LocalEntry},
-                TestValues.InitExprOps);
+                TestValues.InitExpr);
             var b = new FunctionBody(new[] {TestValues.LocalEntry, TestValues.LocalEntry},
-                TestValues.InitExprOps);
+                TestValues.InitExpr);
             Assert.That(a.Equals(a), Is.True);
             Assert.That(a.Equals(b), Is.True);
             Assert.That(a.Equals(null), Is.False);

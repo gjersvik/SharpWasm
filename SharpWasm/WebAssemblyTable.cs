@@ -22,7 +22,7 @@ namespace SharpWasm
 
         internal void Write(ElementSegment segment)
         {
-            var offset = ((Instruction<int>)segment.Offset.Instructions[0]).Immediate;
+            var offset = ((Instruction<int>)segment.Offset[0]).Immediate;
 
             Array.Copy(segment.Elements.ToArray(), 0, _functions, offset, segment.Elements.Length);
         }

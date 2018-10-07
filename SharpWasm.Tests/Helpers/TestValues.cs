@@ -3,7 +3,6 @@ using SharpWasm.Core.Code;
 using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse.Code;
 using SharpWasm.Internal.Parse.Sections;
-using SharpWasm.Internal.Parse.Types;
 using GlobalType = SharpWasm.Core.Types.GlobalType;
 using TableType = SharpWasm.Core.Types.TableType;
 using ValueType = SharpWasm.Core.Types.ValueType;
@@ -20,11 +19,9 @@ namespace SharpWasm.Tests.Helpers
         public static readonly GlobalType GlobalType = new GlobalType(ValueType.I32,false);
         public const string MemoryTypeHex = LimitsHex;
         public static readonly MemoryType MemoryType = new MemoryType(Limits);
-        public static readonly InitExpr InitExpr = new InitExpr(new IInstruction[]{Instruction.I32Const(42), Instruction.End});
-        public const string InitExprHex = "412A0B";
-
-        public static readonly ImmutableArray<IInstruction> InitExprOps =
+        public static readonly ImmutableArray<IInstruction> InitExpr =
             ImmutableArray.Create<IInstruction>(Instruction.I32Const(42), Instruction.End);
+        public const string InitExprHex = "412A0B";
 
         public static readonly GlobalEntry GlobalEntry = new GlobalEntry(GlobalType, InitExpr);
         public const string GlobalEntryHex = GlobalTypeHex + InitExprHex;

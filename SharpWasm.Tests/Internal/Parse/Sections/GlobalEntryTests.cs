@@ -31,7 +31,7 @@ namespace SharpWasm.Tests.Internal.Parse.Sections
             Assert.Multiple(() =>
             {
                 Assert.That(globalEntry.Type, Is.EqualTo(TestValues.GlobalType), "Type");
-                Assert.That(globalEntry.InitExpr, Is.EqualTo(TestValues.InitExpr), "InitExpr");
+                Assert.That(globalEntry.InitExpr, Is.EqualTo(TestValues.InitExpr).AsCollection, "InitExpr");
             });
         }
 

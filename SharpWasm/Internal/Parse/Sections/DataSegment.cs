@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
-using JetBrains.Annotations;
+using SharpWasm.Core.Code;
 using SharpWasm.Core.Parser;
 
 namespace SharpWasm.Internal.Parse.Sections
@@ -11,11 +11,11 @@ namespace SharpWasm.Internal.Parse.Sections
     internal class DataSegment: IEquatable<DataSegment>
     {
         public readonly uint Index;
-        [NotNull] public readonly Types.InitExpr Offset;
+        public readonly ImmutableArray<IInstruction> Offset;
         public readonly uint Size;
         public readonly ImmutableArray<byte> Data;
 
-        public DataSegment(Types.InitExpr offset, IEnumerable<byte> data)
+        public DataSegment(ImmutableArray<IInstruction> offset, IEnumerable<byte> data)
         {
             Index = 0;
             Offset = offset;
@@ -26,7 +26,7 @@ namespace SharpWasm.Internal.Parse.Sections
         public DataSegment(BinaryReader reader)
         {
             Index = Values.ToUInt(reader);
-            Offset = new Types.InitExpr(reader);
+            Offset = CodeParser.ToInitExpr(reader);
             Size = Values.ToUInt(reader);
             Data = ParseTools.ToBytes(reader,Size);
         }
@@ -35,7 +35,7 @@ namespace SharpWasm.Internal.Parse.Sections
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Index == other.Index && Offset.Equals(other.Offset) && Size == other.Size && Data.SequenceEqual(other.Data);
+            return Index == other.Index && Offset.SequenceEqual(other.Offset) && Size == other.Size && Data.SequenceEqual(other.Data);
         }
 
         public override bool Equals(object obj)
@@ -50,7 +50,7 @@ namespace SharpWasm.Internal.Parse.Sections
             unchecked
             {
                 var hashCode = (int) Index;
-                hashCode = (hashCode * 397) ^ Offset.GetHashCode();
+                hashCode = (hashCode * 397) ^ Offset.Length;
                 hashCode = (hashCode * 397) ^ (int) Size;
                 return hashCode;
             }

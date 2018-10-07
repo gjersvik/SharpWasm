@@ -1,6 +1,8 @@
 ﻿
 using System;
+using System.Collections.Immutable;
 using System.IO;
+using System.Linq;
 using SharpWasm.Core.Code;
 
 namespace SharpWasm.Core.Parser
@@ -26,6 +28,19 @@ namespace SharpWasm.Core.Parser
             var flags = Values.ToUInt(reader);
             var offset = Values.ToUInt(reader);
             return new MemoryImmediate(flags, offset);
+        }
+
+        public static ImmutableArray<IInstruction> ToInitExpr(BinaryReader reader)
+        {
+            var builder = ImmutableArray.CreateBuilder<IInstruction>(2);
+            do
+            {
+                builder.Add(ToInstruction(reader));
+            } while (builder.Last().OpCode != OpCode.End);
+
+            builder.Capacity = builder.Count;
+
+            return builder.MoveToImmutable();
         }
 
         public static IInstruction ToInstruction(BinaryReader reader)

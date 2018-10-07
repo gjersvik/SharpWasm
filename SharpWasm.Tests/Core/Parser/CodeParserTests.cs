@@ -61,6 +61,18 @@ namespace SharpWasm.Tests.Core.Parser
             });
         }
 
+
+        [Test]
+        public void ToInitExpr()
+        {
+            const string hex = "412A0B";
+            using (var reader = BinaryTools.HexToReader(hex))
+            {
+                var initExpr = CodeParser.ToInitExpr(reader);
+                Assert.That(initExpr.Length, Is.EqualTo(2));
+            }
+        }
+
         [TestCase(OpCode.Unreachable)]
         [TestCase(OpCode.Nop)]
         [TestCase(OpCode.Else)]

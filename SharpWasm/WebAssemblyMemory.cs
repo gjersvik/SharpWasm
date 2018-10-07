@@ -23,7 +23,7 @@ namespace SharpWasm
 
         internal void Write(DataSegment segment)
         {
-            var offset = ((Instruction<int>)segment.Offset.Instructions[0]).Immediate;
+            var offset = ((Instruction<int>)segment.Offset[0]).Immediate;
 
             Array.Copy(segment.Data.ToArray(),0,_bytes, offset,segment.Data.Length);
         }

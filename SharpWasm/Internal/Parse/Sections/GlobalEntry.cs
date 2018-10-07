@@ -1,18 +1,20 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.IO;
+using System.Linq;
 using JetBrains.Annotations;
+using SharpWasm.Core.Code;
 using SharpWasm.Core.Parser;
 using SharpWasm.Core.Types;
-using SharpWasm.Internal.Parse.Types;
 
 namespace SharpWasm.Internal.Parse.Sections
 {
     internal class GlobalEntry: IEquatable<GlobalEntry>
     {
         [NotNull] public readonly GlobalType Type;
-        [NotNull] public readonly InitExpr InitExpr;
+        public readonly ImmutableArray<IInstruction> InitExpr;
 
-        public GlobalEntry(GlobalType type, InitExpr initExpr)
+        public GlobalEntry(GlobalType type, ImmutableArray<IInstruction> initExpr)
         {
             Type = type;
             InitExpr = initExpr;
@@ -21,14 +23,14 @@ namespace SharpWasm.Internal.Parse.Sections
         public GlobalEntry(BinaryReader reader)
         {
             Type = TypeParser.ToGlobalType(reader);
-            InitExpr = new InitExpr(reader);
+            InitExpr = CodeParser.ToInitExpr(reader);
         }
 
         public bool Equals(GlobalEntry other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Type.Equals(other.Type) && InitExpr.Equals(other.InitExpr);
+            return Type.Equals(other.Type) && InitExpr.SequenceEqual(other.InitExpr);
         }
 
         public override bool Equals(object obj)
@@ -42,7 +44,7 @@ namespace SharpWasm.Internal.Parse.Sections
         {
             unchecked
             {
-                return (Type.GetHashCode() * 397) ^ InitExpr.GetHashCode();
+                return (Type.GetHashCode() * 397) ^ InitExpr.Length;
             }
         }
 

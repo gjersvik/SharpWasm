@@ -13,4 +13,8 @@
     <ProjectReference Include="..\SharpWasm.Core\SharpWasm.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Internal\Parse\Types\" />
+  </ItemGroup>
+
 </Project>

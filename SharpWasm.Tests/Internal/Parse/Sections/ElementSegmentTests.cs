@@ -33,7 +33,7 @@ namespace SharpWasm.Tests.Internal.Parse.Sections
             Assert.Multiple(() =>
             {
                 Assert.That(elementSegment.Index, Is.EqualTo(0), "Index");
-                Assert.That(elementSegment.Offset, Is.EqualTo(TestValues.InitExpr), "Offset");
+                Assert.That(elementSegment.Offset, Is.EqualTo(TestValues.InitExpr).AsCollection, "Offset");
                 Assert.That(elementSegment.NumElem, Is.EqualTo(3), "NumElem");
                 Assert.That(elementSegment.Elements, Is.EqualTo(new uint[] { 1, 2, 42 }), "Elements");
             });
