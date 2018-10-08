@@ -95,5 +95,15 @@ namespace SharpWasm.Tests.Core.Parser
                 Assert.That(elementSegment.Init, Is.EqualTo(new uint[] { 1, 2, 42 }), "Init");
             });
         }
+
+        [Test]
+        public void ToLocals()
+        {
+            using (var reader = BinaryTools.HexToReader(TestValues.LocalHex))
+            {
+                Assert.That(SegmentsParser.ToLocals(reader, out var length), Is.EqualTo(TestValues.Local).AsCollection);
+                Assert.That(length, Is.EqualTo(TestValues.LocalHex.Length / 2));
+            }
+        }
     }
 }

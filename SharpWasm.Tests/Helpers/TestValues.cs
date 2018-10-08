@@ -35,10 +35,12 @@ namespace SharpWasm.Tests.Helpers
         public static readonly Element Element = new Element(0,InitExpr, new uint[] { 1, 2, 42 });
         public const string ElementHex = "00" + InitExprHex + "0301022A";
 
-        public static readonly LocalEntry LocalEntry = new LocalEntry(10, ValueType.I32);
-        public const string LocalEntryHex = "0A7F";
+        public static readonly ImmutableArray<ValueType> Local = ImmutableArray.Create(ValueType.I32, ValueType.I64,
+            ValueType.I64, ValueType.F32, ValueType.F32, ValueType.F32, ValueType.F64, ValueType.F64, ValueType.F64,
+            ValueType.F64);
+        public const string LocalHex = "04017F027E037D047C";
 
-        public static readonly FunctionBody FunctionBody = new FunctionBody(new[] { LocalEntry, LocalEntry },
+        public static readonly FunctionBody FunctionBody = new FunctionBody(new[] { ValueType.I32, ValueType.I32 },
             new IInstruction[] { Instruction.I32Const(42), Instruction.End });
 
         public static readonly DataSegment DataSegment = new DataSegment(InitExpr, new byte[] { 1, 2, 42 });

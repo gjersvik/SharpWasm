@@ -5,24 +5,22 @@ using System.IO;
 using System.Linq;
 using SharpWasm.Core.Code;
 using SharpWasm.Core.Parser;
+using ValueType = SharpWasm.Core.Types.ValueType;
 
 namespace SharpWasm.Internal.Parse.Code
 {
     internal class FunctionBody: IEquatable<FunctionBody>
     {
         public readonly uint BodySize;
-        public readonly uint LocalCount;
-        public readonly ImmutableArray<LocalEntry> Locals;
+        public readonly ImmutableArray<ValueType> Locals;
         public readonly ImmutableArray<IInstruction> Code;
 
         public FunctionBody(BinaryReader reader)
         {
             BodySize = Values.ToUInt(reader);
             var codeLength = BodySize;
-            LocalCount = Values.UnsignedVar(reader, out var count);
-            codeLength -= count;
-            Locals = ParseTools.ToArray(reader, LocalCount, r => new LocalEntry(r));
-            codeLength -= Locals.Select(l => l.Length).Aggregate(0U, (a, b) => a + b);
+            Locals = SegmentsParser.ToLocals(reader, out var length);
+            codeLength -= length;
 
             var builder = ImmutableArray.CreateBuilder<IInstruction>();
             using (var codeReader = ParseTools.ToReader(reader, codeLength))
@@ -37,10 +35,9 @@ namespace SharpWasm.Internal.Parse.Code
             Code = builder.MoveToImmutable();
         }
 
-        public FunctionBody(IEnumerable<LocalEntry> locals, IEnumerable<IInstruction> code)
+        public FunctionBody(IEnumerable<ValueType> locals, IEnumerable<IInstruction> code)
         {
             Locals = locals.ToImmutableArray();
-            LocalCount = (uint) Locals.Length;
             Code = code.ToImmutableArray();
             BodySize = (uint) Code.Length;
         }
@@ -49,7 +46,7 @@ namespace SharpWasm.Internal.Parse.Code
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
-            return BodySize == other.BodySize && LocalCount == other.LocalCount && Locals.SequenceEqual(other.Locals) && Code.SequenceEqual(other.Code);
+            return BodySize == other.BodySize && Locals.SequenceEqual(other.Locals) && Code.SequenceEqual(other.Code);
         }
 
         public override bool Equals(object obj)
@@ -64,7 +61,6 @@ namespace SharpWasm.Internal.Parse.Code
             unchecked
             {
                 var hashCode = (int) BodySize;
-                hashCode = (hashCode * 397) ^ (int) LocalCount;
                 return hashCode;
             }
         }

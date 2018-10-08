@@ -12,7 +12,8 @@ namespace SharpWasm.Core.Parser
         public static bool ToBool(BinaryReader reader) => Convert.ToBoolean(ToUInt(reader));
         public static long ToLong(BinaryReader reader) => SignedVar(reader, out _);
         public static int ToInt(BinaryReader reader) => Convert.ToInt32(ToLong(reader));
-        public static sbyte ToSByte(BinaryReader reader) => Convert.ToSByte(ToLong(reader));
+        public static sbyte ToSByte(BinaryReader reader) => ToSByte(reader, out _);
+        public static sbyte ToSByte(BinaryReader reader,out uint length) => Convert.ToSByte(SignedVar(reader, out length));
 
         public static uint UnsignedVar(BinaryReader reader, out uint count)
         {
