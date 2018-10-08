@@ -19,6 +19,7 @@ namespace SharpWasm.Core.Parser
         public ImmutableArray<Export> Export { get; private set; } = ImmutableArray<Export>.Empty;
         public uint? Start { get; private set; }
         public ImmutableArray<Element> Element { get; private set; } = ImmutableArray<Element>.Empty;
+        public ImmutableArray<CodeSection> Code { get; private set; } = ImmutableArray<CodeSection>.Empty;
 
         public void ParseCustom(BinaryReader reader)
         {
@@ -73,6 +74,11 @@ namespace SharpWasm.Core.Parser
         public void ParseElement(BinaryReader reader)
         {
             Element = Values.ToVector(reader, SegmentsParser.ToElement);
+        }
+
+        public void ParseCode(BinaryReader reader)
+        {
+            Code = Values.ToVector(reader, SegmentsParser.ToCodeSection);
         }
     }
 }

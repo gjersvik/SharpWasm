@@ -97,6 +97,23 @@ namespace SharpWasm.Tests.Core.Parser
         }
 
         [Test]
+        public void ToCodeSection()
+        {
+            const string hex = "0C" + TestValues.LocalHex + TestValues.InitExprHex;
+            CodeSection code;
+            using (var reader = BinaryTools.HexToReader(hex))
+            {
+                code = SegmentsParser.ToCodeSection(reader);
+            }
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(code.Locals, Is.EqualTo(TestValues.Local).AsCollection, "Locals");
+                Assert.That(code.Code, Is.EqualTo(TestValues.InitExpr).AsCollection, "Code");
+            });
+        }
+
+        [Test]
         public void ToLocals()
         {
             using (var reader = BinaryTools.HexToReader(TestValues.LocalHex))

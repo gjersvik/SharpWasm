@@ -2,7 +2,6 @@
 using SharpWasm.Core.Code;
 using SharpWasm.Core.Segments;
 using SharpWasm.Core.Types;
-using SharpWasm.Internal.Parse.Code;
 using SharpWasm.Internal.Parse.Sections;
 using GlobalType = SharpWasm.Core.Types.GlobalType;
 using TableType = SharpWasm.Core.Types.TableType;
@@ -39,9 +38,6 @@ namespace SharpWasm.Tests.Helpers
             ValueType.I64, ValueType.F32, ValueType.F32, ValueType.F32, ValueType.F64, ValueType.F64, ValueType.F64,
             ValueType.F64);
         public const string LocalHex = "04017F027E037D047C";
-
-        public static readonly FunctionBody FunctionBody = new FunctionBody(new[] { ValueType.I32, ValueType.I32 },
-            new IInstruction[] { Instruction.I32Const(42), Instruction.End });
 
         public static readonly DataSegment DataSegment = new DataSegment(InitExpr, new byte[] { 1, 2, 42 });
         public const string DataSegmentHex = "00" + InitExprHex + "0301022A";

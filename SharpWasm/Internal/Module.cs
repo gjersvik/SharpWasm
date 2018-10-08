@@ -1,10 +1,10 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using SharpWasm.Core.Parser;
 using SharpWasm.Core.Segments;
 using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse;
-using SharpWasm.Internal.Parse.Sections;
 using Data = SharpWasm.Internal.Parse.Sections.Data;
 
 namespace SharpWasm.Internal
@@ -17,7 +17,7 @@ namespace SharpWasm.Internal
         public readonly ImmutableArray<TableType> Table;
         public readonly ImmutableArray<Export> Export;
         public readonly ImmutableArray<Element> Element;
-        private readonly CodeSection _code;
+        private readonly ImmutableArray<CodeSection> _code;
         public readonly Data Data;
         private readonly ImmutableDictionary<string, ImmutableArray<byte>> _custom;
 
@@ -29,7 +29,7 @@ namespace SharpWasm.Internal
             Table = parsed.Tables;
             Export = parsed.Exports;
             Element = parsed.Elements;
-            _code = parsed.Code.FirstOrDefault() ?? CodeSection.Empty;
+            _code = parsed.Code;
             Data = parsed.Data.FirstOrDefault() ?? Data.Empty;
             _custom = parsed.Customs;
         }
@@ -52,7 +52,7 @@ namespace SharpWasm.Internal
             }
 
             var baseId = (int) (id - Import.Count(i => i.Type == ExternalKind.Function));
-            return new Function(id, _code.Bodies[baseId].Code, _type[(int) _function[baseId]],
+            return new Function(id, _code[baseId].Code, _type[(int) _function[baseId]],
                 _function[baseId]);
         }
 

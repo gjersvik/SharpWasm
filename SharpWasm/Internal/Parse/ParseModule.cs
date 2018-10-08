@@ -56,8 +56,8 @@ namespace SharpWasm.Internal.Parse
             Exports = newSections.Export;
             Starts = newSections.Start;
             Elements = newSections.Element;
+            Code = newSections.Code;
             // ReSharper disable ImpureMethodCallOnReadonlyValueField
-            Code = ClassicSections.OfType<CodeSection>().ToImmutableArray();
             Data = ClassicSections.OfType<Data>().ToImmutableArray();
             // ReSharper enable ImpureMethodCallOnReadonlyValueField
         }
@@ -106,7 +106,7 @@ namespace SharpWasm.Internal.Parse
                             newSections.ParseElement(subReader);
                             break;
                         case SectionCode.Code:
-                            sections.Add(new CodeSection(subReader));
+                            newSections.ParseCode(subReader);
                             break;
                         case SectionCode.Data:
                             sections.Add(new Data(subReader));

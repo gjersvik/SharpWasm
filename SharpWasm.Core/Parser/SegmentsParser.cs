@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using SharpWasm.Core.Code;
 using SharpWasm.Core.Segments;
 using ValueType = SharpWasm.Core.Types.ValueType;
 
@@ -51,6 +52,24 @@ namespace SharpWasm.Core.Parser
             var offset = CodeParser.ToInitExpr(reader);
             var elements = Values.ToVector(reader, Values.ToUInt);
             return new Element(index, offset, elements);
+        }
+
+        public static CodeSection ToCodeSection(BinaryReader reader)
+        {
+            var bodySize = Values.ToUInt(reader);
+            var locals = ToLocals(reader, out var length);
+            var codeLength = bodySize - length;
+
+            var builder = ImmutableArray.CreateBuilder<IInstruction>();
+            using (var codeReader = Tools.ToReader(reader, codeLength))
+            {
+                while (codeReader.BaseStream.Position != codeReader.BaseStream.Length)
+                {
+                    builder.Add(CodeParser.ToInstruction(codeReader));
+                }
+            }
+
+            return new CodeSection(locals, builder.ToImmutable());
         }
 
         public static ImmutableArray<ValueType> ToLocals(BinaryReader reader, out uint length)
