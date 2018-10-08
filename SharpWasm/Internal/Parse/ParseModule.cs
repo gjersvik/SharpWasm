@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -7,7 +6,6 @@ using SharpWasm.Core.Parser;
 using SharpWasm.Core.Segments;
 using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse.Sections;
-using Data = SharpWasm.Internal.Parse.Sections.Data;
 
 namespace SharpWasm.Internal.Parse
 {
@@ -15,7 +13,6 @@ namespace SharpWasm.Internal.Parse
     {
         public readonly uint MagicNumber;
         public readonly uint Version;
-        public readonly ImmutableArray<ISection> ClassicSections;
 
         public readonly ImmutableDictionary<string, ImmutableArray<byte>> Customs;
         public readonly ImmutableArray<FunctionType> Types;
@@ -30,21 +27,15 @@ namespace SharpWasm.Internal.Parse
         public readonly ImmutableArray<CodeSection> Code;
         public readonly ImmutableArray<Data> Data;
 
-
-        public ParseModule(IEnumerable<ISection> sections) : this(0x6d736100, 0x1, new Tuple<ImmutableArray<ISection>, Core.Parser.Sections>(sections.ToImmutableArray(),new Core.Parser.Sections()))
-        {
-        }
-
         public ParseModule(BinaryReader reader) : this(reader.ReadUInt32(), reader.ReadUInt32(), ParseSelections(reader))
         {
         }
 
-        private ParseModule(uint magicNumber, uint version, Tuple<ImmutableArray<ISection>, Core.Parser.Sections> sections)
+        private ParseModule(uint magicNumber, uint version, Core.Parser.Sections sections)
         {
             MagicNumber = magicNumber;
             Version = version;
-            ClassicSections = sections.Item1;
-            var newSections = sections.Item2;
+            var newSections = sections;
 
             Customs = newSections.Custom;
             Types = newSections.Type;
@@ -57,15 +48,12 @@ namespace SharpWasm.Internal.Parse
             Starts = newSections.Start;
             Elements = newSections.Element;
             Code = newSections.Code;
-            // ReSharper disable ImpureMethodCallOnReadonlyValueField
-            Data = ClassicSections.OfType<Data>().ToImmutableArray();
-            // ReSharper enable ImpureMethodCallOnReadonlyValueField
+            Data = newSections.Data;
         }
 
         [ExcludeFromCodeCoverage]
-        private static Tuple<ImmutableArray<ISection>,Core.Parser.Sections> ParseSelections(BinaryReader reader)
+        private static Core.Parser.Sections ParseSelections(BinaryReader reader)
         {
-            var sections = ImmutableArray.CreateBuilder<ISection>();
             var newSections = new Core.Parser.Sections();
             while (reader.BaseStream.Position != reader.BaseStream.Length)
             {
@@ -109,16 +97,14 @@ namespace SharpWasm.Internal.Parse
                             newSections.ParseCode(subReader);
                             break;
                         case SectionCode.Data:
-                            sections.Add(new Data(subReader));
+                            newSections.ParseData(subReader);
                             break;
                         default:
                             throw new NotImplementedException();
                     }
                 }
             }
-
-            sections.Capacity = sections.Count;
-            return new Tuple<ImmutableArray<ISection>, Core.Parser.Sections>(sections.MoveToImmutable(), newSections);
+            return newSections;
         }
     }
 }

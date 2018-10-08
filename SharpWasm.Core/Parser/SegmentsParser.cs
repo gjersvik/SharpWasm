@@ -87,5 +87,13 @@ namespace SharpWasm.Core.Parser
             }
             return locals.ToImmutableArray();
         }
+
+        public static Data ToData(BinaryReader reader)
+        {
+            var index = Values.ToUInt(reader);
+            var offset = CodeParser.ToInitExpr(reader);
+            var data = Values.ToBytes(reader);
+            return new Data(index, offset, data);
+        }
     }
 }

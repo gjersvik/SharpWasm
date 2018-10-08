@@ -5,7 +5,6 @@ using SharpWasm.Core.Parser;
 using SharpWasm.Core.Segments;
 using SharpWasm.Core.Types;
 using SharpWasm.Internal.Parse;
-using Data = SharpWasm.Internal.Parse.Sections.Data;
 
 namespace SharpWasm.Internal
 {
@@ -18,7 +17,7 @@ namespace SharpWasm.Internal
         public readonly ImmutableArray<Export> Export;
         public readonly ImmutableArray<Element> Element;
         private readonly ImmutableArray<CodeSection> _code;
-        public readonly Data Data;
+        public readonly ImmutableArray<Data> Data;
         private readonly ImmutableDictionary<string, ImmutableArray<byte>> _custom;
 
         public Module(ParseModule parsed)
@@ -30,7 +29,7 @@ namespace SharpWasm.Internal
             Export = parsed.Exports;
             Element = parsed.Elements;
             _code = parsed.Code;
-            Data = parsed.Data.FirstOrDefault() ?? Data.Empty;
+            Data = parsed.Data;
             _custom = parsed.Customs;
         }
 

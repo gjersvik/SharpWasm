@@ -74,5 +74,18 @@ namespace SharpWasm.Tests.Core.Parser
             Assert.That(sections.Element,
                 Is.EqualTo(new[] { TestValues.Element, TestValues.Element }).AsCollection, "Entries");
         }
+
+        [Test]
+        public void Data()
+        {
+            const string hex = "02" + TestValues.DataHex + TestValues.DataHex;
+            var sections = new Sections();
+            using (var reader = BinaryTools.HexToReader(hex))
+            {
+                sections.ParseData(reader);
+            }
+
+            Assert.That(sections.Data, Is.EqualTo(new[] { TestValues.Data, TestValues.Data }).AsCollection);
+        }
     }
 }

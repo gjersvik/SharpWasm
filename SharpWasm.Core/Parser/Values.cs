@@ -77,5 +77,11 @@ namespace SharpWasm.Core.Parser
             var length = ToUInt(reader);
             return Encoding.UTF8.GetString(reader.ReadBytes((int)length));
         }
+
+        public static ImmutableArray<byte> ToBytes(BinaryReader reader)
+        {
+            var length = ToUInt(reader);
+            return reader.ReadBytes((int)length).ToImmutableArray();
+        }
     }
 }

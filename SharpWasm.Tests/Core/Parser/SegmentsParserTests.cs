@@ -122,5 +122,23 @@ namespace SharpWasm.Tests.Core.Parser
                 Assert.That(length, Is.EqualTo(TestValues.LocalHex.Length / 2));
             }
         }
+
+        [Test]
+        public void ToData()
+        {
+            const string hex = "00" + TestValues.InitExprHex + "0301022A";
+            Data data;
+            using (var reader = BinaryTools.HexToReader(hex))
+            {
+                data = SegmentsParser.ToData(reader);
+            }
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(data.Memory, Is.EqualTo(0), "Memory");
+                Assert.That(data.Offset, Is.EqualTo(TestValues.InitExpr).AsCollection, "Offset");
+                Assert.That(data.Init, Is.EqualTo(new byte[] { 1, 2, 42 }), "Init");
+            });
+        }
     }
 }

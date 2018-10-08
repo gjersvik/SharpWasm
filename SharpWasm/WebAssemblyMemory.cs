@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using SharpWasm.Core.Code;
-using SharpWasm.Internal.Parse.Sections;
+using SharpWasm.Core.Segments;
 
 namespace SharpWasm
 {
@@ -21,11 +21,11 @@ namespace SharpWasm
             return output;
         }
 
-        internal void Write(DataSegment segment)
+        internal void Write(Data segment)
         {
             var offset = ((Instruction<int>)segment.Offset[0]).Immediate;
 
-            Array.Copy(segment.Data.ToArray(),0,_bytes, offset,segment.Data.Length);
+            Array.Copy(segment.Init.ToArray(),0,_bytes, offset,segment.Init.Length);
         }
     }
 }
