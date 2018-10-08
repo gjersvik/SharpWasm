@@ -1,65 +1,49 @@
 ﻿using System;
 using System.Collections.Immutable;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using SharpWasm.Core.Parser;
+using System.Linq;
 using SharpWasm.Core.Segments;
-using SharpWasm.Core.Types;
-using SharpWasm.Internal.Parse.Sections;
 
-namespace SharpWasm.Internal.Parse
+namespace SharpWasm.Core.Parser
 {
-    internal class ParseModule
+    internal static class ModuleParser
     {
-        public readonly uint MagicNumber;
-        public readonly uint Version;
-
-        public readonly ImmutableDictionary<string, ImmutableArray<byte>> Customs;
-        public readonly ImmutableArray<FunctionType> Types;
-        public readonly ImmutableArray<Import> Imports;
-        public readonly ImmutableArray<uint> Functions;
-        public readonly ImmutableArray<TableType> Tables;
-        public readonly ImmutableArray<MemoryType> Memories;
-        public readonly ImmutableArray<Global> Globals;
-        public readonly ImmutableArray<Export> Exports;
-        public readonly uint? Starts;
-        public readonly ImmutableArray<Element> Elements;
-        public readonly ImmutableArray<CodeSection> Code;
-        public readonly ImmutableArray<Data> Data;
-
-        public ParseModule(BinaryReader reader) : this(reader.ReadUInt32(), reader.ReadUInt32(), ParseSelections(reader))
+        public static Module ToModule(byte[] bytes)
         {
+            using (var reader = Tools.FromBytes(bytes))
+            {
+                if (reader.ReadUInt32() != 0x6d736100) throw new Exception("Wrong magic number.");
+                if (reader.ReadUInt32() != 1) throw new Exception("Only support version 1");
+
+                var sections = ToSections(reader);
+                var function = sections.Function
+                    .Zip(sections.Code, (index, code) => new Function(index, code.Locals, code.Code))
+                    .ToImmutableArray();
+
+                return new Module(
+                    sections.Custom,
+                    sections.Type,
+                    function,
+                    sections.Table,
+                    sections.Memory,
+                    sections.Global,
+                    sections.Element,
+                    sections.Data,
+                    sections.Start,
+                    sections.Import,
+                    sections.Export
+                );
+            }
         }
 
-        private ParseModule(uint magicNumber, uint version, Core.Parser.Sections sections)
+        public static Sections ToSections(BinaryReader reader)
         {
-            MagicNumber = magicNumber;
-            Version = version;
-            var newSections = sections;
-
-            Customs = newSections.Custom;
-            Types = newSections.Type;
-            Imports = newSections.Import;
-            Functions = newSections.Function;
-            Tables = newSections.Table;
-            Memories = newSections.Memory;
-            Globals = newSections.Global;
-            Exports = newSections.Export;
-            Starts = newSections.Start;
-            Elements = newSections.Element;
-            Code = newSections.Code;
-            Data = newSections.Data;
-        }
-
-        [ExcludeFromCodeCoverage]
-        private static Core.Parser.Sections ParseSelections(BinaryReader reader)
-        {
-            var newSections = new Core.Parser.Sections();
+            var newSections = new Sections();
             while (reader.BaseStream.Position != reader.BaseStream.Length)
             {
-                var id = ParseTools.ToSectionCode(reader);
+                var id = ToSectionCode(reader);
                 var len = Values.ToUInt(reader);
-                using (var subReader = ParseTools.ToReader(reader, len))
+                using (var subReader = Tools.ToReader(reader, len))
                 {
                     switch (id)
                     {
@@ -104,7 +88,29 @@ namespace SharpWasm.Internal.Parse
                     }
                 }
             }
+
             return newSections;
         }
+
+        private static SectionCode ToSectionCode(BinaryReader reader)
+        {
+            return (SectionCode) Values.ToByte(reader);
+        }
+    }
+
+    internal enum SectionCode : byte
+    {
+        Custom = 0,
+        Type,
+        Import,
+        Function,
+        Table,
+        Memory,
+        Global,
+        Export,
+        Start,
+        Element,
+        Code,
+        Data
     }
 }

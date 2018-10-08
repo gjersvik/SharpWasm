@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using SharpWasm.Core.Parser;
 using SharpWasm.Core.Segments;
 using SharpWasm.Core.Types;
 // ReSharper disable  MemberCanBeMadeStatic.Global
@@ -12,7 +13,7 @@ namespace SharpWasm.Core
     {
         public static Module Decode(byte[] module)
         {
-            return new Module();
+            return ModuleParser.ToModule(module);
         }
         
         public Error Validate()
@@ -38,8 +39,29 @@ namespace SharpWasm.Core
         internal readonly ImmutableArray<Global> Globals = ImmutableArray<Global>.Empty;
         internal readonly ImmutableArray<Element> Elem = ImmutableArray<Element>.Empty;
         internal readonly ImmutableArray<Data> Data = ImmutableArray<Data>.Empty;
-        internal readonly uint? Start = null;
+        internal readonly uint? Start;
         internal readonly ImmutableArray<Import> ImportsArray = ImmutableArray<Import>.Empty;
         internal readonly ImmutableArray<Export> ExportsArray = ImmutableArray<Export>.Empty;
+
+
+        public Module()
+        {
+
+        }
+
+        internal Module(ImmutableDictionary<string, ImmutableArray<byte>> custom, ImmutableArray<FunctionType> types, ImmutableArray<Function> funcs, ImmutableArray<TableType> tables, ImmutableArray<MemoryType> mems, ImmutableArray<Global> globals, ImmutableArray<Element> elem, ImmutableArray<Data> data, uint? start, ImmutableArray<Import> importsArray, ImmutableArray<Export> exportsArray)
+        {
+            Custom = custom;
+            Types = types;
+            Funcs = funcs;
+            Tables = tables;
+            Mems = mems;
+            Globals = globals;
+            Elem = elem;
+            Data = data;
+            Start = start;
+            ImportsArray = importsArray;
+            ExportsArray = exportsArray;
+        }
     }
 }

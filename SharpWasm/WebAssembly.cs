@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using SharpWasm.Internal;
-using SharpWasm.Internal.Parse;
 
 namespace SharpWasm
 {
@@ -9,28 +8,19 @@ namespace SharpWasm
     {
         public static WebAssemblyModule Compile(byte[] wasm)
         {
-            using (var reader = ParseTools.FromBytes(wasm))
-            {
-                return new WebAssemblyModule(new Module(new ParseModule(reader)));
-            }
+            return new WebAssemblyModule(new Module(Core.Module.Decode(wasm)));
         }
 
         [ExcludeFromCodeCoverage]
         public static bool Validate(byte[] wasm)
         {
-            using (var reader = ParseTools.FromBytes(wasm))
+            try
             {
-                try
-                {
-                    // ReSharper disable once ObjectCreationAsStatement
-                    new ParseModule(reader);
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-
-                return true;
+                return Core.Module.Decode(wasm).Validate() is null;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
     }

@@ -1,41 +1,30 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using SharpWasm.Core.Parser;
 using SharpWasm.Core.Segments;
 using SharpWasm.Core.Types;
-using SharpWasm.Internal.Parse;
 
 namespace SharpWasm.Internal
 {
     internal class Module
     {
-        private readonly ImmutableArray<FunctionType> _type;
-        public readonly ImmutableArray<Import> Import;
-        private readonly ImmutableArray<uint> _function;
-        public readonly ImmutableArray<TableType> Table;
-        public readonly ImmutableArray<Export> Export;
-        public readonly ImmutableArray<Element> Element;
-        private readonly ImmutableArray<CodeSection> _code;
-        public readonly ImmutableArray<Data> Data;
-        private readonly ImmutableDictionary<string, ImmutableArray<byte>> _custom;
+        private readonly Core.Module _coreModule;
 
-        public Module(ParseModule parsed)
+       
+        public ImmutableArray<Import> Import => _coreModule.ImportsArray;
+        public ImmutableArray<TableType> Table => _coreModule.Tables;
+        public ImmutableArray<Export> Export => _coreModule.ExportsArray;
+        public ImmutableArray<Element> Element => _coreModule.Elem;
+        public ImmutableArray<Data> Data => _coreModule.Data;
+
+        public Module(Core.Module module)
         {
-            _type = parsed.Types;
-            Import = parsed.Imports;
-            _function = parsed.Functions;
-            Table = parsed.Tables;
-            Export = parsed.Exports;
-            Element = parsed.Elements;
-            _code = parsed.Code;
-            Data = parsed.Data;
-            _custom = parsed.Customs;
+            _coreModule = module;
         }
 
         public ImmutableArray<byte> ByName(string name)
         {
-            return _custom.ContainsKey(name) ? _custom[name] : ImmutableArray<byte>.Empty;
+            return _coreModule.Custom.ContainsKey(name) ? _coreModule.Custom[name] : ImmutableArray<byte>.Empty;
         }
 
         public AFunction GetFunction(uint id)
@@ -46,13 +35,13 @@ namespace SharpWasm.Internal
             if (id < imports.Length)
             {
                 var import = imports[(int) id];
-                return new ImportFunction(id, _type[(int) importFunctions[(int) id]], import.Module, import.Name,
+                return new ImportFunction(id, _coreModule.Types[(int) importFunctions[(int) id]], import.Module, import.Name,
                     importFunctions[(int) id]);
             }
 
             var baseId = (int) (id - Import.Count(i => i.Type == ExternalKind.Function));
-            return new Function(id, _code[baseId].Code, _type[(int) _function[baseId]],
-                _function[baseId]);
+            return new Function(id, _coreModule.Funcs[baseId].Body, _coreModule.Types[(int)_coreModule.Funcs[baseId].TypeIndex],
+                _coreModule.Funcs[baseId].TypeIndex);
         }
 
         [ExcludeFromCodeCoverage]

@@ -4,7 +4,7 @@ namespace SharpWasm.Core.Parser
 {
     internal static class Tools
     {
-        private static BinaryReader FromBytes(byte[] bytes)
+        internal static BinaryReader FromBytes(byte[] bytes)
         {
             return new BinaryReader(new MemoryStream(bytes));
         }
