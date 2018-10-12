@@ -6,7 +6,7 @@ using SharpWasm.Core.Types;
 
 namespace SharpWasm.Core
 {
-    public delegate Value? HostFunction(Value[] args);
+    public delegate Result HostFunction(Value[] args);
 
     public class Store
     {
@@ -30,7 +30,7 @@ namespace SharpWasm.Core
             return new FunctionType();
         }
 
-        public Value? InvokeFunction(int address, params Value[] parameters)
+        public Result InvokeFunction(int address, params Value[] parameters)
         {
             return new Value();
         }

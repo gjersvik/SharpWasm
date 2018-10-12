@@ -1,8 +1,7 @@
 ﻿using NUnit.Framework;
 using SharpWasm.Core.Runtime;
-using SharpWasm.Internal.Runtime;
 
-namespace SharpWasm.Tests.Internal.Runtime
+namespace SharpWasm.Tests.Core.Runtime
 {
     [TestFixture]
     public class ResultTests

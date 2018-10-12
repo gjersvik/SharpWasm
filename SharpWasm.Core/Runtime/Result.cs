@@ -1,9 +1,8 @@
 ﻿using JetBrains.Annotations;
-using SharpWasm.Core.Runtime;
 
-namespace SharpWasm.Internal.Runtime
+namespace SharpWasm.Core.Runtime
 {
-    internal class Result
+    public class Result
     {
         public readonly Value? Value;
         [CanBeNull] public readonly Trap Trap;
