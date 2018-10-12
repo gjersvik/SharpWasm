@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using SharpWasm.Core;
+using SharpWasm.Tests.Helpers;
 
 namespace SharpWasm.Tests.Core
 {
@@ -9,7 +10,7 @@ namespace SharpWasm.Tests.Core
         [Test]
         public void Decode()
         {
-            Assert.That(Module.Decode(new byte[0]), Is.InstanceOf<Module>());
+            Assert.That(Module.Decode(BinaryTools.HexToBytes("0061736D01000000")), Is.InstanceOf<Module>());
         }
 
         [Test]
