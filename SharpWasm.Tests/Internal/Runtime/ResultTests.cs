@@ -32,7 +32,7 @@ namespace SharpWasm.Tests.Internal.Runtime
         [Test]
         public void ConstructorTrap()
         {
-            var result = new Result(new Trap());
+            var result = new Result(Trap.Value);
             Assert.Multiple(() =>
             {
                 Assert.That(result.Value, Is.Null);
@@ -51,7 +51,7 @@ namespace SharpWasm.Tests.Internal.Runtime
         [Test]
         public void CastTrap()
         {
-            Result result = new Trap();
+            Result result = Trap.Value;
             Assert.That(result.Trap, Is.Not.Null);
         }
     }
