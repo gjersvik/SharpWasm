@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using SharpWasm.Core.Runtime;
 
 namespace SharpWasm.Internal.Runtime
 {

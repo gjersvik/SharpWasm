@@ -1,9 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
-using SharpWasm.Internal.Runtime;
+using SharpWasm.Core.Runtime;
 using ValueType = SharpWasm.Core.Types.ValueType;
 
-namespace SharpWasm.Tests.Internal.Runtime
+namespace SharpWasm.Tests.Core.Runtime
 {
     [TestFixture]
     public class ValueTests

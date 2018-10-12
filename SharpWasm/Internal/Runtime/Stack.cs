@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SharpWasm.Core.Runtime;
 
 namespace SharpWasm.Internal.Runtime
 {
